@@ -2,7 +2,6 @@
     "name": "fwkit/wechat",
     "description": "Wechat library for swoft",
     "type": "library",
-    "license": "GPL",
     "authors": [
         {
             "name": "Fung Wing Kit",
