@@ -1,0 +1,14 @@
+root = true
+
+[**]
+end_of_line = lf
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[**.{php,zep}]
+indent_size = 4
+tab_width = 4
+
+[**.{js,css,vue,html,volt}]
+indent_size = 2

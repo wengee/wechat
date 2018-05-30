@@ -1,0 +1,21 @@
+{
+    "name": "fwkit/wechat",
+    "description": "Wechat library for swoft",
+    "type": "library",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Fung Wing Kit",
+            "email": "wengee@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "swoft/http-client": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "fwkit\\Wechat\\": "src/"
+        }
+    }
+}
