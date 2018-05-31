@@ -2,6 +2,7 @@
     "name": "fwkit/wechat",
     "description": "Wechat library for swoole",
     "type": "library",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Fung Wing Kit",
