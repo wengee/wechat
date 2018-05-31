@@ -10,7 +10,6 @@
     ],
     "require": {
         "php": ">=7.1",
-        "swoft/http-client": "^1.0",
         "fwkit/common": "^1.0"
     },
     "autoload": {
