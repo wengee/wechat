@@ -1,6 +1,6 @@
 {
     "name": "fwkit/wechat",
-    "description": "Wechat library for swoft",
+    "description": "Wechat library for swoole",
     "type": "library",
     "authors": [
         {
