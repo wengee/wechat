@@ -1,12 +1,13 @@
 <?php
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2018-11-02 17:06:17 +0800
+ */
+namespace Wechat\Mp;
 
-namespace fwkit\Wechat\Mp;
-
-use fwkit\Wechat\ClientBase;
+use Wechat\ClientBase;
 
 class Client extends ClientBase
 {
-    protected $host = 'https://api.weixin.qq.com/cgi-bin/';
-
-    protected $componentPrefix = '\fwkit\Wechat\Mp\Components';
+    protected $baseUri = 'https://api.weixin.qq.com/';
 }

@@ -1,6 +1,6 @@
 {
     "name": "fwkit/wechat",
-    "description": "Wechat library for swoole",
+    "description": "Wechat library",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
@@ -11,11 +11,13 @@
     ],
     "require": {
         "php": ">=7.1",
-        "fwkit/common": "^1.0"
+        "illuminate/support": "^5.7",
+        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/psr7": "^1.4"
     },
     "autoload": {
         "psr-4": {
-            "fwkit\\Wechat\\": "src/"
+            "Wechat\\": "src/"
         }
     }
 }

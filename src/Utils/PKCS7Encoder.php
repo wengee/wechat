@@ -1,6 +1,9 @@
 <?php
-
-namespace fwkit\Wechat\Utils;
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2018-11-01 17:51:08 +0800
+ */
+namespace Wechat\Utils;
 
 /**
  * PKCS7Encoder class

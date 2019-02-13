@@ -1,6 +1,9 @@
 <?php
-
-namespace fwkit\Wechat\Utils;
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2018-11-01 17:51:10 +0800
+ */
+namespace Wechat\Utils;
 
 /**
  * Prpcrypt class
@@ -13,7 +16,7 @@ class Prpcrypt
 
     public function __construct(string $k)
     {
-        $this->key = base64_decode($k . "=");
+        $this->key = base64_decode($k . '=');
     }
 
     /**
@@ -64,7 +67,7 @@ class Prpcrypt
 
         try {
             $content = substr($decrypted, 16);
-            $len = unpack("N", substr($content, 0, 4));
+            $len = unpack('N', substr($content, 0, 4));
             $len = $len[1];
             $xml = substr($content, 4, $len);
             $fromAppId = substr($content, $len + 4);

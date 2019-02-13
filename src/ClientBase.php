@@ -1,296 +1,110 @@
 <?php
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2019-02-13 17:48:15 +0800
+ */
+namespace Wechat;
 
-namespace fwkit\Wechat;
-
-use fwkit\Http;
-use fwkit\Utils;
-use fwkit\Wechat\Utils\MsgCrypt;
-use fwkit\Wechat\Utils\ErrorCode;
+use Wechat\Concerns\HasAccessToken;
+use Wechat\Concerns\HasCache;
+use Wechat\Concerns\HasHttpRequests;
+use Wechat\Concerns\HasOptions;
+use Wechat\Message\MessageBase;
+use Wechat\Utils\MsgCrypt;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class ClientBase
 {
-    protected $host;
+    use HasAccessToken, HasCache, HasHttpRequests, HasOptions;
 
-    protected $config;
+    protected $componentList = [];
 
-    protected $crypto;
+    protected $appId;
 
-    protected $inputed = false;
+    protected $appSecret;
 
-    protected $postStr;
+    protected $token;
 
-    protected $receiveMsg = [];
+    protected $encodingAESKey;
+
+    protected $cryptor = null;
 
     protected $components = [];
 
-    protected $componentPrefix = null;
-
-    public function __construct(array $options = [])
+    final public function __construct(array $options)
     {
-        $config = new Config($options);
-        $this->config = $config;
+        $this->setOptions($options);
+        if ($this->encodingAESKey && $this->token && $this->appId) {
+            $this->cryptor = new MsgCrypt(
+                $this->token,
+                $this->encodingAESKey,
+                $this->appId
+            );
+        }
 
         if (method_exists($this, 'initialize')) {
             $this->initialize();
         }
-
-        if ($config->encodingAESKey) {
-            $this->crypter = new MsgCrypt(
-                $config->token,
-                $config->encodingAESKey,
-                $config->appId
-            );
-        }
     }
 
-    public function __get(string $property)
+    public function checkSignature(Request $request)
     {
-        $method = 'get' . ucfirst($property);
-        if (method_exists($this, $method)) {
-            return $this->{$method}();
+        $signature = $request->query->get('signature', '');
+        $timestamp = $request->query->get('timestamp', '');
+        $nonce = $request->query->get('nonce', '');
+
+        if (!$signature || !$timestamp || !$nonce) {
+            throw new OfficialError('Params is invalid.');
         }
 
-        if (preg_match('/^msg(.+)$/i', $property, $matches)) {
-            $value = $this->getMsg($matches[1]);
-            return $value ?: $this->getMsg($property);
+        $tmpList = [$this->token, $timestamp, $nonce];
+        sort($tmpList, SORT_STRING);
+        $tmpStr = implode('', $tmpList);
+        if (sha1($tmpStr) !== $signature) {
+            throw new OfficialError('Signature is invalid.');
         }
 
-        return null;
+        return true;
+    }
+
+    public function parseMessage(string $message)
+    {
+        return MessageBase::factory($message);
+    }
+
+    public function fetchMessage(Request $request)
+    {
+    }
+
+    public function get(string $name)
+    {
+        return $this->component($name);
     }
 
     public function component(string $name)
     {
-        if ($this->componentPrefix === null) {
-            return null;
-        }
-
         if (isset($this->components[$name])) {
             return $this->components[$name];
         }
 
-        $class = $this->componentPrefix . '\\' . ucfirst($name);
-        if (!class_exists($class)) {
-            throw new \Exception('The component"' . $name . '" is not found.');
-        }
-
-        $component = Utils::newInstance($class);
-        $component->setClient($this);
-        $this->components[$name] = $component;
-        return $component;
-    }
-
-    public function input(string $sMsg, ?string $sEncryptType = null, string $sMsgSig = '', int $sTimestamp = 0, string $sNonce = '')
-    {
-        if ($this->inputed) {
-            return $this;
-        }
-
-        $this->inputed = true;
-        if (strtolower($sEncryptType) === 'aes' && !empty($this->crypter)) {
-            $postStr = $sMsg;
-            $errcode = $this->crypter->decrypt($sMsgSig, $sTimeStamp, $sNonce, $postStr, $sMsg);
-
-            if ($errcode !== ErrorCode::OK) {
-                throw new \Exception('Access Denied.', $errcode);
-            }
-        }
-
-        $receiveMsg = (array) simplexml_load_string($sMsg, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $this->postStr = $sMsg;
-        $this->receiveMsg = array_change_key_case($receiveMsg, CASE_LOWER);
-        return $this;
-    }
-
-    public function getMsgXML()
-    {
-        if ($this->inputed) {
-            return $this->postStr;
+        $className = $this->componentList[$name] ?? null;
+        if ($className !== null) {
+            $component = new $className;
+            $component->setClient($this);
+            $this->components[$name] = $component;
+            return $component;
         }
 
         return null;
-    }
-
-    public function getMsg(string $name, $defaultValue = null)
-    {
-        $name = strtolower($name);
-        return isset($this->receiveMsg[$name]) ? $this->receiveMsg[$name] : $defaultValue;
-    }
-
-    public function getConfig()
-    {
-        return $this->config;
     }
 
     public function getAppId()
     {
-        return $this->config->appId;
+        return $this->appId;
     }
 
-    public function reply($rawXml)
+    public function getAppSecret()
     {
-        if (empty($this->crypter)) {
-            return $rawXml;
-        }
-
-        $nonceStr = Utils::createNonceStr();
-        $timestamp = time();
-        $errcode = $this->crypter->encrypt($rawXml, $timestamp, $nonceStr, $encryptXml);
-        if ($errcode !== ErrorCode::OK) {
-            return $rawXml;
-        }
-
-        return $encryptXml;
-    }
-
-    public function replyMessage(string $type, $data)
-    {
-        if (!$this->inputed) {
-            throw new \Exception('No message is inputed.');
-        }
-
-        $type = strtolower($type);
-        $userData = [
-            'target' => $this->getMsg('FromUserName'),
-            'source' => $this->getMsg('ToUserName'),
-        ];
-
-        $reply = null;
-        switch ($type) {
-            case 'text':
-                $data = is_string($data) ? ['content' => $data] : (array) $data;
-                $data = array_merge($data, $userData);
-                $reply = new Replies\TextReply($data);
-                break;
-
-            case 'image':
-            case 'voice':
-            case 'video':
-                $data = is_string($data) ? ['mediaId' => $data] : (array) $data;
-                $data = array_merge($data, $userData);
-                if ($type == 'image') {
-                    $reply = new Replies\ImageReply($data);
-                } elseif ($type == 'voice') {
-                    $reply = new Replies\VoiceReply($data);
-                } else {
-                    $reply = new Replies\VideoReply($data);
-                }
-
-                break;
-
-            case 'news':
-                $data = (array) $data;
-                $reply = new Replies\ArticleReply($userData);
-                foreach ($data as $item) {
-                    $reply->addItem($item);
-                }
-
-                break;
-        }
-
-        if (empty($reply)) {
-            return 'success';
-        }
-
-        $response = $reply->render();
-        return $this->reply($response);
-    }
-
-    public function request(string $method, string $url, $accessToken = null)
-    {
-        if (!Utils::startsWith($url, ['http://', 'https://'])) {
-            $url = $this->host . ltrim($url, '/');
-        }
-
-        $req = Http::request($method, $url);
-        if ($accessToken !== false) {
-            $accessToken = $accessToken ?: $this->getAccessToken();
-            $accessToken && $req->withAccessToken($accessToken);
-        }
-
-        return $req;
-    }
-
-    public function getAccessToken()
-    {
-        if ($this->config->accessToken) {
-            return $this->config->accessToken;
-        }
-
-        $appId = $this->config->appId;
-        $cache = $this->config->cache;
-        $cacheKey = 'accessToken-' . $this->config->appId;
-        if (is_callable($cache)) {
-            $accessToken = Utils::execute($cache, [$cacheKey]);
-            if ($accessToken) {
-                return $accessToken;
-            }
-        }
-
-        $token = $this->component('token');
-        if (!$token) return null;
-
-        try {
-            $res = $token->getAccessToken();
-            $accessToken = $res->accessToken;
-            if ($accessToken && is_callable($cache)) {
-                $expireIn = (int) $res->expiresIn;
-                Utils::execute($cache, [$cacheKey, $accessToken, $expireIn]);
-            }
-        } catch (\Exception $e) {
-            return null;
-        }
-
-        return $accessToken;
-    }
-}
-
-class Config
-{
-    private $_appId;
-
-    private $_appSecret;
-
-    private $_refreshToken;
-
-    private $_accessToken;
-
-    private $_encodingAESKey;
-
-    private $_mchId;
-
-    private $_mchKey;
-
-    private $_certPath;
-
-    private $_keyPath;
-
-    private $_cache;
-
-    public function __construct(array $options)
-    {
-        foreach ($options as $key => $value) {
-            $property = '_' . $key;
-            if (property_exists($this, $property)) {
-                $this->{$property} = $value;
-            }
-        }
-    }
-
-    public function __get(string $property)
-    {
-        $property = '_' . $property;
-        if (property_exists($this, $property)) {
-            return $this->{$property};
-        }
-
-        return null;
-    }
-
-    public function setToken(string $accessToken, ?string $refreshToken = null)
-    {
-        $this->_accessToken = $accessToken;
-        if ($refreshToken !== null) {
-            $this->_refreshToken = $refreshToken;
-        }
+        return $this->appSecret;
     }
 }

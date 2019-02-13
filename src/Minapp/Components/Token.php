@@ -1,23 +1,28 @@
 <?php
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2018-11-02 14:50:11 +0800
+ */
+namespace Wechat\Minapp\Components;
 
-namespace fwkit\Wechat\Minapp\Components;
-
-use fwkit\Wechat\ComponentBase;
+use Wechat\ComponentBase;
 
 class Token extends ComponentBase
 {
     public function getAccessToken()
     {
-        $params = [
-            'grant_type' => 'client_credential',
-            'appid' => $this->config->appId,
-            'secret' => $this->config->appSecret,
+        $options = [
+            'query' => [
+                'grant_type' => 'client_credential',
+                'appid' => $this->client->getAppId(),
+                'secret' => $this->client->getAppSecret(),
+            ],
         ];
 
-        $res = $this->get('cgi-bin/token', false)
-                    ->withQuery($params)
-                    ->getJson();
-
-        return $this->throwOfficialError($res);
+        $res = $this->get('cgi-bin/token', $options, false);
+        return $this->checkResponse($res, [
+            'access_token' => 'accessToken',
+            'expires_in' => 'expiresIn',
+        ]);
     }
 }

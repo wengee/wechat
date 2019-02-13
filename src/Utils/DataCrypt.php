@@ -1,6 +1,9 @@
 <?php
-
-namespace fwkit\Wechat\Utils;
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2018-11-20 15:25:31 +0800
+ */
+namespace Wechat\Utils;
 
 /**
  * 对微信小程序用户加密数据的解密示例代码.
@@ -32,19 +35,27 @@ class DataCrypt
      *
      * @return int 成功0，失败返回对应的错误码
      */
-    public function decrypt(string $encryptedData, string $iv, string &$data)
+    public function decrypt(string $encryptedData, string $iv, ?string &$data)
     {
-        if (strlen($this->sessionKey) != 24) return ErrorCode::ILLEGAL_AES_KEY;
+        if (strlen($this->sessionKey) != 24) {
+            return ErrorCode::ILLEGAL_AES_KEY;
+        }
         $aesKey = base64_decode($this->sessionKey);
 
-        if (strlen($iv) != 24) return ErrorCode::ILLEGAL_IV;
+        if (strlen($iv) != 24) {
+            return ErrorCode::ILLEGAL_IV;
+        }
         $aesIV = base64_decode($iv);
         $aesCipher = base64_decode($encryptedData);
         $result = openssl_decrypt($aesCipher, 'AES-128-CBC', $aesKey, 1, $aesIV);
 
         $dataObj = json_decode($result);
-        if ($dataObj === null) return ErrorCode::ILLEGAL_BUFFER;
-        if ($dataObj->watermark->appid !== $this->appId) return ErrorCode::ILLEGAL_BUFFER;
+        if ($dataObj === null) {
+            return ErrorCode::ILLEGAL_BUFFER;
+        }
+        if ($dataObj->watermark->appid !== $this->appId) {
+            return ErrorCode::ILLEGAL_BUFFER;
+        }
 
         $data = $result;
         return ErrorCode::OK;

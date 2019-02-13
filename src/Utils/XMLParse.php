@@ -1,6 +1,9 @@
 <?php
-
-namespace fwkit\Wechat\Utils;
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2018-11-01 17:51:16 +0800
+ */
+namespace Wechat\Utils;
 
 /**
  * XMLParse class
@@ -38,12 +41,12 @@ class XMLParse
      */
     public static function generate(string $encrypt, string $signature, string $timestamp, string $nonce)
     {
-        $format = "<xml>
+        $format = '<xml>
 <Encrypt><![CDATA[%s]]></Encrypt>
 <MsgSignature><![CDATA[%s]]></MsgSignature>
 <TimeStamp>%s</TimeStamp>
 <Nonce><![CDATA[%s]]></Nonce>
-</xml>";
+</xml>';
         return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
     }
 }

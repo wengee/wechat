@@ -1,12 +1,26 @@
 <?php
+/**
+ * @author   Fung Wing Kit <wengee@gmail.com>
+ * @version  2019-02-13 17:48:39 +0800
+ */
+namespace Wechat\Minapp;
 
-namespace fwkit\Wechat\Minapp;
-
-use fwkit\Wechat\ClientBase;
+use Wechat\ClientBase;
 
 class Client extends ClientBase
 {
-    protected $host = 'https://api.weixin.qq.com/';
+    protected $componentList = [
+        'analysis' => Components\Analysis::class,
+        'media'    => Components\Media::class,
+        'message'  => Components\Message::class,
+        'nearby'   => Components\Nearby::class,
+        'oauth'    => Components\OAuth::class,
+        'plugin'   => Components\Plugin::class,
+        'qrcode'   => Components\QrCode::class,
+        'security' => Components\Security::class,
+        'template' => Components\Template::class,
+        'token'    => Components\Token::class,
+    ];
 
-    protected $componentPrefix = '\fwkit\Wechat\Minapp\Components';
+    protected $baseUri = 'https://api.weixin.qq.com/';
 }
