@@ -3,7 +3,7 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2018-11-02 18:02:09 +0800
  */
-namespace Wechat\Message;
+namespace fwkit\Wechat\Message;
 
 abstract class MessageBase
 {

@@ -3,11 +3,11 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2018-11-20 16:12:25 +0800
  */
-namespace Wechat\Minapp\Components;
+namespace fwkit\Wechat\Minapp\Components;
 
-use Wechat\ComponentBase;
-use Wechat\OfficialError;
-use Wechat\Utils\DataCrypt;
+use fwkit\Wechat\ComponentBase;
+use fwkit\Wechat\OfficialError;
+use fwkit\Wechat\Utils\DataCrypt;
 
 class OAuth extends ComponentBase
 {

@@ -3,7 +3,7 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2018-11-20 15:25:31 +0800
  */
-namespace Wechat\Utils;
+namespace fwkit\Wechat\Utils;
 
 /**
  * 对微信小程序用户加密数据的解密示例代码.

@@ -3,9 +3,9 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2018-11-02 15:54:35 +0800
  */
-namespace Wechat\Minapp\Components;
+namespace fwkit\Wechat\Minapp\Components;
 
-use Wechat\ComponentBase;
+use fwkit\Wechat\ComponentBase;
 use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
 

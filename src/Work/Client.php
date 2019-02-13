@@ -3,9 +3,9 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2018-11-02 17:06:22 +0800
  */
-namespace Wechat\Work;
+namespace fwkit\Wechat\Work;
 
-use Wechat\ClientBase;
+use fwkit\Wechat\ClientBase;
 
 class Client extends ClientBase
 {

@@ -3,9 +3,9 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2018-11-02 16:59:59 +0800
  */
-namespace Wechat\Minapp\Components;
+namespace fwkit\Wechat\Minapp\Components;
 
-use Wechat\ComponentBase;
+use fwkit\Wechat\ComponentBase;
 
 class QrCode extends ComponentBase
 {

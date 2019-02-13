@@ -3,7 +3,7 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2019-02-13 17:58:29 +0800
  */
-namespace Wechat\Concerns;
+namespace fwkit\Wechat\Concerns;
 
 trait HasCache
 {

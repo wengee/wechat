@@ -3,9 +3,9 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2019-02-13 17:48:39 +0800
  */
-namespace Wechat\Minapp;
+namespace fwkit\Wechat\Minapp;
 
-use Wechat\ClientBase;
+use fwkit\Wechat\ClientBase;
 
 class Client extends ClientBase
 {

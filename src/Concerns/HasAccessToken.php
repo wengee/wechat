@@ -3,7 +3,7 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2019-02-13 17:59:20 +0800
  */
-namespace Wechat\Concerns;
+namespace fwkit\Wechat\Concerns;
 
 trait HasAccessToken
 {

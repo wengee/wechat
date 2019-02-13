@@ -5,12 +5,12 @@
  */
 namespace Wechat;
 
-use Wechat\Concerns\HasAccessToken;
-use Wechat\Concerns\HasCache;
-use Wechat\Concerns\HasHttpRequests;
-use Wechat\Concerns\HasOptions;
-use Wechat\Message\MessageBase;
-use Wechat\Utils\MsgCrypt;
+use fwkit\Wechat\Concerns\HasAccessToken;
+use fwkit\Wechat\Concerns\HasCache;
+use fwkit\Wechat\Concerns\HasHttpRequests;
+use fwkit\Wechat\Concerns\HasOptions;
+use fwkit\Wechat\Message\MessageBase;
+use fwkit\Wechat\Utils\MsgCrypt;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class ClientBase
