@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-01 18:38:17 +0800
+ * @version  2019-02-14 16:35:37 +0800
  */
 namespace Wechat;
 
@@ -12,9 +12,15 @@ class Collection extends IlluminateCollection
     public function __get($name)
     {
         try {
-            return parent::__get($name);
+            $value = parent::__get($name);
         } catch (\Exception $e) {
-            return $this->get($name);
+            $value = $this->get($name);
         }
+
+        if (is_array($value)) {
+            $value = new static($value);
+        }
+
+        return $value;
     }
 }

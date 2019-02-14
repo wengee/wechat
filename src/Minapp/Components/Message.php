@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-02 15:35:48 +0800
+ * @version  2019-02-14 15:29:03 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
@@ -60,6 +60,7 @@ class Message extends ComponentBase
         $res = $this->post('cgi-bin/message/custom/send', [
             'json' => [
                 'touser' => $openId,
+                'msgtype' => $msgType,
                 $msgType => $data,
             ],
         ]);

@@ -1,10 +1,10 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-02 17:58:56 +0800
+ * @version  2019-02-14 17:19:31 +0800
  */
 namespace fwkit\Wechat\Message;
 
-class ImageMessage extends MessageBase
+class Unknown extends MessageBase
 {
 }

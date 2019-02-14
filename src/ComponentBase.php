@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-20 15:29:18 +0800
+ * @version  2019-02-14 16:33:59 +0800
  */
 namespace Wechat;
 
@@ -62,12 +62,15 @@ abstract class ComponentBase
     protected function parseMap(array $arr, array $map)
     {
         foreach ($map as $key => $value) {
-            $arrValue = $arr[$key] ?? null;
-            if (is_array($arrValue)) {
-                $arrValue = $this->parseMap($arrValue, $map);
-            }
+            if (array_key_exists($key, $arr)) {
+                $arrValue = $arr[$key];
+                if (is_array($arrValue)) {
+                    $arrValue = $this->parseMap($arrValue, $map);
+                }
 
-            $arr[$value] = $arr[$key] = $arrValue;
+                $arr[$value] = $arrValue;
+                unset($arr[$key]);
+            }
         }
 
         return $arr;

@@ -9,6 +9,8 @@ trait HasAccessToken
 {
     protected static $tokenGetter;
 
+    protected $tokenComponent = 'token';
+
     protected $accessToken;
 
     public function getAccessToken(bool $forceUpdate = false)
@@ -30,10 +32,10 @@ trait HasAccessToken
         }
 
         if (empty($accessToken)) {
-            $token = $this->component('token');
-            if ($token) {
+            $tokenComponent = $this->component($this->tokenComponent);
+            if ($tokenComponent) {
                 try {
-                    $res = $token->getAccessToken();
+                    $res = $tokenComponent->getAccessToken();
                     $accessToken = $res->get('accessToken', null);
                     if (method_exists($this, 'cacheSet')) {
                         $ttl = (int) max(1, $res->get('expiresIn', 0) - 600);
