@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 09:34:58 +0800
+ * @version  2019-02-15 18:00:30 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Response;
 
 trait HasHttpRequests
 {
-    public function request(string $method, string $url, array $options, $accessToken = null, bool $returnRaw = false)
+    public function request(string $method, string $url, array $options, $accessToken = null, $dataType = 'auto')
     {
         static $client;
         if (!isset($client)) {
@@ -34,21 +34,23 @@ trait HasHttpRequests
         }
 
         $response = $client->request($method, $url, $options);
-        return $returnRaw ? $response : $this->tryParseResponse($response);
+        return $this->parseResponse($response);
     }
 
-    protected function tryParseResponse(Response $response)
+    protected function parseResponse(Response $response, $dataType = 'auto')
     {
-        $res = null;
-        if ($response->getStatusCode() === 200) {
-            $body = trim($response->getBody());
-            if ($body{0} === '<') {
-                $res = @simplexml_load_string($body);
-            } else {
-                $res = @json_decode($body, true);
-            }
+        if ($response->getStatusCode() !== 200 || $dataType === 'raw' || empty($dataType)) {
+            return $response;
         }
 
-        return $res ?: $response;
+        $res = null;
+        $body = trim($response->getBody());
+        if ($dataType === 'xml' || ($dataType === 'auto' && $body{0} === '<')) {
+            $res = @simplexml_load_string($body);
+        } elseif ($dataType === 'json' || $dataType === 'auto') {
+            $res = @json_decode($body, true);
+        }
+
+        return ($dataType === 'auto') ? ($res ?: $response) : $res;
     }
 }

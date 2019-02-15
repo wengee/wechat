@@ -6,7 +6,7 @@
 namespace fwkit\Wechat\Mp\Components;
 
 use fwkit\Wechat\ComponentBase;
-use fwkit\Wechat\Mp\Items\Button;
+use fwkit\Wechat\Utils\Items\Button;
 
 class Menu extends ComponentBase
 {

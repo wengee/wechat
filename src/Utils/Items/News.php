@@ -1,9 +1,9 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 15:16:37 +0800
+ * @version  2019-02-15 17:38:47 +0800
  */
-namespace fwkit\Wechat\Mp\Items;
+namespace fwkit\Wechat\Utils\Items;
 
 use fwkit\Wechat\Concerns\HasOptions;
 use JsonSerializable;

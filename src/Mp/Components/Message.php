@@ -1,13 +1,13 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 15:30:20 +0800
+ * @version  2019-02-15 17:40:02 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
 use fwkit\Wechat\ComponentBase;
-use fwkit\Wechat\Mp\Items\News;
 use fwkit\Wechat\Utils\Helper;
+use fwkit\Wechat\Utils\Items\News;
 
 class Message extends ComponentBase
 {

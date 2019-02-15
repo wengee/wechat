@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-13 17:48:15 +0800
+ * @version  2019-02-15 15:52:45 +0800
  */
 namespace Wechat;
 
@@ -10,8 +10,9 @@ use fwkit\Wechat\Concerns\HasCache;
 use fwkit\Wechat\Concerns\HasHttpRequests;
 use fwkit\Wechat\Concerns\HasOptions;
 use fwkit\Wechat\Message\MessageBase;
+use fwkit\Wechat\Utils\ErrorCode;
 use fwkit\Wechat\Utils\MsgCrypt;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 abstract class ClientBase
 {
@@ -47,11 +48,12 @@ abstract class ClientBase
         }
     }
 
-    public function checkSignature(Request $request)
+    public function checkSignature(ServerRequestInterface $request)
     {
-        $signature = $request->query->get('signature', '');
-        $timestamp = $request->query->get('timestamp', '');
-        $nonce = $request->query->get('nonce', '');
+        $query = $request->getQueryParams();
+        $signature = $query['signature'] ?? '';
+        $timestamp = $query['timestamp'] ?? '';
+        $nonce = $query['nonce'] ?? '';
 
         if (!$signature || !$timestamp || !$nonce) {
             throw new OfficialError('Params is invalid.');
@@ -69,11 +71,40 @@ abstract class ClientBase
 
     public function parseMessage(string $message)
     {
-        return MessageBase::factory($message);
+        $message = MessageBase::factory($message);
+        $message->setCryptor($this->cryptor);
+        return $message;
     }
 
-    public function fetchMessage(Request $request)
+    public function fetchMessage(ServerRequestInterface $request)
     {
+        $query = $request->getQueryParams();
+        $body = (string) $request->getBody();
+
+        $message = '';
+        $encryptType = $query['encrypt_type'] ?? null;
+        if ($encryptType && $this->cryptor) {
+            $msgSignature = $query['msg_signature'] ?? '';
+            $timestamp = $query['timestamp'] ?? '';
+            $nonce = $query['nonce'] ?? '';
+
+            $errcode = $this->cryptor->decrypt(
+                $msgSignature,
+                $timestamp,
+                $nonce,
+                $body,
+                $message
+            );
+
+            if ($errcode !== ErrorCode::OK) {
+                throw new OfficialError('Decrypt error ' . $errcode);
+            }
+        } else {
+            $this->checkSignature($request);
+            $message = $body;
+        }
+
+        return $this->parseMessage($message);
     }
 
     public function get(string $name)

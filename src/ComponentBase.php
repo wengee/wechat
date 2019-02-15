@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 16:33:59 +0800
+ * @version  2019-02-15 17:52:06 +0800
  */
 namespace Wechat;
 
@@ -14,24 +14,25 @@ abstract class ComponentBase
         $this->client = $client;
     }
 
-    protected function get(string $url, array $options = [], $accessToken = null)
+    protected function get(string $url, array $options = [], $accessToken = null, $dataType = 'auto')
     {
         return $this->request('GET', $url, $options, $accessToken);
     }
 
-    protected function post(string $url, array $options = [], $accessToken = null)
+    protected function post(string $url, array $options = [], $accessToken = null, $dataType = 'auto')
     {
         return $this->request('POST', $url, $options, $accessToken);
     }
 
-    protected function request(string $method, string $url, array $options = [], $accessToken = null)
+    protected function request(string $method, string $url, array $options = [], $accessToken = null, $dataType = 'auto')
     {
-        $first = true;
+        $first = $accessToken === null;
 
         RETRY:
-        $res = $this->client->request($method, $url, $options, $first ? $accessToken : true);
+        $res = $this->client->request($method, $url, $options, $accessToken, $dataType);
         if ($first && ($accessToken !== false) && is_array($res) && isset($res['errcode']) && ($res['errcode'] == 40001 || $res['errcode'] == 42001)) {
             $first = false;
+            $accessToken = true;
             goto RETRY;
         }
 

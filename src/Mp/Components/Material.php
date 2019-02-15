@@ -1,13 +1,13 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 14:35:59 +0800
+ * @version  2019-02-15 17:39:38 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
 use fwkit\Wechat\ComponentBase;
-use fwkit\Wechat\Mp\Items\Article;
 use fwkit\Wechat\Utils\Helper;
+use fwkit\Wechat\Utils\Items\Article;
 use GuzzleHttp\Psr7\Stream;
 use Psr\Http\Message\StreamInterface;
 

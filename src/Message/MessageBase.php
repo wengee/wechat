@@ -1,37 +1,45 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 17:50:33 +0800
+ * @version  2019-02-15 15:52:59 +0800
  */
 namespace fwkit\Wechat\Message;
-
-use fwkit\Wechat\Message\Event\Unknown as UnknownEvent;
-use fwkit\Wechat\Message\Unknown as UnknownMessage;
 
 abstract class MessageBase
 {
     protected static $types = [
-        'image'   => Image::class,
-        'link'   => Link::class,
-        'location'   => Location::class,
+        'image'         => Image::class,
+        'link'          => Link::class,
+        'location'      => Location::class,
         'shortvideo'    => ShortVideo::class,
-        'text'    => Text::class,
-        'video'    => Video::class,
-        'voice'    => Voice::class,
+        'text'          => Text::class,
+        'video'         => Video::class,
+        'voice'         => Voice::class,
     ];
 
     protected static $events = [
-        'click' => Event\Click::class,
-        'location' => Event\Location::class,
-        'scan' => Event\Scan::class,
-        'subscribe' => Event\Subscribe::class,
-        'unsubscribe' => Event\Unsubscribe::class,
-        'view' => Event\View::class,
+        'click'         => Event\Click::class,
+        'location'      => Event\Location::class,
+        'scan'          => Event\Scan::class,
+        'subscribe'     => Event\Subscribe::class,
+        'unsubscribe'   => Event\Unsubscribe::class,
+        'view'          => Event\View::class,
+    ];
+
+    protected static $replies = [
+        'image'         => Reply\Image::class,
+        'music'         => Reply\Music::class,
+        'news'          => Reply\News::class,
+        'text'          => Reply\Text::class,
+        'video'         => Reply\Video::class,
+        'voice'         => Reply\Voice::class,
     ];
 
     protected $rawXml;
 
     protected $data;
+
+    protected $cryptor;
 
     public $id;
 
@@ -51,6 +59,12 @@ abstract class MessageBase
         $this->initialize($data);
     }
 
+    public function setCryptor($cryptor)
+    {
+        $this->cryptor = $cryptor;
+        return $this;
+    }
+
     public function get($key, $default = null)
     {
         $key = strtolower($key);
@@ -62,17 +76,29 @@ abstract class MessageBase
         return $this->rawXml;
     }
 
+    public function reply(string $type = 'text')
+    {
+        $className = static::$replies[$type] ?? Reply\Unknown::class;
+        $reply = new $className($this->accountId, $this->openId);
+        $reply->setCryptor($this->cryptor);
+        return $reply;
+    }
+
     public static function factory(string $message)
     {
-        $data = (array) simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $data = (array) @simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
         $data = array_change_key_case($data, CASE_LOWER);
+
+        if (empty($data) || !isset($data['msgtype'])) {
+            return null;
+        }
 
         $msgType = strtolower($data['msgtype']);
         if ($msgType === 'event') {
             $event = strtolower($data['event']);
-            $className = static::$events[$event] ?? UnknownEvent::class;
+            $className = static::$events[$event] ?? Event\Unknown::class;
         } else {
-            $className = static::$types[$msgType] ?? UnknownMessage::class;
+            $className = static::$types[$msgType] ?? Unknown::class;
         }
 
         return new $className($message, $data);
@@ -80,30 +106,23 @@ abstract class MessageBase
 
     protected function setAttributes(array $data, array $map = [])
     {
+        $this->id = $data['msgid'] ?? null;
+        $this->type = isset($data['msgtype']) ? strtolower($data['msgtype']) : null;
+        $this->accountId = $data['tousername'] ?? null;
+        $this->openId = $data['fromusername'] ?? null;
+        $this->createTime = (int) $data['createtime'] ?? 0;
+
         foreach ($data as $key => $value) {
-            if ($key === 'tousername') {
-                $this->accountId = $value;
-            } elseif ($key === 'fromusername') {
-                $this->openId = $value;
-            } elseif ($key === 'createtime') {
-                $this->createTime = $value;
-            } elseif ($key === 'msgid') {
-                $this->id = $value;
-            } elseif ($key === 'msgtype') {
-                $this->type = strtolower($value);
-            } else {
-                if (property_exists($this, $key)) {
-                    $this->{$key} = $value;
-                    continue;
-                }
+            if (property_exists($this, $key)) {
+                $this->{$key} = $value;
+                continue;
+            }
 
-                if (isset($map[$key])) {
-                    $nKey = $map[$key];
+            if (isset($map[$key])) {
+                $nKey = $map[$key];
 
-                    if (property_exists($this, $nKey)) {
-                        $this->{$nKey} = $value;
-                        continue;
-                    }
+                if (property_exists($this, $nKey)) {
+                    $this->{$nKey} = $value;
                 }
             }
         }
