@@ -1,9 +1,9 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 16:35:37 +0800
+ * @version  2019-02-16 16:09:21 +0800
  */
-namespace Wechat;
+namespace fwkit\Wechat;
 
 use Illuminate\Support\Collection as IlluminateCollection;
 

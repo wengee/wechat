@@ -1,9 +1,9 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-01 14:48:16 +0800
+ * @version  2019-02-16 16:09:31 +0800
  */
-namespace Wechat;
+namespace fwkit\Wechat;
 
 class OfficialError extends \Exception
 {

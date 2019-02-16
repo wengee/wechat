@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-13 17:59:20 +0800
+ * @version  2019-02-16 16:06:15 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -20,15 +20,13 @@ trait HasAccessToken
         }
 
         $accessToken = null;
-        $appId = $this->appId;
-        $cacheKey = 'wechat-access-token-' . $appId;
 
         if (method_exists($this, 'cacheGet') && !$forceUpdate) {
-            $accessToken = $this->cacheGet($cacheKey);
+            $accessToken = $this->cacheGet('accessToken');
         }
 
         if (empty($accessToken) && static::$tokenGetter && is_callable(static::$tokenGetter)) {
-            $accessToken = call_user_func(static::$tokenGetter, $appId);
+            $accessToken = call_user_func(static::$tokenGetter, $this->appId);
         }
 
         if (empty($accessToken)) {
@@ -39,7 +37,7 @@ trait HasAccessToken
                     $accessToken = $res->get('accessToken', null);
                     if (method_exists($this, 'cacheSet')) {
                         $ttl = (int) max(1, $res->get('expiresIn', 0) - 600);
-                        $this->cacheSet($cacheKey, $accessToken, $ttl);
+                        $this->cacheSet('accessToken', $accessToken, $ttl);
                     }
                 } catch (\Exception $e) {
                 }

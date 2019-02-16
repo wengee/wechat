@@ -1,9 +1,9 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 17:52:06 +0800
+ * @version  2019-02-16 16:09:27 +0800
  */
-namespace Wechat;
+namespace fwkit\Wechat;
 
 abstract class ComponentBase
 {
@@ -47,7 +47,7 @@ abstract class ComponentBase
             }
 
             if ($map && is_array($map)) {
-                $res = $this->parseMap($res, $map);
+                $res = $this->transformKeys($res, $map);
             }
 
             return $this->makeCollection($res);
@@ -60,13 +60,13 @@ abstract class ComponentBase
         return $res;
     }
 
-    protected function parseMap(array $arr, array $map)
+    protected function transformKeys(array $arr, array $map)
     {
         foreach ($map as $key => $value) {
             if (array_key_exists($key, $arr)) {
                 $arrValue = $arr[$key];
                 if (is_array($arrValue)) {
-                    $arrValue = $this->parseMap($arrValue, $map);
+                    $arrValue = $this->transformKeys($arrValue, $map);
                 }
 
                 $arr[$value] = $arrValue;

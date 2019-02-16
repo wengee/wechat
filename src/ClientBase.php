@@ -1,9 +1,9 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 15:52:45 +0800
+ * @version  2019-02-16 16:59:18 +0800
  */
-namespace Wechat;
+namespace fwkit\Wechat;
 
 use fwkit\Wechat\Concerns\HasAccessToken;
 use fwkit\Wechat\Concerns\HasCache;
@@ -29,6 +29,14 @@ abstract class ClientBase
     protected $encodingAESKey;
 
     protected $cryptor = null;
+
+    protected $mchId;
+
+    protected $mchSecret;
+
+    protected $sslCert;
+
+    protected $sslKey;
 
     protected $components = [];
 
@@ -137,5 +145,15 @@ abstract class ClientBase
     public function getAppSecret()
     {
         return $this->appSecret;
+    }
+
+    public function getMchId()
+    {
+        return $this->mchId;
+    }
+
+    public function getMchSecret()
+    {
+        return $this->mchSecret;
     }
 }

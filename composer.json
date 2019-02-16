@@ -19,6 +19,9 @@
     "autoload": {
         "psr-4": {
             "fwkit\\Wechat\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     }
 }

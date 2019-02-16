@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 15:11:38 +0800
+ * @version  2019-02-16 10:54:54 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -72,7 +72,11 @@ class Menu extends ComponentBase
     public function createConditional(array $buttons, array $matchRule)
     {
         $buttons = $this->filterButtons($buttons);
-        $matchRule = $this->filterMatchRule($matchRule);
+        $matchRule = $this->transformKeys($matchRule, [
+            'tagId' => 'tag_id',
+            'platform' => 'client_platform_type',
+            'clientPlatformType' => 'client_platform_type',
+        ]);
         $ret = $this->post('cgi-bin/menu/addconditional', [
             'json' => [
                 'button' => $buttons,
@@ -120,21 +124,5 @@ class Menu extends ComponentBase
 
             return null;
         }, $buttons);
-    }
-
-    protected function filterMatchRule(array $matchRule): array
-    {
-        $ret = [];
-        foreach ($matchRule as $key => $value) {
-            if ($key === 'tagId') {
-                $ret['tag_id'] = $value;
-            } elseif ($key === 'platform' || $key === 'clientPlatformType') {
-                $ret['client_platform_type'] = $value;
-            } else {
-                $ret[$key] = $value;
-            }
-        }
-
-        return $ret;
     }
 }

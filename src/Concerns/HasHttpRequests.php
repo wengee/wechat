@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 18:00:30 +0800
+ * @version  2019-02-16 17:18:11 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -10,15 +10,28 @@ use GuzzleHttp\Psr7\Response;
 
 trait HasHttpRequests
 {
+    protected static $defaultHandler;
+
+    public static function setDefaultHandler($handler)
+    {
+        if (is_callable($handler)) {
+            self::$defaultHandler = $handler;
+        } elseif (is_string($handler) && class_exists($handler)) {
+            self::$defaultHandler = new $handler;
+        }
+    }
+
     public function request(string $method, string $url, array $options, $accessToken = null, $dataType = 'auto')
     {
         static $client;
         if (!isset($client)) {
-            $client = new Client;
+            $client = new Client([
+                'handler' => self::$defaultHandler,
+            ]);
         }
 
         $method = strtoupper($method);
-        if (property_exists($this, 'baseUri') && !is_null($this->baseUri)) {
+        if (!preg_match('#^https?://.+#i', $url) && property_exists($this, 'baseUri') && !is_null($this->baseUri)) {
             $options['base_uri'] = $this->baseUri;
         }
 
@@ -33,14 +46,31 @@ trait HasHttpRequests
             $options['query']['access_token'] = $accessToken;
         }
 
+        if (isset($options['withCert'])) {
+            $withCert = $options['withCert'];
+            unset($options['withCert']);
+
+            if ($withCert) {
+                $options['cert'] = $this->sslCert;
+                $options['ssl_key'] = $this->sslKey;
+            }
+        }
+
         $response = $client->request($method, $url, $options);
         return $this->parseResponse($response);
     }
 
     protected function parseResponse(Response $response, $dataType = 'auto')
     {
-        if ($response->getStatusCode() !== 200 || $dataType === 'raw' || empty($dataType)) {
+        if ($dataType === 'raw' || empty($dataType)) {
             return $response;
+        }
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception(
+                $response->getBody(),
+                $response->getStatusCode()
+            );
         }
 
         $res = null;
