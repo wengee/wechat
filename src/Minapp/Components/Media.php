@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-02 15:54:35 +0800
+ * @version  2019-02-18 17:09:32 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
@@ -11,7 +11,7 @@ use Psr\Http\Message\StreamInterface;
 
 class Media extends ComponentBase
 {
-    public function getTemp(string $mediaId)
+    public function fetch(string $mediaId)
     {
         $res = $this->get('cgi-bin/media/get', [
             'query' => [
@@ -19,11 +19,12 @@ class Media extends ComponentBase
             ],
         ]);
 
-        $this->checkResponse($res, null, false);
-        return $res->getBody();
+        return $this->checkResponse($res, [
+            'video_url' => 'videoUrl',
+        ], false);
     }
 
-    public function uploadTemp($file, string $type = 'image')
+    public function upload($file, string $type = 'image')
     {
         if (is_string($file)) {
             $file = fopen($file, 'r');

@@ -1,22 +1,26 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-18 16:03:43 +0800
+ * @version  2019-02-18 16:59:36 +0800
  */
-namespace fwkit\Wechat\Work\Components;
+namespace fwkit\Wechat\Mp\Components;
 
 use fwkit\Wechat\ComponentBase;
 use fwkit\Wechat\Utils\Helper;
 
 class Redpack extends ComponentBase
 {
-    public function send(string $openId, int $amount = 100, array $data = [])
+    public function send(string $openId, int $amount = 100, array $data = [], bool $group = false)
     {
         $data['re_openid'] = $openId;
         $data['total_amount'] = $amount;
-        $xml = $this->toXml($data);
+        $xml = $this->toXml($data, $group);
 
-        $res = $this->post('https://api.mch.weixin.qq.com/mmpaymkttransfers/sendworkwxredpack', [
+        $url = $group ?
+            'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendgroupredpack' :
+            'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
+
+        $res = $this->post($url, [
             'body' => $xml,
             'withCert' => true,
         ], false, 'xml');
@@ -25,36 +29,43 @@ class Redpack extends ComponentBase
             'return_code' => 'returnCode',
             'return_msg' => 'returnMsg',
             'result_code' => 'resultCode',
+            'err_code' => 'errCode',
+            'err_code_des' => 'errCodeDes',
             'mch_billno' => 'mchBillNo',
             'mch_id' => 'mchId',
             'wxappid' => 'appId',
             're_openid' => 'openId',
             'total_amount' => 'amount',
             'send_listid' => 'sendListId',
-            'sender_name' => 'senderName',
-            'sender_header_media_id' => 'senderHeaderMediaId',
         ]) : null;
     }
 
-    public function query(string $mchBillNo)
+    public function sendGroup(string $openId, int $amount = 100, array $data = [])
+    {
+        return $this->send($openId, $amount, $data, true);
+    }
+
+    public function query(string $mchBillNo, string $billType = 'MCHT')
     {
         $data = [
             'nonce_str' => Helper::createNonceStr(),
             'mch_billno' => $mchBillNo,
             'mch_id' => $this->client->getMchId(),
             'appid' => $this->client->getAppId(),
+            'bill_type' => $billType,
         ];
 
         $data['sign'] = $this->signature($data);
         $xml = "<xml>
-                    <nonce_str><![CDATA[{$data['nonce_str']}]]></nonce_str>
                     <sign><![CDATA[{$data['sign']}]]></sign>
                     <mch_billno><![CDATA[{$data['mch_billno']}]]></mch_billno>
                     <mch_id><![CDATA[{$data['mch_id']}]]></mch_id>
                     <appid><![CDATA[{$data['appid']}]]></appid>
+                    <bill_type><![CDATA[{$data['bill_type']}]]></bill_type>
+                    <nonce_str><![CDATA[{$data['nonce_str']}]]></nonce_str>
                 </xml>";
 
-        $res = $this->post('https://api.mch.weixin.qq.com/mmpaymkttransfers/queryworkwxredpack', [
+        $res = $this->post('https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo', [
             'body' => $xml,
             'withCert' => true,
         ], false, 'xml');
@@ -63,21 +74,26 @@ class Redpack extends ComponentBase
             'return_code' => 'returnCode',
             'return_msg' => 'returnMsg',
             'result_code' => 'resultCode',
+            'err_code' => 'errCode',
+            'err_code_des' => 'errCodeDes',
             'mch_billno' => 'mchBillNo',
             'mch_id' => 'mchId',
             'detail_id' => 'detailId',
             'send_type' => 'sendType',
+            'hb_type' => 'hbType',
+            'total_num' => 'num',
             'total_amount' => 'amount',
             'send_time' => 'sendTime',
+            'refund_time' => 'refundTime',
+            'refund_amount' => 'refundAmount',
             'act_name' => 'actName',
+            'hblist' => 'hbList',
             'openid' => 'openId',
             'rcv_time' => 'rcvTime',
-            'sender_name' => 'senderName',
-            'sender_header_media_id' => 'senderHeaderMediaId',
         ]) : null;
     }
 
-    private function toXml(array $data)
+    private function toXml(array $data, bool $group = false)
     {
         $data = $this->transformKeys($data, [
             'actName' => 'act_name',
@@ -85,12 +101,14 @@ class Redpack extends ComponentBase
             'billNo' => 'mch_billno',
             'mchBillNo' => 'mch_billno',
             'openId' => 're_openid',
-            'senderName' => 'sender_name',
+            'sendName' => 'send_name',
             'amount' => 'total_amount',
             'num' => 'total_num',
-            'agentId' => 'agentid',
-            'senderHeaderMediaId' => 'sender_header_media_id',
+            'totalNum' => 'total_num',
+            'clientIp' => 'client_ip',
             'sceneId' => 'scene_id',
+            'riskInfo' => 'risk_info',
+            'amtType' => 'amt_type',
         ]);
 
         $data += [
@@ -98,14 +116,16 @@ class Redpack extends ComponentBase
             'mch_billno' => '',
             'mch_id' => $this->client->getMchId(),
             'wxappid' => $this->client->getAppId(),
-            'sender_name' => '',
-            'sender_header_media_id' => '',
+            'send_name' => '',
             're_openid' => '',
             'total_amount' => '',
+            'total_num' => 1,
             'wishing' => '',//祝福语
             'act_name' => '',
             'remark' => '',
+            'client_ip' => '',
             'scene_id' => '',
+            'risk_info' => '',
         ];
 
         if (empty($data['mch_billno'])) {
@@ -114,28 +134,33 @@ class Redpack extends ComponentBase
             $data['mch_billno'] = substr($mchBillNo, 0, 28);
         }
 
-        $data['workwx_sign'] = $this->signature($data, true);
-        $data['sign'] = $this->signature($data);
+        $amtType = '';
+        if ($group) {
+            $data['amt_type'] = $data['amt_type'] ?? 'ALL_RAND';
+            $amtType = "<amt_type><![CDATA[{$data['amt_type']}]]></amt_type>";
+        }
 
+        $data['sign'] = $this->signature($data);
         return "<xml>
-                    <nonce_str><![CDATA[{$data['nonce_str']}]]></nonce_str>
                     <sign><![CDATA[{$data['sign']}]]></sign>
                     <mch_billno><![CDATA[{$data['mch_billno']}]]></mch_billno>
                     <mch_id><![CDATA[{$data['mch_id']}]]></mch_id>
                     <wxappid><![CDATA[{$data['wxappid']}]]></wxappid>
-                    <sender_name><![CDATA[{$data['sender_name']}]]></sender_name>
-                    <sender_header_media_id><![CDATA[{$data['sender_header_media_id']}]]></sender_header_media_id>
+                    <send_name><![CDATA[{$data['send_name']}]]></send_name>
                     <re_openid><![CDATA[{$data['re_openid']}]]></re_openid>
-                    <total_amount><![CDATA[{$data['total_amount']}]]></total_amount>
+                    <total_amount><![CDATA[{$data['total_amount']}]]></total_amount>{$amtType}
+                    <total_num><![CDATA[{$data['total_num']}]]></total_num>
                     <wishing><![CDATA[{$data['wishing']}]]></wishing>
+                    <client_ip><![CDATA[{$data['client_ip']}]]></client_ip>
                     <act_name><![CDATA[{$data['act_name']}]]></act_name>
                     <remark><![CDATA[{$data['remark']}]]></remark>
                     <scene_id><![CDATA[{$data['scene_id']}]]></scene_id>
-                    <workwx_sign><![CDATA[{$data['workwx_sign']}]]></workwx_sign>
+                    <nonce_str><![CDATA[{$data['nonce_str']}]]></nonce_str>
+                    <risk_info><![CDATA[{$data['risk_info']}]]></risk_info>
                 </xml>";
     }
 
-    private function signature(array $data, bool $workWxSign = false)
+    private function signature(array $data)
     {
         $data = array_filter($data, 'strlen');
         ksort($data);
@@ -144,12 +169,7 @@ class Redpack extends ComponentBase
             $tmpStr .= $key . '=' . $value . '&';
         }
 
-        if ($workWxSign) {
-            $tmpStr .= 'secret=' . $this->client->getAppSecret();
-        } else {
-            $tmpStr .= 'key=' . $this->client->getMchKey();
-        }
-
+        $tmpStr .= 'key=' . $this->client->getMchKey();
         return strtoupper(md5($tmpStr));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 16:59:18 +0800
+ * @version  2019-02-18 15:31:56 +0800
  */
 namespace fwkit\Wechat;
 
@@ -32,7 +32,7 @@ abstract class ClientBase
 
     protected $mchId;
 
-    protected $mchSecret;
+    protected $mchKey;
 
     protected $sslCert;
 
@@ -152,8 +152,8 @@ abstract class ClientBase
         return $this->mchId;
     }
 
-    public function getMchSecret()
+    public function getMchKey()
     {
-        return $this->mchSecret;
+        return $this->mchKey;
     }
 }
