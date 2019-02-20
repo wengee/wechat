@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 17:18:11 +0800
+ * @version  2019-02-20 17:20:16 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -54,6 +54,12 @@ trait HasHttpRequests
                 $options['cert'] = $this->sslCert;
                 $options['ssl_key'] = $this->sslKey;
             }
+        }
+
+        // 妈妈咪呀，微信不认识 \uxxxx的中文编码
+        if (isset($options['json'])) {
+            $options['body'] = json_encode($options['json'], JSON_UNESCAPED_UNICODE);
+            unset($options['json']);
         }
 
         $response = $client->request($method, $url, $options);
