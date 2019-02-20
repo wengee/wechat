@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 15:56:45 +0800
+ * @version  2019-02-20 15:34:15 +0800
  */
 namespace fwkit\Wechat\Work\Components;
 
@@ -94,12 +94,13 @@ class User extends ComponentBase
         return true;
     }
 
-    public function fetchList(int $departmentId, bool $fetchChild = true)
+    public function fetchList(int $departmentId, bool $fetchChild = true, int $status = 0)
     {
         $res = $this->get('cgi-bin/user/simplelist', [
             'query' => [
                 'department_id' => $departmentId,
                 'fetch_child' => $fetchChild ? 1 : 0,
+                'status' => $status,
             ],
         ]);
 
@@ -109,12 +110,13 @@ class User extends ComponentBase
         ]);
     }
 
-    public function fetchAll(int $departmentId, bool $fetchChild = true)
+    public function fetchAll(int $departmentId, bool $fetchChild = true, int $status = 0)
     {
         $res = $this->get('cgi-bin/user/list', [
             'query' => [
                 'department_id' => $departmentId,
                 'fetch_child' => $fetchChild ? 1 : 0,
+                'status' => $status,
             ],
         ]);
 
