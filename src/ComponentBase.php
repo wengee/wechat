@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 16:09:27 +0800
+ * @version  2019-02-20 15:18:58 +0800
  */
 namespace fwkit\Wechat;
 
@@ -60,21 +60,23 @@ abstract class ComponentBase
         return $res;
     }
 
-    protected function transformKeys(array $arr, array $map)
+    protected function transformKeys(array $arr, array $map): array
     {
-        foreach ($map as $key => $value) {
-            if (array_key_exists($key, $arr)) {
-                $arrValue = $arr[$key];
-                if (is_array($arrValue)) {
-                    $arrValue = $this->transformKeys($arrValue, $map);
-                }
+        $ret = [];
+        foreach ($arr as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->transformKeys($value, $map);
+            }
 
-                $arr[$value] = $arrValue;
-                unset($arr[$key]);
+            if (isset($map[$key])) {
+                $newKey = $map[$key];
+                $ret[$newKey] = $value;
+            } else {
+                $ret[$key] = $value;
             }
         }
 
-        return $arr;
+        return $ret;
     }
 
     protected function makeCollection($arr)
