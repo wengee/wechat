@@ -1,6 +1,10 @@
 {
     "name": "fwkit/wechat",
     "description": "Wechat library",
+    "keywords": [
+        "weixin",
+        "wechat"
+    ],
     "type": "library",
     "license": "Apache-2.0",
     "authors": [

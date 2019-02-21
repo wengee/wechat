@@ -1,2 +1,2 @@
 # Wechat Library
-Wechat library for swoft
+Wechat library
