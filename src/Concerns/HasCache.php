@@ -1,37 +1,36 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 16:05:18 +0800
+ * @version  2019-02-21 10:55:00 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
+use fwkit\Wechat\CacheInterface;
+
 trait HasCache
 {
-    protected static $setCacheFunc;
-
-    protected static $getCacheFunc;
+    protected static $cache;
 
     public function cacheSet(string $key, $value, int $ttl = 0)
     {
-        if (is_callable(self::$setCacheFunc)) {
+        if (self::$cache) {
             $key = 'wechat:' . $this->appId . ':' . $key;
-            return call_user_func_array(self::$setCacheFunc, [$key, $value, $ttl]);
+            return self::$cache->set($key, $value, $ttl);
         }
     }
 
     public function cacheGet(string $key)
     {
-        if (is_callable(self::$getCacheFunc)) {
+        if (self::$cache) {
             $key = 'wechat:' . $this->appId . ':' . $key;
-            return call_user_func_array(self::$getCacheFunc, [$key]);
+            return self::$cache->get($key);
         }
 
         return null;
     }
 
-    public static function cacheCallback(?callable $setCacheFunc = null, ?callable $getCacheFunc = null)
+    public static function setCacheObj(CacheInterface $cache)
     {
-        self::$setCacheFunc = $setCacheFunc;
-        self::$getCacheFunc = $getCacheFunc;
+        self::$cache = $cache;
     }
 }

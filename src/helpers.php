@@ -1,14 +1,17 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 17:19:06 +0800
+ * @version  2019-02-21 10:53:23 +0800
  */
+use fwkit\Wechat\CacheInterface;
 use fwkit\Wechat\ClientBase;
 
-if (!function_exists('wechat_cache_callback')) {
-    function wechat_cache_callback(?callable $setCacheFunc = null, ?callable $getCacheFunc = null)
+if (!function_exists('wechat_set_cache')) {
+    function wechat_set_cache(?CacheInterface $cache = null)
     {
-        return ClientBase::cacheCallback($setCacheFunc, $getCacheFunc);
+        if ($cache) {
+            ClientBase::setCacheObj($cache);
+        }
     }
 }
 
