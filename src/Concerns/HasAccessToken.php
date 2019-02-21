@@ -1,9 +1,11 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 16:06:15 +0800
+ * @version  2019-02-21 11:31:29 +0800
  */
 namespace fwkit\Wechat\Concerns;
+
+use fwkit\Wechat\Utils\Cache;
 
 trait HasAccessToken
 {
@@ -21,8 +23,8 @@ trait HasAccessToken
 
         $accessToken = null;
 
-        if (method_exists($this, 'cacheGet') && !$forceUpdate) {
-            $accessToken = $this->cacheGet('accessToken');
+        if (!$forceUpdate) {
+            $accessToken = Cache::get($this->appId, 'accessToken');
         }
 
         if (empty($accessToken) && static::$tokenGetter && is_callable(static::$tokenGetter)) {
@@ -35,10 +37,9 @@ trait HasAccessToken
                 try {
                     $res = $tokenComponent->getAccessToken();
                     $accessToken = $res->get('accessToken', null);
-                    if (method_exists($this, 'cacheSet')) {
-                        $ttl = (int) max(1, $res->get('expiresIn', 0) - 600);
-                        $this->cacheSet('accessToken', $accessToken, $ttl);
-                    }
+
+                    $ttl = (int) max(1, $res->get('expiresIn', 0) - 600);
+                    Cache::set($this->appId, 'accessToken', $accessToken, $ttl);
                 } catch (\Exception $e) {
                 }
             }

@@ -1,11 +1,12 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 16:36:21 +0800
+ * @version  2019-02-21 11:31:52 +0800
  */
 namespace fwkit\Wechat\Work\Components;
 
 use fwkit\Wechat\ComponentBase;
+use fwkit\Wechat\Utils\Cache;
 use fwkit\Wechat\Utils\Helper;
 
 class JsApi extends ComponentBase
@@ -58,8 +59,9 @@ class JsApi extends ComponentBase
 
     protected function safeGetTicket(bool $agentConfig = false): string
     {
+        $appId = $this->client->getAppId();
         $cacheKey = $agentConfig ? 'agentConfigJsApiTicket' : 'jsApiTicket';
-        $ticket = $this->client->cacheGet($cacheKey);
+        $ticket = Cache::get($appId, $cacheKey);
         if (empty($ticket)) {
             try {
                 $res = $this->getTicket($agentConfig);
@@ -68,7 +70,7 @@ class JsApi extends ComponentBase
             }
 
             $ticket = $res->ticket;
-            $this->client->cacheSet($cacheKey, $ticket, $res->expiresIn - 600);
+            Cache::set($appId, $cacheKey, $ticket, $res->expiresIn - 600);
         }
 
         return $ticket ?: '';

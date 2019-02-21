@@ -1,12 +1,11 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-18 15:31:56 +0800
+ * @version  2019-02-21 11:27:52 +0800
  */
 namespace fwkit\Wechat;
 
 use fwkit\Wechat\Concerns\HasAccessToken;
-use fwkit\Wechat\Concerns\HasCache;
 use fwkit\Wechat\Concerns\HasHttpRequests;
 use fwkit\Wechat\Concerns\HasOptions;
 use fwkit\Wechat\Message\MessageBase;
@@ -16,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class ClientBase
 {
-    use HasAccessToken, HasCache, HasHttpRequests, HasOptions;
+    use HasAccessToken, HasHttpRequests, HasOptions;
 
     protected $componentList = [];
 
