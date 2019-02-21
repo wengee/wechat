@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-21 11:31:29 +0800
+ * @version  2019-02-21 14:37:35 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -22,7 +22,6 @@ trait HasAccessToken
         }
 
         $accessToken = null;
-
         if (!$forceUpdate) {
             $accessToken = Cache::get($this->appId, 'accessToken');
         }

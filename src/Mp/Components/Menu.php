@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 10:54:54 +0800
+ * @version  2019-02-21 15:00:12 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 

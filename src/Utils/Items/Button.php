@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 17:38:50 +0800
+ * @version  2019-02-21 15:01:11 +0800
  */
 namespace fwkit\Wechat\Utils\Items;
 
@@ -50,7 +50,7 @@ class Button implements JsonSerializable
 
     public $mediaId;
 
-    public function __constrcut(array $options)
+    public function __construct(array $options)
     {
         $this->setOptions($options);
     }
@@ -114,6 +114,10 @@ class Button implements JsonSerializable
                 case self::VIEW_LIMITED:
                     $data['media_id'] = $this->mediaId;
                     break;
+
+                default:
+                    $data['type'] = self::CLICK;
+                    $data['key'] = $this->key ?: $this->name;
             }
         } else {
             $data['sub_button'] = array_map(function ($button) {

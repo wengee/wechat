@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 16:58:35 +0800
+ * @version  2019-02-21 15:05:09 +0800
  */
 namespace fwkit\Wechat\Mp;
 
@@ -19,6 +19,7 @@ class Client extends ClientBase
         'message'   => Components\Message::class,
         'oauth'     => Components\OAuth::class,
         'qrcode'    => Components\QrCode::class,
+        'redpack'   => Components\Redpack::class,
         'tag'       => Components\Tag::class,
         'token'     => Components\Token::class,
         'user'      => Components\User::class,
