@@ -26,13 +26,11 @@ trait HasAccessToken
             $accessToken = Cache::get($this->appId, 'accessToken');
         }
 
-        if (empty($accessToken) && static::$tokenGetter && is_callable(static::$tokenGetter)) {
-            $accessToken = call_user_func(static::$tokenGetter, $this->appId);
-        }
-
         if (empty($accessToken)) {
-            $tokenComponent = $this->component($this->tokenComponent);
-            if ($tokenComponent) {
+            if (static::$tokenGetter && is_callable(static::$tokenGetter)) {
+                $accessToken = call_user_func(static::$tokenGetter, $this->appId);
+            } else {
+                $tokenComponent = $this->component($this->tokenComponent);
                 try {
                     $res = $tokenComponent->getAccessToken();
                     $accessToken = $res->get('accessToken', null);
