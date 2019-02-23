@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-23 10:41:07 +0800
+ * @version  2019-02-23 11:12:15 +0800
  */
 namespace fwkit\Wechat\Provider\Components;
 
@@ -29,15 +29,13 @@ class Token extends ComponentBase
 
     public function getAccessToken()
     {
-        $options = [
+        $res = $this->get('cgi-bin/component/api_component_token', [
             'json' => [
                 'component_appid' => $this->client->getAppId(),
                 'component_appsecret' => $this->client->getAppSecret(),
                 'component_verify_ticket' => $this->getVerifyTicket(),
             ],
-        ];
-
-        $res = $this->get('cgi-bin/component/api_component_token', $options, false);
+        ], false);
         return $this->checkResponse($res, [
             'component_access_token' => 'accessToken',
             'expires_in' => 'expiresIn',
