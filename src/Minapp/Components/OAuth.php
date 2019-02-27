@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-20 16:12:25 +0800
+ * @version  2019-02-27 10:42:58 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
@@ -59,7 +59,10 @@ class OAuth extends ComponentBase
             throw new OfficialError('Data is empty.');
         }
 
-        $data = $this->parseMap($data, []);
+        $data = $this->transformKeys($data, [
+            'nickName' => 'nickname',
+            'appid' => 'appId',
+        ]);
         return $this->makeCollection($data);
     }
 }
