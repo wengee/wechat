@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-27 10:42:58 +0800
+ * @version  2019-04-28 16:48:04 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
@@ -31,6 +31,7 @@ class OAuth extends ComponentBase
         $res = $this->checkResponse($res, [
             'expires_in' => 'expiresIn',
             'openid' => 'openId',
+            'unionid' => 'unionId',
             'session_key' => 'sessionKey',
             'unionid' => 'unionId',
         ]);
