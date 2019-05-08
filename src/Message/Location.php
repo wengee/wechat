@@ -1,25 +1,21 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 17:21:17 +0800
+ * @version  2019-05-08 15:17:37 +0800
  */
 namespace fwkit\Wechat\Message;
 
-class Location extends MessageBase
+class Video extends MessageBase
 {
-    public $latitude;
+    public $mediaId;
 
-    public $longitude;
-
-    public $scale;
-
-    public $label;
+    public $thumbMediaId;
 
     protected function initialize(array $data)
     {
-        $this->setAttributes($data, [
-            'location_x' => 'latitude',
-            'location_y' => 'longitude',
+        $this->setData($data, [
+            'mediaid' => 'mediaId',
+            'thumbmediaid' => 'thumbMediaId',
         ]);
     }
 }

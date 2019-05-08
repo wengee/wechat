@@ -13,7 +13,7 @@ class Video extends MessageBase
 
     protected function initialize(array $data)
     {
-        $this->setAttributes($data, [
+        $this->setData($data, [
             'mediaid' => 'mediaId',
             'thumbmediaid' => 'thumbMediaId',
         ]);

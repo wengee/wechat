@@ -13,7 +13,7 @@ class Scan extends EventBase
 
     protected function initialize(array $data)
     {
-        $this->setAttributes($data, [
+        $this->setData($data, [
             'eventkey' => 'scene',
         ]);
     }

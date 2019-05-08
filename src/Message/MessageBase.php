@@ -1,9 +1,11 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 15:52:59 +0800
+ * @version  2019-05-08 15:22:34 +0800
  */
 namespace fwkit\Wechat\Message;
+
+use Illuminate\Support\Collection;
 
 abstract class MessageBase
 {
@@ -35,6 +37,8 @@ abstract class MessageBase
         'voice'         => Reply\Voice::class,
     ];
 
+    protected $attributes;
+
     protected $rawXml;
 
     protected $data;
@@ -53,6 +57,7 @@ abstract class MessageBase
 
     public function __construct(string $rawXml, array $data)
     {
+        $this->attributes = new Collection;
         $this->rawXml = $rawXml;
         $this->data = $data;
 
@@ -104,7 +109,29 @@ abstract class MessageBase
         return new $className($message, $data);
     }
 
-    protected function setAttributes(array $data, array $map = [])
+    public function withAttribute($name, $value): self
+    {
+        $this->attributes[$name] = $value;
+        return $this;
+    }
+
+    public function withoutAttribute($name): self
+    {
+        unset($this->attributes[$name]);
+        return $this;
+    }
+
+    public function getAttributes()
+    {
+        return $this->attributes->all();
+    }
+
+    public function getAttribute($name, $default = null)
+    {
+        return $this->attributes->get($name, $default);
+    }
+
+    protected function setData(array $data, array $map = [])
     {
         $this->id = $data['msgid'] ?? null;
         $this->type = isset($data['msgtype']) ? strtolower($data['msgtype']) : null;
@@ -130,6 +157,6 @@ abstract class MessageBase
 
     protected function initialize(array $data)
     {
-        $this->setAttributes($data);
+        $this->setData($data);
     }
 }

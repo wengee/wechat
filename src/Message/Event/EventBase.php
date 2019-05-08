@@ -13,10 +13,10 @@ abstract class EventBase extends MessageBase
 
     public $eventKey;
 
-    protected function setAttributes(array $data, array $map = [])
+    protected function setData(array $data, array $map = [])
     {
         $this->event = isset($data['event']) ? strtolower($data['event']) : null;
         $this->eventKey = isset($data['eventkey']) ? strtolower($data['eventkey']) : null;
-        parent::setAttributes($data, $map);
+        parent::setData($data, $map);
     }
 }

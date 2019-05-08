@@ -13,7 +13,7 @@ class Image extends MessageBase
 
     protected function initialize(array $data)
     {
-        $this->setAttributes($data, [
+        $this->setData($data, [
             'picurl' => 'picUrl',
             'mediaid' => 'mediaId',
         ]);

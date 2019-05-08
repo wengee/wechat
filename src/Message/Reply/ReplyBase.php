@@ -30,7 +30,10 @@ abstract class ReplyBase implements ReplyInterface
 
     public function set($key, $value)
     {
-        if (property_exists($this, $key)) {
+        $setter = 'set' . ucfirst($key);
+        if (method_exists($this, $setter)) {
+            $this->{$setter}($value);
+        } elseif (property_exists($this, $key)) {
             $this->{$key} = $value;
         }
 
