@@ -1,11 +1,11 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-08 15:17:37 +0800
+ * @version  2019-05-08 18:10:35 +0800
  */
 namespace fwkit\Wechat\Message;
 
-class Video extends MessageBase
+class Location extends MessageBase
 {
     public $mediaId;
 
