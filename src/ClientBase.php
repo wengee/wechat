@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-21 11:27:52 +0800
+ * @version  2019-05-11 18:12:05 +0800
  */
 namespace fwkit\Wechat;
 
@@ -18,6 +18,8 @@ abstract class ClientBase
     use HasAccessToken, HasHttpRequests, HasOptions;
 
     protected $componentList = [];
+
+    protected $originId;
 
     protected $appId;
 
@@ -134,6 +136,11 @@ abstract class ClientBase
         }
 
         return null;
+    }
+
+    public function getOriginId()
+    {
+        return $this->originId;
     }
 
     public function getAppId()
