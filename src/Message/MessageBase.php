@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-08 15:22:34 +0800
+ * @version  2019-05-11 18:07:55 +0800
  */
 namespace fwkit\Wechat\Message;
 
@@ -35,6 +35,7 @@ abstract class MessageBase
         'text'          => Reply\Text::class,
         'video'         => Reply\Video::class,
         'voice'         => Reply\Voice::class,
+        'raw'           => Reply\Raw::class,
     ];
 
     protected $attributes;
