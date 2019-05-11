@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-21 15:21:48 +0800
+ * @version  2019-05-11 17:06:05 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -63,7 +63,7 @@ trait HasHttpRequests
         }
 
         $response = $client->request($method, $url, $options);
-        return $this->parseResponse($response);
+        return $this->parseResponse($response, $dataType);
     }
 
     protected function parseResponse(Response $response, $dataType = 'auto')
