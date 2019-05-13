@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 15:45:46 +0800
+ * @version  2019-05-13 09:53:10 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -35,6 +35,11 @@ class QrCode extends ComponentBase
         return $this->checkResponse($res, [
             'expire_seconds' => 'expire',
         ]);
+    }
+
+    public function url(string $ticket)
+    {
+        return 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($ticket);
     }
 
     public function fetch(string $ticket)
