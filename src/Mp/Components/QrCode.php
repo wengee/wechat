@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-13 09:53:10 +0800
+ * @version  2019-06-03 12:05:35 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -22,10 +22,14 @@ class QrCode extends ComponentBase
 
         if (is_int($value)) {
             $data['action_name'] = $prefix . 'SCENE';
-            $data['action_info'] = ['scene_id' => $value];
+            $data['action_info'] = [
+                'scene' => ['scene_id' => $value],
+            ];
         } else {
             $data['action_name'] = $prefix . 'STR_SCENE';
-            $data['action_info'] = ['scene_str' => (string) $value];
+            $data['action_info'] = [
+                'scene' => ['scene_str' => (string) $value],
+            ];
         }
 
         $res = $this->post('cgi-bin/qrcode/create', [
