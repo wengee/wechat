@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-04-28 16:48:04 +0800
+ * @version  2019-06-15 16:24:03 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
@@ -44,6 +44,20 @@ class OAuth extends ComponentBase
 
     public function getUserInfo(string $encryptedData, string $iv, ?string $sessionKey = null)
     {
+        $data = $this->decryptData($encryptedData, $iv, $sessionKey);
+        if (!is_array($data) || empty($data)) {
+            throw new OfficialError('Data is empty.');
+        }
+
+        $data = $this->transformKeys($data, [
+            'nickName' => 'nickname',
+            'appid' => 'appId',
+        ]);
+        return $this->makeCollection($data);
+    }
+
+    public function decryptData(string $encryptedData, string $iv, ?string $sessionKey = null)
+    {
         $sessionKey = $sessionKey ?: $this->sessionKey;
         if (!$sessionKey) {
             throw new OfficialError('Illegal session key.');
@@ -56,14 +70,12 @@ class OAuth extends ComponentBase
         }
 
         $data = json_decode($decryptedData, true);
-        if (!is_array($data) || empty($data)) {
-            throw new OfficialError('Data is empty.');
+
+        $errcode = json_last_error();
+        if ($errcode !== JSON_ERROR_NONE) {
+            throw new OfficialError('Parse json error: ' . json_last_error_msg(), $errcode);
         }
 
-        $data = $this->transformKeys($data, [
-            'nickName' => 'nickname',
-            'appid' => 'appId',
-        ]);
-        return $this->makeCollection($data);
+        return $data;
     }
 }
