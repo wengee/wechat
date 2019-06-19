@@ -21,6 +21,7 @@ class Client extends ClientBase
         'qrcode'    => Components\QrCode::class,
         'redpack'   => Components\Redpack::class,
         'tag'       => Components\Tag::class,
+        'template'  => Components\Template::class,
         'token'     => Components\Token::class,
         'user'      => Components\User::class,
     ];
