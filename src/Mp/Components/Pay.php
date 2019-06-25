@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-25 18:13:39 +0800
+ * @version  2019-06-25 18:33:17 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -201,8 +201,8 @@ class Pay extends ComponentBase
             'nonce_str' => Helper::createNonceStr(),
         ];
 
-        $data['sign'] = $this->signature($data, $mchConfig);
         $data['sign_type'] = 'MD5';
+        $data['sign'] = $this->signature($data, $mchConfig);
         $ret = '<xml>';
         foreach ($data as $key => $value) {
             if (is_array($value) || is_object($value)) {
