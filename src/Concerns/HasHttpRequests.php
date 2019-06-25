@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-11 17:06:05 +0800
+ * @version  2019-06-25 17:11:28 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -50,7 +50,12 @@ trait HasHttpRequests
             $withCert = $options['withCert'];
             unset($options['withCert']);
 
-            if ($withCert) {
+            if (is_array($withCert)) {
+                if (isset($withCert['sslCert']) && isset($withCert['sslKey'])) {
+                    $options['cert'] = $withCert['sslCert'];
+                    $options['ssl_key'] = $withCert['sslKey'];
+                }
+            } elseif ($withCert) {
                 $options['cert'] = $this->sslCert;
                 $options['ssl_key'] = $this->sslKey;
             }

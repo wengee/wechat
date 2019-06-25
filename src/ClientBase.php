@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-11 18:12:05 +0800
+ * @version  2019-06-25 16:16:51 +0800
  */
 namespace fwkit\Wechat;
 
@@ -31,13 +31,7 @@ abstract class ClientBase
 
     protected $cryptor = null;
 
-    protected $mchId;
-
-    protected $mchKey;
-
-    protected $sslCert;
-
-    protected $sslKey;
+    protected $mchConfig = [];
 
     protected $components = [];
 
@@ -153,13 +147,13 @@ abstract class ClientBase
         return $this->appSecret;
     }
 
-    public function getMchId()
+    public function mchConfig(array $config = [], ?string $key = null, $default = null)
     {
-        return $this->mchId;
-    }
+        $config += $this->mchConfig;
+        if ($key === null) {
+            return $config;
+        }
 
-    public function getMchKey()
-    {
-        return $this->mchKey;
+        return isset($config[$key]) ? $config[$key] : $default;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-18 16:03:43 +0800
+ * @version  2019-06-25 16:29:40 +0800
  */
 namespace fwkit\Wechat\Work\Components;
 
@@ -10,15 +10,15 @@ use fwkit\Wechat\Utils\Helper;
 
 class Redpack extends ComponentBase
 {
-    public function send(string $openId, int $amount = 100, array $data = [])
+    public function send(string $openId, int $amount = 100, array $data = [], array $mchConfig = [])
     {
         $data['re_openid'] = $openId;
         $data['total_amount'] = $amount;
-        $xml = $this->toXml($data);
+        $xml = $this->toXml($data, $mchConfig);
 
         $res = $this->post('https://api.mch.weixin.qq.com/mmpaymkttransfers/sendworkwxredpack', [
             'body' => $xml,
-            'withCert' => true,
+            'withCert' => $mchConfig,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
@@ -36,16 +36,16 @@ class Redpack extends ComponentBase
         ]) : null;
     }
 
-    public function query(string $mchBillNo)
+    public function query(string $mchBillNo, array $mchConfig = [])
     {
         $data = [
             'nonce_str' => Helper::createNonceStr(),
             'mch_billno' => $mchBillNo,
-            'mch_id' => $this->client->getMchId(),
+            'mch_id' => $this->client->mchConfig($mchConfig, 'mchId'),
             'appid' => $this->client->getAppId(),
         ];
 
-        $data['sign'] = $this->signature($data);
+        $data['sign'] = $this->signature($data, $mchConfig);
         $xml = "<xml>
                     <nonce_str><![CDATA[{$data['nonce_str']}]]></nonce_str>
                     <sign><![CDATA[{$data['sign']}]]></sign>
@@ -56,7 +56,7 @@ class Redpack extends ComponentBase
 
         $res = $this->post('https://api.mch.weixin.qq.com/mmpaymkttransfers/queryworkwxredpack', [
             'body' => $xml,
-            'withCert' => true,
+            'withCert' => $mchConfig,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
@@ -77,7 +77,7 @@ class Redpack extends ComponentBase
         ]) : null;
     }
 
-    private function toXml(array $data)
+    private function toXml(array $data, array $mchConfig = [])
     {
         $data = $this->transformKeys($data, [
             'actName' => 'act_name',
@@ -96,7 +96,7 @@ class Redpack extends ComponentBase
         $data += [
             'nonce_str' => Helper::createNonceStr(),
             'mch_billno' => '',
-            'mch_id' => $this->client->getMchId(),
+            'mch_id' => $this->client->mchConfig($mchConfig, 'mchId'),
             'wxappid' => $this->client->getAppId(),
             'sender_name' => '',
             'sender_header_media_id' => '',
@@ -115,7 +115,7 @@ class Redpack extends ComponentBase
         }
 
         $data['workwx_sign'] = $this->signature($data, true);
-        $data['sign'] = $this->signature($data);
+        $data['sign'] = $this->signature($data, $mchConfig);
 
         return "<xml>
                     <nonce_str><![CDATA[{$data['nonce_str']}]]></nonce_str>
@@ -135,7 +135,7 @@ class Redpack extends ComponentBase
                 </xml>";
     }
 
-    private function signature(array $data, bool $workWxSign = false)
+    private function signature(array $data, $workWxSign = false)
     {
         $data = array_filter($data, 'strlen');
         ksort($data);
@@ -144,10 +144,11 @@ class Redpack extends ComponentBase
             $tmpStr .= $key . '=' . $value . '&';
         }
 
-        if ($workWxSign) {
+        if ($workWxSign === true) {
             $tmpStr .= 'secret=' . $this->client->getAppSecret();
         } else {
-            $tmpStr .= 'key=' . $this->client->getMchKey();
+            $mchConfig = is_array($workWxSign) ? $workWxSign : [];
+            $tmpStr .= 'key=' . $this->client->mchConfig($mchConfig, 'mchKey');
         }
 
         return strtoupper(md5($tmpStr));

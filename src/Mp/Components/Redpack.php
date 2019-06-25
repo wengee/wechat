@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-21 15:07:34 +0800
+ * @version  2019-06-25 16:25:18 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -10,11 +10,11 @@ use fwkit\Wechat\Utils\Helper;
 
 class Redpack extends ComponentBase
 {
-    public function send(string $openId, int $amount = 100, array $data = [], bool $group = false)
+    public function send(string $openId, int $amount = 100, array $data = [], array $mchConfig = [], bool $group = false)
     {
         $data['re_openid'] = $openId;
         $data['total_amount'] = $amount;
-        $xml = $this->toXml($data, $group);
+        $xml = $this->toXml($data, $mchConfig, $group);
 
         $url = $group ?
             'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendgroupredpack' :
@@ -22,7 +22,7 @@ class Redpack extends ComponentBase
 
         $res = $this->post($url, [
             'body' => $xml,
-            'withCert' => true,
+            'withCert' => $mchConfig,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
@@ -40,22 +40,22 @@ class Redpack extends ComponentBase
         ]) : null;
     }
 
-    public function sendGroup(string $openId, int $amount = 100, array $data = [])
+    public function sendGroup(string $openId, int $amount = 100, array $data = [], array $mchConfig = [])
     {
-        return $this->send($openId, $amount, $data, true);
+        return $this->send($openId, $amount, $data, $mchConfig, true);
     }
 
-    public function query(string $mchBillNo, string $billType = 'MCHT')
+    public function query(string $mchBillNo, string $billType = 'MCHT', array $mchConfig = [])
     {
         $data = [
             'nonce_str' => Helper::createNonceStr(),
             'mch_billno' => $mchBillNo,
-            'mch_id' => $this->client->getMchId(),
+            'mch_id' => $this->client->mchConfig($mchConfig, 'mchId'),
             'appid' => $this->client->getAppId(),
             'bill_type' => $billType,
         ];
 
-        $data['sign'] = $this->signature($data);
+        $data['sign'] = $this->signature($data, $mchConfig);
         $xml = "<xml>
                     <sign><![CDATA[{$data['sign']}]]></sign>
                     <mch_billno><![CDATA[{$data['mch_billno']}]]></mch_billno>
@@ -67,7 +67,7 @@ class Redpack extends ComponentBase
 
         $res = $this->post('https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo', [
             'body' => $xml,
-            'withCert' => true,
+            'withCert' => $mchConfig,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
@@ -93,7 +93,7 @@ class Redpack extends ComponentBase
         ]) : null;
     }
 
-    private function toXml(array $data, bool $group = false)
+    private function toXml(array $data, array $mchConfig = [], bool $group = false)
     {
         $data = $this->transformKeys($data, [
             'actName' => 'act_name',
@@ -114,7 +114,7 @@ class Redpack extends ComponentBase
         $data += [
             'nonce_str' => Helper::createNonceStr(),
             'mch_billno' => '',
-            'mch_id' => $this->client->getMchId(),
+            'mch_id' => $this->client->mchConfig($mchConfig, 'mchId'),
             'wxappid' => $this->client->getAppId(),
             'send_name' => '',
             're_openid' => '',
@@ -140,7 +140,7 @@ class Redpack extends ComponentBase
             $amtType = "<amt_type><![CDATA[{$data['amt_type']}]]></amt_type>";
         }
 
-        $data['sign'] = $this->signature($data);
+        $data['sign'] = $this->signature($data, $mchConfig);
         return "<xml>
                     <sign><![CDATA[{$data['sign']}]]></sign>
                     <mch_billno><![CDATA[{$data['mch_billno']}]]></mch_billno>
@@ -160,7 +160,7 @@ class Redpack extends ComponentBase
                 </xml>";
     }
 
-    private function signature(array $data)
+    private function signature(array $data, array $mchConfig = [])
     {
         $data = array_filter($data, 'strlen');
         ksort($data);
@@ -169,7 +169,7 @@ class Redpack extends ComponentBase
             $tmpStr .= $key . '=' . $value . '&';
         }
 
-        $tmpStr .= 'key=' . $this->client->getMchKey();
+        $tmpStr .= 'key=' . $this->client->mchConfig($mchConfig, 'mchKey');
         return strtoupper(md5($tmpStr));
     }
 }
