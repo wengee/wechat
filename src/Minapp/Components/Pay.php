@@ -1,11 +1,12 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-25 17:29:28 +0800
+ * @version  2019-06-25 18:13:54 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
 use fwkit\Wechat\ComponentBase;
+use fwkit\Wechat\Utils\Helper;
 
 class Pay extends ComponentBase
 {
