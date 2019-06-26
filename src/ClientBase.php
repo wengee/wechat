@@ -74,9 +74,7 @@ abstract class ClientBase
 
     public function parseMessage(string $message)
     {
-        $message = MessageBase::factory($message);
-        $message->setCryptor($this->cryptor);
-        return $message;
+        return MessageBase::factory($message);
     }
 
     public function fetchMessage(ServerRequestInterface $request)
@@ -102,12 +100,14 @@ abstract class ClientBase
             if ($errcode !== ErrorCode::OK) {
                 throw new OfficialError('Decrypt error ' . $errcode);
             }
+
+            $message = $this->parseMessage($message);
+            $message->setCryptor($this->cryptor);
+            return $message;
         } else {
             $this->checkSignature($request);
-            $message = $body;
+            return $this->parseMessage($body);
         }
-
-        return $this->parseMessage($message);
     }
 
     public function get(string $name)
