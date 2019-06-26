@@ -13,6 +13,15 @@ abstract class EventBase extends MessageBase
 
     public $eventKey;
 
+    public function isEvent(...$types)
+    {
+        if (count($types) === 0) {
+            return true;
+        }
+
+        return in_array($this->event, $types, true);
+    }
+
     protected function setData(array $data, array $map = [])
     {
         $this->event = isset($data['event']) ? strtolower($data['event']) : null;

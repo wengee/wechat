@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-11 18:07:55 +0800
+ * @version  2019-06-26 23:16:03 +0800
  */
 namespace fwkit\Wechat\Message;
 
@@ -130,6 +130,11 @@ abstract class MessageBase
     public function getAttribute($name, $default = null)
     {
         return $this->attributes->get($name, $default);
+    }
+
+    public function isEvent(...$types): bool
+    {
+        return false;
     }
 
     protected function setData(array $data, array $map = [])
