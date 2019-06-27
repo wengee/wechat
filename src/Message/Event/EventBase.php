@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-03 14:32:31 +0800
+ * @version  2019-06-27 10:53:00 +0800
  */
 namespace fwkit\Wechat\Message\Event;
 
@@ -13,7 +13,7 @@ abstract class EventBase extends MessageBase
 
     public $eventKey;
 
-    public function isEvent(...$types)
+    public function isEvent(...$types): bool
     {
         if (count($types) === 0) {
             return true;
