@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-07-18 18:19:22 +0800
+ * @version  2019-07-19 06:20:34 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
@@ -11,7 +11,7 @@ class Raw extends ReplyBase
         'xml' => '',
     ];
 
-    public function toXml(): string
+    protected function template(): string
     {
         return $this->attributes['xml'] ?? '';
     }
