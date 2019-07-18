@@ -1,17 +1,17 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 14:24:59 +0800
+ * @version  2019-07-18 18:18:26 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
 class Video extends ReplyBase
 {
-    public $mediaId;
-
-    public $title;
-
-    public $description;
+    protected $attributes = [
+        'mediaId' => '',
+        'title' => '',
+        'description' => '',
+    ];
 
     protected function template(): string
     {

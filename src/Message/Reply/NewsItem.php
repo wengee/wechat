@@ -7,13 +7,12 @@ namespace fwkit\Wechat\Message\Reply;
 
 class NewsItem implements ReplyInterface
 {
-    public $title;
-
-    public $description;
-
-    public $url;
-
-    public $picUrl;
+    protected $attributes = [
+        'title' => '',
+        'description' => '',
+        'url' => '',
+        'picUrl' => '',
+    ];
 
     public function __construct(string $title, string $description, string $url, string $picUrl)
     {
@@ -25,11 +24,12 @@ class NewsItem implements ReplyInterface
 
     public function toXml(): string
     {
+        $attributes = $this->attributes;
         return "<item>
-                    <Title><![CDATA[{$this->title}]]></Title>
-                    <Description><![CDATA[{$this->description}]]></Description>
-                    <PicUrl><![CDATA[{$this->picUrl}]]></PicUrl>
-                    <Url><![CDATA[{$this->url}]]></Url>
+                    <Title><![CDATA[{$attributes['title']}]]></Title>
+                    <Description><![CDATA[{$attributes['description']}]]></Description>
+                    <PicUrl><![CDATA[{$attributes['picUrl']}]]></PicUrl>
+                    <Url><![CDATA[{$attributes['url']}]]></Url>
                 </item>";
     }
 }

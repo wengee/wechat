@@ -12,6 +12,8 @@ abstract class ReplyBase implements ReplyInterface
 {
     protected $cryptor;
 
+    protected $attributes = [];
+
     public $accountId;
 
     public $openId;
@@ -33,8 +35,8 @@ abstract class ReplyBase implements ReplyInterface
         $setter = 'set' . ucfirst($key);
         if (method_exists($this, $setter)) {
             $this->{$setter}($value);
-        } elseif (property_exists($this, $key)) {
-            $this->{$key} = $value;
+        } elseif (array_key_exists($key, $this->attributes)) {
+            $this->attributes[$key] = $value;
         }
 
         return $this;
@@ -86,7 +88,9 @@ abstract class ReplyBase implements ReplyInterface
 
     protected function getVars(): array
     {
-        $vars = get_object_vars($this);
+        $vars = $this->attributes ?: [];
+        $vars['accountId'] = $this->accountId;
+        $vars['openId'] = $this->openId;
         $vars['createTime'] = time();
         return $vars;
     }

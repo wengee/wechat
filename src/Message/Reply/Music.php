@@ -1,21 +1,19 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 14:24:47 +0800
+ * @version  2019-07-18 18:13:26 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
 class Music extends ReplyBase
 {
-    public $title;
-
-    public $description;
-
-    public $url;
-
-    public $hqUrl;
-
-    public $thumbMediaId;
+    protected $attributes = [
+        'title' => '',
+        'description' => '',
+        'url' => '',
+        'hqUrl' => '',
+        'thumbMediaId' => '',
+    ];
 
     protected function template(): string
     {

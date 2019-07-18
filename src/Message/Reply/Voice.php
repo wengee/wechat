@@ -7,7 +7,9 @@ namespace fwkit\Wechat\Message\Reply;
 
 class Voice extends ReplyBase
 {
-    public $mediaId;
+    protected $attributes = [
+        'mediaId' => '',
+    ];
 
     protected function template(): string
     {

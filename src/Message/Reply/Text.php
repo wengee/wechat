@@ -1,13 +1,15 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 14:24:55 +0800
+ * @version  2019-07-18 18:18:06 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
 class Text extends ReplyBase
 {
-    public $content;
+    protected $attributes = [
+        'content' => '',
+    ];
 
     protected function template(): string
     {
