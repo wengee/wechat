@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-01 17:51:05 +0800
+ * @version  2019-07-18 18:26:43 +0800
  */
 namespace fwkit\Wechat\Utils;
 
@@ -92,7 +92,6 @@ class MsgCrypt
     {
         //加密
         [$ret, $encrypted] = $this->pc->encrypt($sReplyMsg, $this->sAppId);
-        $ret = $array[0];
         if ($ret !== 0) {
             return $ret;
         }
