@@ -1,13 +1,15 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 14:24:40 +0800
+ * @version  2019-07-18 18:20:22 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
 class Image extends ReplyBase
 {
-    public $mediaId;
+    protected $attributes = [
+        'mediaId' => '',
+    ];
 
     protected function template(): string
     {
