@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-16 15:48:38 +0800
+ * @version  2019-07-19 16:53:14 +0800
  */
 namespace fwkit\Wechat\Work\Components;
 
@@ -15,7 +15,13 @@ class OAuth extends ComponentBase
         return sprintf('https://open.weixin.qq.com/connect/qrconnect?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s#wechat_redirect', $this->client->getAppId(), $url, $responseType, $scope, $state);
     }
 
-    public function qrAuthorizeUrl(int $agentId, string $url, string $state = null): string
+    public function qyAuthorizeUrl(string $url, int $agentId = 0, string $scope = 'snsapi_base', string $state = null, string $responseType = 'code'): string
+    {
+        $url = urlencode($url);
+        return sprintf('https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&agentid=%d&state=%s#wechat_redirect', $this->client->getAppId(), $url, $responseType, $scope, $agentId, $state);
+    }
+
+    public function ssoAuthorizeUrl(int $agentId, string $url, string $state = null): string
     {
         $url = urlencode($url);
         return sprintf('https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=%s&agentid=%d&redirect_uri=%s&state=%s', $this->client->getAppId(), $agentId, $url, $state);

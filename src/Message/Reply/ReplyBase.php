@@ -14,6 +14,8 @@ abstract class ReplyBase implements ReplyInterface
 
     protected $attributes = [];
 
+    protected $directOutput = false;
+
     public $accountId;
 
     public $openId;
@@ -53,14 +55,17 @@ abstract class ReplyBase implements ReplyInterface
 
     public function toXml(): string
     {
-        $template = $this->template();
-        $vars = $this->getVars();
+        $originXml = $this->template();
 
-        $search = array_map(function ($item) {
-            return '{{' . $item . '}}';
-        }, array_keys($vars));
-        $replace = array_values($vars);
-        $originXml = str_replace($search, $replace, $template);
+        if (!$this->directOutput) {
+            $vars = $this->getVars();
+
+            $search = array_map(function ($item) {
+                return '{{' . $item . '}}';
+            }, array_keys($vars));
+            $replace = array_values($vars);
+            $originXml = str_replace($search, $replace, $originXml);
+        }
 
         if ($this->cryptor) {
             $nonceStr = Helper::createNonceStr();
