@@ -57,15 +57,15 @@ class Article implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'title' => $this->title,
-            'thumb_media_id' => $this->thumbMediaId,
-            'author' => $this->author,
-            'digest' => $this->digest,
-            'show_cover_pic' => $this->showCoverPic ? 1 : 0,
-            'content' => $this->content,
-            'content_source_url' => $this->contentSourceUrl,
-            'need_open_comment' => $this->openComment ? 1 : 0,
-            'only_fans_can_comment' => $this->onlyFansComment ? 1 : 0,
+            'title'                     => $this->title,
+            'thumb_media_id'            => $this->thumbMediaId,
+            'author'                    => $this->author,
+            'digest'                    => $this->digest,
+            'show_cover_pic'            => $this->showCoverPic ? 1 : 0,
+            'content'                   => $this->content,
+            'content_source_url'        => $this->contentSourceUrl,
+            'need_open_comment'         => $this->openComment ? 1 : 0,
+            'only_fans_can_comment'     => $this->onlyFansComment ? 1 : 0,
         ];
     }
 }

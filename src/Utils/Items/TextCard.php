@@ -1,14 +1,14 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 17:38:47 +0800
+ * @version  2019-09-04 17:58:16 +0800
  */
 namespace fwkit\Wechat\Utils\Items;
 
 use fwkit\Wechat\Concerns\HasOptions;
 use JsonSerializable;
 
-class News implements JsonSerializable
+class TextCard implements JsonSerializable
 {
     use HasOptions;
 
@@ -18,7 +18,7 @@ class News implements JsonSerializable
 
     public $url;
 
-    public $picUrl;
+    public $btnTxt;
 
     public function __constrcut(array $options)
     {
@@ -31,7 +31,7 @@ class News implements JsonSerializable
             'title'         => $this->title,
             'description'   => $this->description,
             'url'           => $this->url,
-            'picurl'        => $this->picUrl,
+            'btntxt'        => $this->btnTxt,
         ];
     }
 }

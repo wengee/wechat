@@ -10,15 +10,16 @@ trait HasOptions
     public function setOptions(array $options)
     {
         foreach ($options as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->{$key} = $value;
-            }
+            $this->setOption($key, $value);
         }
     }
 
     public function setOption(string $key, $value)
     {
-        if (property_exists($this, $key)) {
+        $method = 'set' . ucfirst($key);
+        if (method_exists($this, $method)) {
+            $this->{$method}($value);
+        } elseif (property_exists($this, $key)) {
             $this->{$key} = $value;
         }
 
