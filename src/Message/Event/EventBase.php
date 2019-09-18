@@ -24,8 +24,8 @@ abstract class EventBase extends MessageBase
 
     protected function setData(array $data, array $map = [])
     {
+        parent::setData($data, $map);
         $this->event = isset($data['event']) ? strtolower($data['event']) : null;
         $this->eventKey = isset($data['eventkey']) ? $data['eventkey'] : null;
-        parent::setData($data, $map);
     }
 }
