@@ -17,6 +17,7 @@ abstract class MessageBase
         'text'          => Text::class,
         'video'         => Video::class,
         'voice'         => Voice::class,
+        'file'          => File::class,
     ];
 
     protected static $events = [

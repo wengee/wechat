@@ -7,15 +7,19 @@ namespace fwkit\Wechat\Message;
 
 class Location extends MessageBase
 {
-    public $mediaId;
+    public $latitude;
 
-    public $thumbMediaId;
+    public $longitude;
+
+    public $scale;
+
+    public $label;
 
     protected function initialize(array $data)
     {
         $this->setData($data, [
-            'mediaid' => 'mediaId',
-            'thumbmediaid' => 'thumbMediaId',
+            'location_x' => 'latitude',
+            'location_y' => 'longitude',
         ]);
     }
 }
