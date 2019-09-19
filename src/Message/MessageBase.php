@@ -1,13 +1,14 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-26 23:16:03 +0800
+ * @version  2019-09-19 10:06:45 +0800
  */
 namespace fwkit\Wechat\Message;
 
 use Illuminate\Support\Collection;
+use JsonSerializable;
 
-abstract class MessageBase
+abstract class MessageBase implements JsonSerializable
 {
     protected static $types = [
         'image'         => Image::class,
@@ -46,6 +47,8 @@ abstract class MessageBase
     protected $data;
 
     protected $cryptor;
+
+    protected $properties = [];
 
     public $id;
 
@@ -136,6 +139,33 @@ abstract class MessageBase
     public function isEvent(...$types): bool
     {
         return false;
+    }
+
+    public function toArray(): array
+    {
+        $data = [
+            'type'          => $this->type,
+            'accountId'     => $this->accountId,
+            'openId'        => $this->openId,
+            'createTime'    => $this->createTime,
+        ];
+
+        if ($this->id) {
+            $data['id'] = $this->id;
+        }
+
+        if ($this->properties) {
+            foreach ($this->properties as $property) {
+                $data[$property] = $this->{$property};
+            }
+        }
+
+        return $data;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     protected function setData(array $data, array $map = [])

@@ -1,12 +1,19 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-08 18:10:35 +0800
+ * @version  2019-09-19 10:09:12 +0800
  */
 namespace fwkit\Wechat\Message;
 
 class Location extends MessageBase
 {
+    protected $properties = [
+        'latitude',
+        'longitude',
+        'scale',
+        'label',
+    ];
+
     public $latitude;
 
     public $longitude;

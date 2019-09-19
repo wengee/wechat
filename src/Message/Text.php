@@ -7,6 +7,11 @@ namespace fwkit\Wechat\Message;
 
 class Text extends MessageBase
 {
+    protected $properties = [
+        'content',
+        'menuId',
+    ];
+
     public $content;
 
     public $menuId;

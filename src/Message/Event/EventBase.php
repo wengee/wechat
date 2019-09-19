@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-27 10:53:00 +0800
+ * @version  2019-09-19 10:10:50 +0800
  */
 namespace fwkit\Wechat\Message\Event;
 
@@ -9,6 +9,11 @@ use fwkit\Wechat\Message\MessageBase;
 
 abstract class EventBase extends MessageBase
 {
+    protected $properties = [
+        'event',
+        'eventKey',
+    ];
+
     public $event;
 
     public $eventKey;

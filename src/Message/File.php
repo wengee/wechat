@@ -7,6 +7,14 @@ namespace fwkit\Wechat\Message;
 
 class File extends MessageBase
 {
+    protected $properties = [
+        'title',
+        'description',
+        'fileKey',
+        'fileMd5',
+        'fileSize',
+    ];
+
     public $title;
 
     public $description;
