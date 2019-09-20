@@ -23,7 +23,7 @@ abstract class MessageBase
         'location'              => Event\Location::class,
         'location_select'       => Event\LocationSelect::class,
         'pic_photo_or_album'    => Event\PicPhotoOrAlbum::class,
-        'pic_sys_photo'         => Event\PicSysPhoto::class,
+        'pic_sysphoto'          => Event\PicSysPhoto::class,
         'pic_weixin'            => Event\PicWeixin::class,
         'scan'                  => Event\Scan::class,
         'scancode_push'         => Event\ScanCodePush::class,
