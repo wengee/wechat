@@ -1,28 +1,22 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-19 10:10:15 +0800
+ * @version  2019-09-20 14:35:47 +0800
  */
 namespace fwkit\Wechat\Message;
 
 class Voice extends MessageBase
 {
-    protected $properties = [
-        'format',
-        'mediaId',
-        'recognition',
-    ];
-
     public $format;
 
     public $mediaId;
 
     public $recognition;
 
-    protected function initialize(array $data)
+    protected function initialize()
     {
-        $this->setData($data, [
-            'mediaid' => 'mediaId',
-        ]);
+        $this->format = $this->get('format');
+        $this->mediaId = $this->get('mediaId');
+        $this->recognition = $this->get('recognition');
     }
 }

@@ -1,19 +1,12 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-19 10:09:12 +0800
+ * @version  2019-09-20 14:35:26 +0800
  */
 namespace fwkit\Wechat\Message;
 
 class Location extends MessageBase
 {
-    protected $properties = [
-        'latitude',
-        'longitude',
-        'scale',
-        'label',
-    ];
-
     public $latitude;
 
     public $longitude;
@@ -22,11 +15,11 @@ class Location extends MessageBase
 
     public $label;
 
-    protected function initialize(array $data)
+    protected function initialize()
     {
-        $this->setData($data, [
-            'location_x' => 'latitude',
-            'location_y' => 'longitude',
-        ]);
+        $this->latitude = (float) $this->get('location_x');
+        $this->longitude = (float) $this->get('location_y');
+        $this->scale = (int) $this->get('scale');
+        $this->label = $this->get('label');
     }
 }

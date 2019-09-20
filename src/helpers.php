@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-21 11:30:57 +0800
+ * @version  2019-09-20 13:21:24 +0800
  */
 use fwkit\Wechat\ClientBase;
 use fwkit\Wechat\Utils\Cache;
@@ -20,5 +20,18 @@ if (!function_exists('wechat_guzzle_handler')) {
     function wechat_guzzle_handler($handler)
     {
         return ClientBase::setDefaultHandler($handler);
+    }
+}
+
+if (!function_exists('array_change_key_case_recursive')) {
+    function array_change_key_case_recursive(array $data, int $case = CASE_LOWER)
+    {
+        return array_map(function ($item) use ($case) {
+            if (is_array($item)) {
+                $item = array_change_key_case_recursive($item, $case);
+            }
+
+            return $item;
+        }, array_change_key_case($data, $case));
     }
 }

@@ -1,20 +1,12 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 17:19:03 +0800
+ * @version  2019-09-20 14:35:12 +0800
  */
 namespace fwkit\Wechat\Message;
 
 class File extends MessageBase
 {
-    protected $properties = [
-        'title',
-        'description',
-        'fileKey',
-        'fileMd5',
-        'fileSize',
-    ];
-
     public $title;
 
     public $description;
@@ -25,12 +17,12 @@ class File extends MessageBase
 
     public $fileSize = 0;
 
-    protected function initialize(array $data)
+    protected function initialize()
     {
-        $this->setData($data, [
-            'filekey'       => 'fileKey',
-            'filemd5'       => 'fileMd5',
-            'filetotallen'  => 'fileSize',
-        ]);
+        $this->title = $this->get('title');
+        $this->description = $this->get('description');
+        $this->fileKey = $this->get('fileKey');
+        $this->fileMd5 = $this->get('fileMd5');
+        $this->fileSize = (int) $this->get('fileTotalLen');
     }
 }

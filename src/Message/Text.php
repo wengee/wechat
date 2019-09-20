@@ -1,25 +1,19 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 17:51:59 +0800
+ * @version  2019-09-20 14:35:36 +0800
  */
 namespace fwkit\Wechat\Message;
 
 class Text extends MessageBase
 {
-    protected $properties = [
-        'content',
-        'menuId',
-    ];
-
     public $content;
 
     public $menuId;
 
-    protected function initialize(array $data)
+    protected function initialize()
     {
-        $this->setData($data, [
-            'bizmsgmenuid' => 'menuId',
-        ]);
+        $this->content = $this->get('content');
+        $this->menuId = $this->get('bizMsgMenuId');
     }
 }

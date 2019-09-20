@@ -1,54 +1,55 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-19 10:06:45 +0800
+ * @version  2019-09-20 14:37:21 +0800
  */
 namespace fwkit\Wechat\Message;
 
-use Illuminate\Support\Collection;
-use JsonSerializable;
-
-abstract class MessageBase implements JsonSerializable
+abstract class MessageBase
 {
     protected static $types = [
-        'image'         => Image::class,
-        'link'          => Link::class,
-        'location'      => Location::class,
-        'shortvideo'    => ShortVideo::class,
-        'text'          => Text::class,
-        'video'         => Video::class,
-        'voice'         => Voice::class,
-        'file'          => File::class,
+        'image'                 => Image::class,
+        'link'                  => Link::class,
+        'location'              => Location::class,
+        'shortvideo'            => ShortVideo::class,
+        'text'                  => Text::class,
+        'video'                 => Video::class,
+        'voice'                 => Voice::class,
+        'file'                  => File::class,
     ];
 
     protected static $events = [
-        'click'         => Event\Click::class,
-        'location'      => Event\Location::class,
-        'scan'          => Event\Scan::class,
-        'subscribe'     => Event\Subscribe::class,
-        'unsubscribe'   => Event\Unsubscribe::class,
-        'view'          => Event\View::class,
+        'click'                 => Event\Click::class,
+        'location'              => Event\Location::class,
+        'location_select'       => Event\LocationSelect::class,
+        'pic_photo_or_album'    => Event\PicPhotoOrAlbum::class,
+        'pic_sys_photo'         => Event\PicSysPhoto::class,
+        'pic_weixin'            => Event\PicWeixin::class,
+        'scan'                  => Event\Scan::class,
+        'scancode_push'         => Event\ScanCodePush::class,
+        'scancode_waitmsg'      => Event\ScanCodeWaitMsg::class,
+        'subscribe'             => Event\Subscribe::class,
+        'unsubscribe'           => Event\Unsubscribe::class,
+        'view'                  => Event\View::class,
     ];
 
     protected static $replies = [
-        'image'         => Reply\Image::class,
-        'music'         => Reply\Music::class,
-        'news'          => Reply\News::class,
-        'text'          => Reply\Text::class,
-        'video'         => Reply\Video::class,
-        'voice'         => Reply\Voice::class,
-        'raw'           => Reply\Raw::class,
+        'image'                 => Reply\Image::class,
+        'music'                 => Reply\Music::class,
+        'news'                  => Reply\News::class,
+        'text'                  => Reply\Text::class,
+        'video'                 => Reply\Video::class,
+        'voice'                 => Reply\Voice::class,
+        'raw'                   => Reply\Raw::class,
     ];
 
-    protected $attributes;
+    protected $attributes = [];
 
     protected $rawXml;
 
     protected $data;
 
     protected $cryptor;
-
-    protected $properties = [];
 
     public $id;
 
@@ -62,11 +63,10 @@ abstract class MessageBase implements JsonSerializable
 
     public function __construct(string $rawXml, array $data)
     {
-        $this->attributes = new Collection;
         $this->rawXml = $rawXml;
-        $this->data = $data;
 
-        $this->initialize($data);
+        $this->setData($data);
+        $this->initialize();
     }
 
     public function setCryptor($cryptor)
@@ -78,7 +78,7 @@ abstract class MessageBase implements JsonSerializable
     public function get($key, $default = null)
     {
         $key = strtolower($key);
-        return isset($this->data[$key]) ? $this->data[$key] : $default;
+        return array_get($this->data, $key, $default);
     }
 
     public function rawXml()
@@ -97,7 +97,7 @@ abstract class MessageBase implements JsonSerializable
     public static function factory(string $message)
     {
         $data = (array) @simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $data = array_change_key_case($data, CASE_LOWER);
+        $data = array_change_key_case_recursive($data);
 
         if (empty($data) || !isset($data['msgtype'])) {
             return null;
@@ -128,12 +128,12 @@ abstract class MessageBase implements JsonSerializable
 
     public function getAttributes()
     {
-        return $this->attributes->all();
+        return $this->attributes;
     }
 
     public function getAttribute($name, $default = null)
     {
-        return $this->attributes->get($name, $default);
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : $default;
     }
 
     public function isEvent(...$types): bool
@@ -141,59 +141,18 @@ abstract class MessageBase implements JsonSerializable
         return false;
     }
 
-    public function toArray(): array
+    protected function setData(array $data)
     {
-        $data = [
-            'type'          => $this->type,
-            'accountId'     => $this->accountId,
-            'openId'        => $this->openId,
-            'createTime'    => $this->createTime,
-        ];
+        $this->data = $data;
 
-        if ($this->id) {
-            $data['id'] = $this->id;
-        }
-
-        if ($this->properties) {
-            foreach ($this->properties as $property) {
-                $data[$property] = $this->{$property};
-            }
-        }
-
-        return $data;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-
-    protected function setData(array $data, array $map = [])
-    {
         $this->id = $data['msgid'] ?? null;
         $this->type = isset($data['msgtype']) ? strtolower($data['msgtype']) : null;
         $this->accountId = $data['tousername'] ?? null;
         $this->openId = $data['fromusername'] ?? null;
         $this->createTime = (int) $data['createtime'] ?? 0;
-
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->{$key} = $value;
-                continue;
-            }
-
-            if (isset($map[$key])) {
-                $nKey = $map[$key];
-
-                if (property_exists($this, $nKey)) {
-                    $this->{$nKey} = $value;
-                }
-            }
-        }
     }
 
-    protected function initialize(array $data)
+    protected function initialize()
     {
-        $this->setData($data);
     }
 }

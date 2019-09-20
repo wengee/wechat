@@ -1,26 +1,19 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-19 10:09:59 +0800
+ * @version  2019-09-20 14:35:43 +0800
  */
 namespace fwkit\Wechat\Message;
 
 class Video extends MessageBase
 {
-    protected $properties = [
-        'mediaId',
-        'thumbMediaId',
-    ];
-
     public $mediaId;
 
     public $thumbMediaId;
 
-    protected function initialize(array $data)
+    protected function initialize()
     {
-        $this->setData($data, [
-            'mediaid' => 'mediaId',
-            'thumbmediaid' => 'thumbMediaId',
-        ]);
+        $this->mediaId = $this->get('mediaId');
+        $this->thumbMediaId = $this->get('thumbMediaId');
     }
 }

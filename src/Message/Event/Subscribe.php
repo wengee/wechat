@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 17:51:02 +0800
+ * @version  2019-09-20 14:27:50 +0800
  */
 namespace fwkit\Wechat\Message\Event;
 
@@ -11,9 +11,9 @@ class Subscribe extends EventBase
 
     public $scene;
 
-    protected function initialize(array $data)
+    protected function initialize()
     {
-        parent::initialize($data);
+        $this->ticket = $this->get('ticket');
         $eventKey = $this->eventKey;
         if (strpos($eventKey, 'qrscene_')) {
             $this->scene = substr($eventKey, 8);
