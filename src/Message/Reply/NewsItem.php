@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 14:18:00 +0800
+ * @version  2019-09-21 15:39:58 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
@@ -31,5 +31,10 @@ class NewsItem implements ReplyInterface
                     <PicUrl><![CDATA[{$attributes['picUrl']}]]></PicUrl>
                     <Url><![CDATA[{$attributes['url']}]]></Url>
                 </item>";
+    }
+
+    public function __toString(): string
+    {
+        return $this->toXml();
     }
 }
