@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-20 14:37:21 +0800
+ * @version  2019-09-21 17:46:39 +0800
  */
 namespace fwkit\Wechat\Message;
 
@@ -67,6 +67,16 @@ abstract class MessageBase
 
         $this->setData($data);
         $this->initialize();
+    }
+
+    public function __get(string $property)
+    {
+        $method = 'get' . ucfirst($property);
+        if (method_exists($this, $method)) {
+            return $this->{$method}();
+        } else {
+            return isset($this->attributes[$property]) ? $this->attributes[$property] : null;
+        }
     }
 
     public function setCryptor($cryptor)
