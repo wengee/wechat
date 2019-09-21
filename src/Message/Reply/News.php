@@ -1,13 +1,29 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 14:22:14 +0800
+ * @version  2019-09-21 14:55:13 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
 class News extends ReplyBase
 {
     protected $articles = [];
+
+    public function setArticles(array $articles)
+    {
+        foreach ($articles as $article) {
+            if (!is_array($article) || empty($article['title'])) {
+                continue;
+            }
+
+            $this->addItem(
+                $article['title'],
+                $article['description'] ?? '',
+                $article['url'] ?? '',
+                $article['picUrl'] ?? ''
+            );
+        }
+    }
 
     public function addItem(string $title, string $description = '', string $url = '', string $picUrl = '')
     {
