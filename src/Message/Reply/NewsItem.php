@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-21 15:39:58 +0800
+ * @version  2019-09-21 15:50:38 +0800
  */
 namespace fwkit\Wechat\Message\Reply;
 
@@ -16,10 +16,10 @@ class NewsItem implements ReplyInterface
 
     public function __construct(string $title, string $description, string $url, string $picUrl)
     {
-        $this->title = $title;
-        $this->description = $description;
-        $this->url = $url;
-        $this->picUrl = $picUrl;
+        $this->attributes['title'] = $title;
+        $this->attributes['description'] = $description;
+        $this->attributes['url'] = $url;
+        $this->attributes['picUrl'] = $picUrl;
     }
 
     public function toXml(): string
