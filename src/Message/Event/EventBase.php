@@ -26,6 +26,6 @@ abstract class EventBase extends MessageBase
     {
         parent::setData($data);
         $this->event = isset($data['event']) ? strtolower($data['event']) : null;
-        $this->eventKey = isset($data['eventkey']) ? $data['eventkey'] : null;
+        $this->eventKey = isset($data['eventkey']) ? strval($data['eventkey']) : null;
     }
 }
