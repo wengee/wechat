@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 15:54:57 +0800
+ * @version  2019-10-16 10:10:52 +0800
  */
 namespace fwkit\Wechat\Utils;
 
@@ -13,7 +13,7 @@ class Helper
             return false;
         }
 
-        return !ctype_digit(implode('', array_keys($array)));
+        return !ctype_digit(implode('', array_keys($arr)));
     }
 
     public static function createNonceStr(int $length = 16): string
