@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-25 17:11:28 +0800
+ * @version  2019-10-16 10:46:21 +0800
  */
 namespace fwkit\Wechat\Concerns;
 
@@ -85,7 +85,7 @@ trait HasHttpRequests
         }
 
         $res = null;
-        $body = trim($response->getBody());
+        $body = trim((string) $response->getBody());
         if ($body) {
             if ($dataType === 'xml' || ($dataType === 'auto' && $body{0} === '<')) {
                 $backup = libxml_disable_entity_loader(true);
