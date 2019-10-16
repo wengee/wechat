@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-04 17:47:07 +0800
+ * @version  2019-10-16 10:34:41 +0800
  */
 namespace fwkit\Wechat\Utils\Items;
 
@@ -24,7 +24,7 @@ class MpNews implements JsonSerializable
 
     public $description;
 
-    public function __constrcut(array $options)
+    public function __construct(array $options)
     {
         $this->setOptions($options);
     }

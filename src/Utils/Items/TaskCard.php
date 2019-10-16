@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-04 18:07:50 +0800
+ * @version  2019-10-16 10:34:45 +0800
  */
 namespace fwkit\Wechat\Utils\Items;
 
@@ -22,7 +22,7 @@ class TastCard implements JsonSerializable
 
     public $btn = [];
 
-    public function __constrcut(array $options)
+    public function __construct(array $options)
     {
         $this->setOptions($options);
     }

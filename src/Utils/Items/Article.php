@@ -30,7 +30,7 @@ class Article implements JsonSerializable
 
     public $onlyFansComment = false;
 
-    public function __constrcut(array $options)
+    public function __construct(array $options)
     {
         $this->setOptions($options);
     }

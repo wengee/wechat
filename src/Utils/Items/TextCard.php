@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-04 17:58:16 +0800
+ * @version  2019-10-16 10:34:50 +0800
  */
 namespace fwkit\Wechat\Utils\Items;
 
@@ -20,7 +20,7 @@ class TextCard implements JsonSerializable
 
     public $btnTxt;
 
-    public function __constrcut(array $options)
+    public function __construct(array $options)
     {
         $this->setOptions($options);
     }

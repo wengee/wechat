@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 17:38:47 +0800
+ * @version  2019-10-16 10:34:37 +0800
  */
 namespace fwkit\Wechat\Utils\Items;
 
@@ -20,7 +20,7 @@ class News implements JsonSerializable
 
     public $picUrl;
 
-    public function __constrcut(array $options)
+    public function __construct(array $options)
     {
         $this->setOptions($options);
     }
