@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-15 16:19:17 +0800
+ * @version  2019-10-17 11:11:57 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -28,7 +28,7 @@ class OAuth extends ComponentBase
                 'code' => $code,
                 'grant_type' => $grantType,
             ],
-        ]);
+        ], false);
 
         return $this->checkResponse($res, [
             'openid' => 'openId',
