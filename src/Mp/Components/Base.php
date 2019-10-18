@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 15:58:02 +0800
+ * @version  2019-10-18 14:55:03 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -12,8 +12,10 @@ class Base extends ComponentBase
     public function shortUrl(string $url)
     {
         $res = $this->post('cgi-bin/shorturl', [
-            'action' => 'long2short',
-            'long_url' => $url,
+            'json' => [
+                'action' => 'long2short',
+                'long_url' => $url,
+            ],
         ]);
 
         $res = $this->checkResponse($res, ['short_url' => 'shortUrl']);
@@ -30,8 +32,10 @@ class Base extends ComponentBase
     public function check(string $action = 'all', string $operator = 'DEFAULT')
     {
         $res = $this->post('cgi-bin/callback/check', [
-            'action' => $action,
-            'check_operator' => $operator,
+            'json' => [
+                'action' => $action,
+                'check_operator' => $operator,
+            ],
         ]);
 
         return $this->checkResponse($res, [
