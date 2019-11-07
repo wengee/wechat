@@ -31,6 +31,7 @@ abstract class MessageBase
         'subscribe'             => Event\Subscribe::class,
         'unsubscribe'           => Event\Unsubscribe::class,
         'view'                  => Event\View::class,
+        'view_miniprogram'      => Event\ViewMiniProgram::class,
     ];
 
     protected static $replies = [
