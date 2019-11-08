@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-10-17 11:11:57 +0800
+ * @version  2019-11-08 17:55:22 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -31,9 +31,10 @@ class OAuth extends ComponentBase
         ], false);
 
         return $this->checkResponse($res, [
-            'openid' => 'openId',
-            'unionid' => 'unionId',
-            'access_token' => 'accessToken',
+            'openid'        => 'openId',
+            'unionid'       => 'unionId',
+            'expires_in'    => 'expiresIn',
+            'access_token'  => 'accessToken',
             'refresh_token' => 'refreshToken',
         ]);
     }
@@ -49,9 +50,9 @@ class OAuth extends ComponentBase
         ]);
 
         return $this->checkResponse($res, [
-            'openid' => 'openId',
-            'unionid' => 'unionId',
-            'access_token' => 'accessToken',
+            'openid'        => 'openId',
+            'unionid'       => 'unionId',
+            'access_token'  => 'accessToken',
             'refresh_token' => 'refreshToken',
         ]);
     }
@@ -74,9 +75,9 @@ class OAuth extends ComponentBase
         ], $token->accessToken);
 
         return $this->checkResponse($res, [
-            'openid' => 'openId',
-            'unionid' => 'unionId',
-            'headimgurl' => 'headImgUrl',
+            'openid'        => 'openId',
+            'unionid'       => 'unionId',
+            'headimgurl'    => 'headImgUrl',
         ]);
     }
 }
