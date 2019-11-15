@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-19 14:52:15 +0800
+ * @version  2019-11-15 14:37:49 +0800
  */
 namespace fwkit\Wechat\Mp\Components;
 
@@ -68,7 +68,7 @@ class Template extends ComponentBase
         return true;
     }
 
-    public function send(string $openId, string $templateId, array $data)
+    public function send(string $openId, string $templateId, array $data, bool $oneTime = false)
     {
         $data = $this->transformKeys($data, [
             'miniProgram' => 'miniprogram',
@@ -79,11 +79,22 @@ class Template extends ComponentBase
         $data['touser'] = $openId;
         $data['template_id'] = $templateId;
 
-        $res = $this->post('cgi-bin/message/template/send', [
+        $url = $oneTime ? 'cgi-bin/message/template/subscribe' : 'cgi-bin/message/template/send';
+        $res = $this->post($url, [
             'json' => $data,
         ]);
 
         $res = $this->checkResponse($res);
         return $res->get('msgid');
+    }
+
+    public function subscribeUrl(string $url, string $templateId, int $scene, ?string $reserved = null)
+    {
+        return sprintf('https://mp.weixin.qq.com/mp/subscribemsg?action=get_confirm&appid=%s&scene=%d&template_id=%s&redirect_url=%s&reserved=%s#wechat_redirect', $this->client->getAppId(), $scene, $templateId, urlencode($url), urlencode($reserved));
+    }
+
+    public function sendOneTime(string $openId, string $templateId, array $data)
+    {
+        return $this->send($openId, $templateId, $data, true);
     }
 }
