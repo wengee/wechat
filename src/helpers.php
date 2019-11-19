@@ -16,13 +16,6 @@ if (!function_exists('wechat_set_cache')) {
     }
 }
 
-if (!function_exists('wechat_guzzle_handler')) {
-    function wechat_guzzle_handler($handler)
-    {
-        return ClientBase::setDefaultHandler($handler);
-    }
-}
-
 if (!function_exists('array_change_key_case_recursive')) {
     function array_change_key_case_recursive(array $data, int $case = CASE_LOWER)
     {

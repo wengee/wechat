@@ -10,24 +10,11 @@ use GuzzleHttp\Psr7\Response;
 
 trait HasHttpRequests
 {
-    protected static $defaultHandler;
-
-    public static function setDefaultHandler($handler)
-    {
-        if (is_callable($handler)) {
-            self::$defaultHandler = $handler;
-        } elseif (is_string($handler) && class_exists($handler)) {
-            self::$defaultHandler = new $handler;
-        }
-    }
-
     public function request(string $method, string $url, array $options, $accessToken = null, $dataType = 'auto')
     {
         static $client;
         if (!isset($client)) {
-            $client = new Client([
-                'handler' => self::$defaultHandler,
-            ]);
+            $client = new Client;
         }
 
         $method = strtoupper($method);
