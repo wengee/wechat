@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-02 16:17:14 +0800
+ * @version  2019-12-04 11:19:48 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
@@ -11,6 +11,10 @@ use Psr\Http\Message\StreamInterface;
 
 class Security extends ComponentBase
 {
+    public const MEDIA_VOICE = 1;
+
+    public const MEDIA_IMAGE = 2;
+
     public function checkImg($file)
     {
         if (is_string($file)) {
@@ -42,5 +46,19 @@ class Security extends ComponentBase
         ]);
 
         return $this->checkResponse($res);
+    }
+
+    public function checkMediaAsync(string $mediaUrl, int $mediaType = 1)
+    {
+        $res = $this->post('wxa/media_check_async', [
+            'json' => [
+                'media_url' => $mediaUrl,
+                'media_type' => $mediaType,
+            ],
+        ]);
+
+        return $this->checkResponse($res, [
+            'trace_id' => 'traceId',
+        ]);
     }
 }
