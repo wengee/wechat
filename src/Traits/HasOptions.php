@@ -3,7 +3,7 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2019-02-14 09:56:45 +0800
  */
-namespace fwkit\Wechat\Concerns;
+namespace fwkit\Wechat\Traits;
 
 trait HasOptions
 {

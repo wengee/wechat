@@ -5,9 +5,9 @@
  */
 namespace fwkit\Wechat;
 
-use fwkit\Wechat\Concerns\HasAccessToken;
-use fwkit\Wechat\Concerns\HasHttpRequests;
-use fwkit\Wechat\Concerns\HasOptions;
+use fwkit\Wechat\Traits\HasAccessToken;
+use fwkit\Wechat\Traits\HasHttpRequests;
+use fwkit\Wechat\Traits\HasOptions;
 use fwkit\Wechat\Message\MessageBase;
 use fwkit\Wechat\Utils\ErrorCode;
 use fwkit\Wechat\Utils\MsgCrypt;

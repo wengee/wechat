@@ -5,7 +5,7 @@
  */
 namespace fwkit\Wechat\Utils\Items;
 
-use fwkit\Wechat\Concerns\HasOptions;
+use fwkit\Wechat\Traits\HasOptions;
 use JsonSerializable;
 
 class MpNews implements JsonSerializable

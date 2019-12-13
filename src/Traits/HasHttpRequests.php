@@ -3,7 +3,7 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2019-10-16 10:46:21 +0800
  */
-namespace fwkit\Wechat\Concerns;
+namespace fwkit\Wechat\Traits;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;

@@ -3,7 +3,7 @@
  * @author   Fung Wing Kit <wengee@gmail.com>
  * @version  2019-09-24 16:47:06 +0800
  */
-namespace fwkit\Wechat\Concerns;
+namespace fwkit\Wechat\Traits;
 
 use fwkit\Wechat\Utils\Cache;
 
