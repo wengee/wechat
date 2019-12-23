@@ -12,6 +12,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Client extends ClientBase
 {
+    protected $type = self::TYPE_WORK;
+
     protected $componentList = [
         'agent'         => Components\Agent::class,
         'base'          => Components\Base::class,

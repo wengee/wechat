@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-12-04 14:25:13 +0800
+ * @version  2019-12-23 15:50:05 +0800
  */
 namespace fwkit\Wechat\Minapp;
 
@@ -9,6 +9,8 @@ use fwkit\Wechat\ClientBase;
 
 class Client extends ClientBase
 {
+    protected $type = self::TYPE_MINAPP;
+
     protected $componentList = [
         'analysis'  => Components\Analysis::class,
         'media'     => Components\Media::class,

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-25 16:16:51 +0800
+ * @version  2019-12-23 15:49:37 +0800
  */
 namespace fwkit\Wechat;
 
@@ -15,7 +15,15 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class ClientBase
 {
+    const TYPE_MP = 'mp';
+
+    const TYPE_MINAPP = 'minapp';
+
+    const TYPE_WORK = 'work';
+
     use HasAccessToken, HasHttpRequests, HasOptions;
+
+    protected $type;
 
     protected $componentList = [];
 
@@ -49,6 +57,11 @@ abstract class ClientBase
         if (method_exists($this, 'initialize')) {
             $this->initialize();
         }
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
     }
 
     public function checkSignature(ServerRequestInterface $request)

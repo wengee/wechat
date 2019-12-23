@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-25 17:52:30 +0800
+ * @version  2019-12-23 15:49:53 +0800
  */
 namespace fwkit\Wechat\Mp;
 
@@ -9,6 +9,8 @@ use fwkit\Wechat\ClientBase;
 
 class Client extends ClientBase
 {
+    protected $type = self::TYPE_MP;
+
     protected $componentList = [
         'base'      => Components\Base::class,
         'comment'   => Components\Comment::class,
