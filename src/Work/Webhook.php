@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-12-24 16:25:03 +0800
+ * @version  2019-12-24 16:32:51 +0800
  */
 namespace fwkit\Wechat\Work;
 
@@ -50,10 +50,9 @@ class Webhook
             $image = $image->getContents();
         }
 
-        $image = base64_encode($image);
         $md5 = md5($image);
         return $this->send('image', [
-            'base64'    => $image,
+            'base64'    => base64_encode($image),
             'md5'       => $md5,
         ], $mentioned);
     }
