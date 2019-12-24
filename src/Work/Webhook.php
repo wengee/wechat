@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-12-24 15:53:16 +0800
+ * @version  2019-12-24 16:18:23 +0800
  */
 namespace fwkit\Wechat\Work;
 
@@ -89,7 +89,8 @@ class Webhook
     {
         $msgData += $this->parseMentioned($mentioned);
         $res = $this->request('POST', 'cgi-bin/message/send', [
-            'json' => [
+            'query' => ['key' => $this->key],
+            'json'  => [
                 'msgtype'   => $msgType,
                 $msgType    => $msgData,
             ],
