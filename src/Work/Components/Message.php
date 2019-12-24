@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-04 18:08:37 +0800
+ * @version  2019-12-24 15:54:17 +0800
  */
 namespace fwkit\Wechat\Work\Components;
 
@@ -9,6 +9,7 @@ use Exception;
 use fwkit\Wechat\ComponentBase;
 use fwkit\Wechat\Utils\Helper;
 use fwkit\Wechat\Utils\Items\MiniprogramNotice;
+use fwkit\Wechat\Utils\Items\MpNews;
 use fwkit\Wechat\Utils\Items\News;
 use fwkit\Wechat\Utils\Items\TaskCard;
 use fwkit\Wechat\Utils\Items\TextCard;
@@ -149,8 +150,9 @@ class Message extends ComponentBase
     {
         $userData = $this->parseUser($user);
         $msgData = array_merge($userData, [
-            'msgtype' => $msgType,
-            $msgType => $data,
+            'msgtype'   => $msgType,
+            $msgType    => $data,
+            'agentid'   => $agentId,
         ]);
 
         $res = $this->post('cgi-bin/message/send', [

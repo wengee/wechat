@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-06-15 16:24:03 +0800
+ * @version  2019-12-24 14:58:41 +0800
  */
 namespace fwkit\Wechat\Minapp\Components;
 
@@ -33,7 +33,6 @@ class OAuth extends ComponentBase
             'openid' => 'openId',
             'unionid' => 'unionId',
             'session_key' => 'sessionKey',
-            'unionid' => 'unionId',
         ]);
 
         $this->code = $code;
