@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-24 16:47:06 +0800
+ * @version  2019-12-26 10:46:09 +0800
  */
 namespace fwkit\Wechat\Traits;
 
@@ -23,16 +23,17 @@ trait HasAccessToken
             return $this->accessToken;
         }
 
+        $cacheKey = $this->appId . ':' . $this->appSecret;
         $accessToken = null;
         $expiresIn = 0;
         if (!$forceUpdate) {
-            $accessToken = Cache::get($this->appId, 'accessToken');
-            $expiresIn = (int) Cache::get($this->appId, 'accessToken_expiresIn');
+            $accessToken = Cache::get($cacheKey, 'accessToken');
+            $expiresIn = (int) Cache::get($cacheKey, 'accessToken_expiresIn');
         }
 
         if (empty($accessToken)) {
             if (static::$tokenGetter && is_callable(static::$tokenGetter)) {
-                $accessToken = call_user_func(static::$tokenGetter, $this->appId);
+                $accessToken = call_user_func(static::$tokenGetter, $cacheKey);
             } else {
                 $tokenComponent = $this->component($this->tokenComponent);
                 try {
@@ -41,8 +42,8 @@ trait HasAccessToken
 
                     $ttl = (int) max(1, $res->get('expiresIn', 0) - 600);
                     $expiresIn = time() + $ttl;
-                    Cache::set($this->appId, 'accessToken', $accessToken, $ttl);
-                    Cache::set($this->appId, 'accessToken_expiresIn', $expiresIn, $ttl);
+                    Cache::set($cacheKey, 'accessToken', $accessToken, $ttl);
+                    Cache::set($cacheKey, 'accessToken_expiresIn', $expiresIn, $ttl);
                 } catch (\Exception $e) {
                 }
             }
@@ -57,7 +58,11 @@ trait HasAccessToken
     {
         $expiresIn = $this->expiresIn ?: 0;
         if (!$expiresIn) {
-            $expiresIn = (int) Cache::get($this->appId, 'accessToken_expiresIn');
+            $expiresIn = (int) Cache::get(
+                $this->appId . ':' . $this->appSecret,
+                'accessToken_expiresIn'
+            );
+
             $this->expiresIn = $expiresIn;
         }
 
