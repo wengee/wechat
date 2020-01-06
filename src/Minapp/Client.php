@@ -1,7 +1,7 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-12-23 15:50:05 +0800
+ * @version  2020-01-06 18:39:57 +0800
  */
 namespace fwkit\Wechat\Minapp;
 
@@ -23,7 +23,7 @@ class Client extends ClientBase
         'search'    => Components\Search::class,
         'security'  => Components\Security::class,
         'soter'     => Components\Soter::class,
-        'subscribe' => Components\SubscribeMessage::class,
+        'subscribe' => Components\Subscribe::class,
         'template'  => Components\Template::class,
         'token'     => Components\Token::class,
     ];
