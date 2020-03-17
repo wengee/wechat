@@ -1,14 +1,14 @@
 <?php
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-10-16 10:34:45 +0800
+ * @version  2020-03-17 14:40:08 +0800
  */
 namespace fwkit\Wechat\Utils\Items;
 
 use fwkit\Wechat\Traits\HasOptions;
 use JsonSerializable;
 
-class TastCard implements JsonSerializable
+class TaskCard implements JsonSerializable
 {
     use HasOptions;
 
