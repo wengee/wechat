@@ -1,13 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-14 09:56:45 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Traits;
 
 trait HasOptions
 {
-    public function setOptions(array $options)
+    public function setOptions(array $options): void
     {
         foreach ($options as $key => $value) {
             $this->setOption($key, $value);

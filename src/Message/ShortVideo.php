@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-20 14:35:33 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Message;
 
 class ShortVideo extends MessageBase
@@ -11,7 +12,7 @@ class ShortVideo extends MessageBase
 
     public $thumbMediaId;
 
-    protected function initialize()
+    protected function initialize(): void
     {
         $this->mediaId = $this->get('mediaId');
         $this->thumbMediaId = $this->get('thumbMediaId');

@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-01 17:51:01 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Utils;
 
 /**
@@ -23,29 +24,29 @@ namespace fwkit\Wechat\Utils;
  */
 class ErrorCode
 {
-    const OK = 0;
+    public const OK = 0;
 
-    const VALIDATE_SIGNATURE_ERROR = -40001;
+    public const VALIDATE_SIGNATURE_ERROR = -40001;
 
-    const PARSE_XML_ERROR = -40002;
+    public const PARSE_XML_ERROR = -40002;
 
-    const COMPUTE_SIGNATURE_ERROR = -40003;
+    public const COMPUTE_SIGNATURE_ERROR = -40003;
 
-    const ILLEGAL_AES_KEY = -40004;
+    public const ILLEGAL_AES_KEY = -40004;
 
-    const VALIDATE_APPID_ERROR = -40005;
+    public const VALIDATE_APPID_ERROR = -40005;
 
-    const ENCRYPT_AES_ERROR = -40006;
+    public const ENCRYPT_AES_ERROR = -40006;
 
-    const DECRYPT_AES_ERROR = -40007;
+    public const DECRYPT_AES_ERROR = -40007;
 
-    const ILLEGAL_BUFFER = -40008;
+    public const ILLEGAL_BUFFER = -40008;
 
-    const ENCODE_BASE64_ERROR = -40009;
+    public const ENCODE_BASE64_ERROR = -40009;
 
-    const DECODE_BASE64_ERROR = -40010;
+    public const DECODE_BASE64_ERROR = -40010;
 
-    const GEN_RETURN_XML_ERROR = -40011;
+    public const GEN_RETURN_XML_ERROR = -40011;
 
-    const ILLEGAL_IV = -40012;
+    public const ILLEGAL_IV = -40012;
 }

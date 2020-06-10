@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-03-17 14:40:08 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Utils\Items;
 
 use fwkit\Wechat\Traits\HasOptions;
@@ -37,7 +38,7 @@ class TaskCard implements JsonSerializable
         ];
     }
 
-    public function setBtn($data)
+    public function setBtn($data): void
     {
         if (is_array($data)) {
             if (Helper::isAssoc($data)) {

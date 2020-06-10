@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-10-16 10:10:52 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Utils;
 
 class Helper
@@ -21,7 +22,7 @@ class Helper
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $str = '';
         for ($i = 0; $i < $length; $i++) {
-            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+            $str .= substr($chars, random_int(0, strlen($chars) - 1), 1);
         }
         return $str;
     }

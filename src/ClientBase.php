@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-12-23 15:49:37 +0800
+ * @version  2020-06-03 17:40:28 +0800
  */
+
 namespace fwkit\Wechat;
 
 use fwkit\Wechat\Traits\HasAccessToken;
@@ -15,11 +16,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class ClientBase
 {
-    const TYPE_MP = 'mp';
+    public const TYPE_MP = 'mp';
 
-    const TYPE_MINAPP = 'minapp';
+    public const TYPE_MINAPP = 'minapp';
 
-    const TYPE_WORK = 'work';
+    public const TYPE_WORK = 'work';
+
+    public const TYPE_THIRD_PARTY = 'thirdParty';
 
     use HasAccessToken, HasHttpRequests, HasOptions;
 
@@ -99,7 +102,7 @@ abstract class ClientBase
         $encryptType = $query['encrypt_type'] ?? null;
         if ($encryptType && $this->cryptor) {
             $msgSignature = $query['msg_signature'] ?? '';
-            $timestamp = $query['timestamp'] ?? '';
+            $timestamp = intval($query['timestamp'] ?? 0);
             $nonce = $query['nonce'] ?? '';
 
             $errcode = $this->cryptor->decrypt(
@@ -167,6 +170,6 @@ abstract class ClientBase
             return $config;
         }
 
-        return isset($config[$key]) ? $config[$key] : $default;
+        return $config[$key] ?? $default;
     }
 }

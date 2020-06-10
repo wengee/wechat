@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-21 15:01:11 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Utils\Items;
 
 use fwkit\Wechat\Traits\HasOptions;
@@ -12,27 +13,27 @@ class Button implements JsonSerializable
 {
     use HasOptions;
 
-    const CLICK = 'click';
+    public const CLICK = 'click';
 
-    const VIEW = 'view';
+    public const VIEW = 'view';
 
-    const SCANCODE_PUSH = 'scancode_push';
+    public const SCANCODE_PUSH = 'scancode_push';
 
-    const SCANCODE_WAITMSG = 'scancode_waitmsg';
+    public const SCANCODE_WAITMSG = 'scancode_waitmsg';
 
-    const PIC_SYSPHOTO = 'pic_sysphoto';
+    public const PIC_SYSPHOTO = 'pic_sysphoto';
 
-    const PIC_PHOTO_OR_ALBUM = 'pic_photo_or_album';
+    public const PIC_PHOTO_OR_ALBUM = 'pic_photo_or_album';
 
-    const PIC_WEIXIN = 'pic_weixin';
+    public const PIC_WEIXIN = 'pic_weixin';
 
-    const LOCATION_SELECT = 'location_select';
+    public const LOCATION_SELECT = 'location_select';
 
-    const MEDIA_ID = 'media_id';
+    public const MEDIA_ID = 'media_id';
 
-    const VIEW_LIMITED = 'view_limited';
+    public const VIEW_LIMITED = 'view_limited';
 
-    const MINI_PROGRAM = 'miniprogram';
+    public const MINI_PROGRAM = 'miniprogram';
 
     protected $children = [];
 
@@ -69,7 +70,7 @@ class Button implements JsonSerializable
         return false;
     }
 
-    public function setChildren(array $buttons)
+    public function setChildren(array $buttons): void
     {
         $this->children = [];
         foreach ($buttons as $button) {

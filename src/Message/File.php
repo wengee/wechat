@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-20 14:35:12 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Message;
 
 class File extends MessageBase
@@ -17,7 +18,7 @@ class File extends MessageBase
 
     public $fileSize = 0;
 
-    protected function initialize()
+    protected function initialize(): void
     {
         $this->title = $this->get('title');
         $this->description = $this->get('description');

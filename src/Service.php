@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-05-08 15:39:35 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat;
 
 use fwkit\Wechat\Message\MessageBase;
@@ -50,7 +51,7 @@ class Service
         return $response;
     }
 
-    protected function seedHandlerStack(?callable $kernel = null)
+    protected function seedHandlerStack(?callable $kernel = null): void
     {
         if (!is_null($this->tip)) {
             throw new RuntimeException('HandlerStack can only be seeded once.');

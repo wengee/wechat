@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2018-11-01 17:51:16 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Utils;
 
 /**
@@ -25,7 +26,7 @@ class XMLParse
             $e = $xml->getElementsByTagName('Encrypt');
             $a = $xml->getElementsByTagName('ToUserName');
             $encrypt = $e->item(0)->nodeValue;
-            $tousername = $a->item(0)->nodeValue;
+            $tousername = $a->item(0) ? $a->item(0)->nodeValue : null;
             return [ErrorCode::OK, $encrypt, $tousername];
         } catch (\Exception $e) {
             return [ErrorCode::PARSE_XML_ERROR, null, null];

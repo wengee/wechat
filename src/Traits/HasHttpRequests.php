@@ -1,10 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-10-16 10:46:21 +0800
+ * @version  2020-06-03 18:11:05 +0800
  */
+
 namespace fwkit\Wechat\Traits;
 
+use fwkit\Wechat\ClientBase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 
@@ -30,7 +32,12 @@ trait HasHttpRequests
             }
 
             $options['query'] = $options['query'] ?? [];
-            $options['query']['access_token'] = $accessToken;
+
+            if ($this->getType() === ClientBase::TYPE_THIRD_PARTY) {
+                $options['query']['component_access_token'] = $accessToken;
+            } else {
+                $options['query']['access_token'] = $accessToken;
+            }
         }
 
         if (isset($options['withCert'])) {

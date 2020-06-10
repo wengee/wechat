@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-12-26 10:46:09 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat\Traits;
 
 use fwkit\Wechat\Utils\Cache;
@@ -17,7 +18,7 @@ trait HasAccessToken
 
     protected $expiresIn = 0;
 
-    public function getAccessToken(bool $forceUpdate = false)
+    public function getAccessToken(bool $forceUpdate = false, array $keys = [])
     {
         if ($this->accessToken && $this->expiresIn > time() && !$forceUpdate) {
             return $this->accessToken;
@@ -69,7 +70,7 @@ trait HasAccessToken
         return $expiresIn;
     }
 
-    public static function setTokenGetter(callable $func)
+    public static function setTokenGetter(callable $func): void
     {
         static::$tokenGetter = $func;
     }

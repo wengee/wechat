@@ -1,11 +1,13 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-12-23 15:49:53 +0800
+ * @version  2020-06-04 14:32:11 +0800
  */
+
 namespace fwkit\Wechat\Mp;
 
 use fwkit\Wechat\ClientBase;
+use fwkit\Wechat\ThirdParty\ThirdClientInterface;
 
 class Client extends ClientBase
 {
@@ -30,4 +32,17 @@ class Client extends ClientBase
     ];
 
     protected $baseUri = 'https://api.weixin.qq.com/';
+
+    protected $thirdClient;
+
+    public function setThirdClient(ThirdClientInterface $thirdClient)
+    {
+        $this->thirdClient = $thirdClient;
+        return $this;
+    }
+
+    public function getThirdClient(): ?ThirdClientInterface
+    {
+        return $this->thirdClient ?: null;
+    }
 }

@@ -1,9 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-09-21 17:46:39 +0800
+ * @version  2020-06-10 15:12:31 +0800
  */
+
 namespace fwkit\Wechat\Message;
+
+use Illuminate\Support\Arr;
 
 abstract class MessageBase
 {
@@ -16,6 +19,7 @@ abstract class MessageBase
         'video'                 => Video::class,
         'voice'                 => Voice::class,
         'file'                  => File::class,
+        'info'                  => Info::class,
     ];
 
     protected static $events = [
@@ -89,7 +93,7 @@ abstract class MessageBase
     public function get($key, $default = null)
     {
         $key = strtolower($key);
-        return array_get($this->data, $key, $default);
+        return Arr::get($this->data, $key, $default);
     }
 
     public function rawXml()
@@ -110,11 +114,12 @@ abstract class MessageBase
         $data = (array) @simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
         $data = array_change_key_case_recursive($data);
 
-        if (empty($data) || !isset($data['msgtype'])) {
+        $msgType = $data['msgtype'] ?? (isset($data['infotype']) ? 'info' : null);
+        if (empty($data) || !$msgType) {
             return null;
         }
 
-        $msgType = strtolower($data['msgtype']);
+        $msgType = \strtolower($msgType);
         if ($msgType === 'event') {
             $event = strtolower($data['event']);
             $className = static::$events[$event] ?? Event\Unknown::class;
@@ -152,7 +157,7 @@ abstract class MessageBase
         return false;
     }
 
-    protected function setData(array $data)
+    protected function setData(array $data): void
     {
         $this->data = $data;
 
@@ -163,7 +168,7 @@ abstract class MessageBase
         $this->createTime = (int) $data['createtime'] ?? 0;
     }
 
-    protected function initialize()
+    protected function initialize(): void
     {
     }
 }

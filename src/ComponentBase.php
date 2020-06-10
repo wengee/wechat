@@ -1,15 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2019-02-20 15:18:58 +0800
+ * @version  2020-06-03 17:15:25 +0800
  */
+
 namespace fwkit\Wechat;
 
 abstract class ComponentBase
 {
     protected $client;
 
-    public function setClient(ClientBase $client)
+    public function setClient(ClientBase $client): void
     {
         $this->client = $client;
     }
