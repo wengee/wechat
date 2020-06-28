@@ -40,12 +40,12 @@ class XMLParse
      * @param string $timestamp 时间戳
      * @param string $nonce 随机字符串
      */
-    public static function generate(string $encrypt, string $signature, string $timestamp, string $nonce)
+    public static function generate(string $encrypt, string $signature, int $timestamp, string $nonce)
     {
         $format = '<xml>
 <Encrypt><![CDATA[%s]]></Encrypt>
 <MsgSignature><![CDATA[%s]]></MsgSignature>
-<TimeStamp>%s</TimeStamp>
+<TimeStamp>%d</TimeStamp>
 <Nonce><![CDATA[%s]]></Nonce>
 </xml>';
         return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
