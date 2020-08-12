@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:40:28 +0800
+ * @version  2020-08-12 21:35:23 +0800
  */
 
 namespace fwkit\Wechat;
 
+use fwkit\Wechat\Message\MessageBase;
 use fwkit\Wechat\Traits\HasAccessToken;
 use fwkit\Wechat\Traits\HasHttpRequests;
 use fwkit\Wechat\Traits\HasOptions;
-use fwkit\Wechat\Message\MessageBase;
 use fwkit\Wechat\Utils\ErrorCode;
 use fwkit\Wechat\Utils\MsgCrypt;
 use Psr\Http\Message\ServerRequestInterface;
@@ -57,9 +57,7 @@ abstract class ClientBase
             );
         }
 
-        if (method_exists($this, 'initialize')) {
-            $this->initialize();
-        }
+        $this->initialize();
     }
 
     public function getType(): ?string
@@ -171,5 +169,9 @@ abstract class ClientBase
         }
 
         return $config[$key] ?? $default;
+    }
+
+    protected function initialize()
+    {
     }
 }

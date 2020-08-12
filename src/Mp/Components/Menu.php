@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2020-08-12 21:31:41 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -78,7 +78,7 @@ class Menu extends ComponentBase
             'platform' => 'client_platform_type',
             'clientPlatformType' => 'client_platform_type',
         ]);
-        $ret = $this->post('cgi-bin/menu/addconditional', [
+        $res = $this->post('cgi-bin/menu/addconditional', [
             'json' => [
                 'button' => $buttons,
                 'matchrule' => $matchRule,

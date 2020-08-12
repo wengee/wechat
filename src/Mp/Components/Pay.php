@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2020-08-12 21:32:07 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -16,7 +16,7 @@ class Pay extends ComponentBase
         $data = [
             'appId'     => $this->client->getAppId(),
             'timeStamp' => (string) time(),
-            'nonceStr'  => Helper::nonceStr(),
+            'nonceStr'  => Helper::createNonceStr(),
             'package'   => 'prepay_id=' . $prepayId,
             'signType'  => 'MD5',
         ];

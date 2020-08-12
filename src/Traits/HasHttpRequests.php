@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 18:11:05 +0800
+ * @version  2020-08-12 21:33:04 +0800
  */
 
 namespace fwkit\Wechat\Traits;
@@ -81,7 +81,7 @@ trait HasHttpRequests
         $res = null;
         $body = trim((string) $response->getBody());
         if ($body) {
-            if ($dataType === 'xml' || ($dataType === 'auto' && $body{0} === '<')) {
+            if ($dataType === 'xml' || ($dataType === 'auto' && $body[0] === '<')) {
                 $backup = libxml_disable_entity_loader(true);
                 $res = @simplexml_load_string($body, 'SimpleXMLElement', LIBXML_NOCDATA);
                 $res = $res ? json_decode(json_encode($res), true) : null;

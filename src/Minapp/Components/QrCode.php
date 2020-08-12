@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2020-08-12 21:29:12 +0800
  */
 
 namespace fwkit\Wechat\Minapp\Components;
@@ -63,7 +63,7 @@ class QrCode extends ComponentBase
         $rgb = [];
         if (is_string($color)) {
             if (strlen($color) === 6) {
-                $colorVal = hexdec($hexStr);
+                $colorVal = hexdec($color);
                 $rgb['r'] = 0xFF & ($colorVal >> 0x10);
                 $rgb['g'] = 0xFF & ($colorVal >> 0x8);
                 $rgb['b'] = 0xFF & $colorVal;

@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2020-08-12 21:33:27 +0800
  */
 
 namespace fwkit\Wechat\Utils\Items;
 
 use fwkit\Wechat\Traits\HasOptions;
+use fwkit\Wechat\Utils\Helper;
 use JsonSerializable;
 
 class TaskCard implements JsonSerializable
