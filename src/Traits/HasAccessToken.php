@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2021-03-01 11:01:09 +0800
  */
-
 namespace fwkit\Wechat\Traits;
 
 use fwkit\Wechat\Utils\Cache;
@@ -14,22 +13,12 @@ trait HasAccessToken
 
     protected $tokenComponent = 'token';
 
-    protected $accessToken;
-
-    protected $expiresIn = 0;
-
-    public function getAccessToken(bool $forceUpdate = false, array $keys = [])
+    public function getAccessToken(bool $forceUpdate = false): ?string
     {
-        if ($this->accessToken && $this->expiresIn > time() && !$forceUpdate) {
-            return $this->accessToken;
-        }
-
         $cacheKey = $this->appId . ':' . $this->appSecret;
         $accessToken = null;
-        $expiresIn = 0;
         if (!$forceUpdate) {
             $accessToken = Cache::get($cacheKey, 'accessToken');
-            $expiresIn = (int) Cache::get($cacheKey, 'accessToken_expiresIn');
         }
 
         if (empty($accessToken)) {
@@ -43,6 +32,7 @@ trait HasAccessToken
 
                     $ttl = (int) max(1, $res->get('expiresIn', 0) - 600);
                     $expiresIn = time() + $ttl;
+
                     Cache::set($cacheKey, 'accessToken', $accessToken, $ttl);
                     Cache::set($cacheKey, 'accessToken_expiresIn', $expiresIn, $ttl);
                 } catch (\Exception $e) {
@@ -50,24 +40,15 @@ trait HasAccessToken
             }
         }
 
-        $this->accessToken = $accessToken;
-        $this->expiresIn = $expiresIn;
         return $accessToken;
     }
 
     public function getAccessTokenExpiresIn(): int
     {
-        $expiresIn = $this->expiresIn ?: 0;
-        if (!$expiresIn) {
-            $expiresIn = (int) Cache::get(
-                $this->appId . ':' . $this->appSecret,
-                'accessToken_expiresIn'
-            );
-
-            $this->expiresIn = $expiresIn;
-        }
-
-        return $expiresIn;
+        return (int) Cache::get(
+            $this->appId . ':' . $this->appSecret,
+            'accessToken_expiresIn'
+        );
     }
 
     public static function setTokenGetter(callable $func): void
