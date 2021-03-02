@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-03-02 10:11:54 +0800
+ * @version  2021-03-02 10:12:20 +0800
  */
 namespace fwkit\Wechat\Traits;
 
@@ -13,7 +13,7 @@ trait HasAccessToken
 
     protected $tokenComponent = 'token';
 
-    public function getAccessToken(bool $forceUpdate = false)
+    public function getAccessToken(bool $forceUpdate = false): ?string
     {
         $cacheKey = $this->appId . ':' . $this->appSecret;
         $accessToken = null;
@@ -40,7 +40,7 @@ trait HasAccessToken
             }
         }
 
-        return $accessToken;
+        return $accessToken ?: null;
     }
 
     public function getAccessTokenExpiresIn(): int
