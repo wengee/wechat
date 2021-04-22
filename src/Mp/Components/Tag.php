@@ -1,9 +1,8 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2021-04-22 18:22:13 +0800
  */
-
 namespace fwkit\Wechat\Mp\Components;
 
 use fwkit\Wechat\ComponentBase;
@@ -19,7 +18,7 @@ class Tag extends ComponentBase
         ]);
 
         $res = $this->checkResponse($res);
-        return $res->get('tag.id');
+        return $res->get('tag');
     }
 
     public function fetchAll()
