@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-04 14:32:11 +0800
+ * @version  2021-04-23 10:05:01 +0800
  */
 
 namespace fwkit\Wechat\Mp;
@@ -14,21 +15,22 @@ class Client extends ClientBase
     protected $type = self::TYPE_MP;
 
     protected $componentList = [
-        'base'      => Components\Base::class,
-        'comment'   => Components\Comment::class,
-        'jsapi'     => Components\JsApi::class,
-        'material'  => Components\Material::class,
-        'media'     => Components\Media::class,
-        'menu'      => Components\Menu::class,
-        'message'   => Components\Message::class,
-        'oauth'     => Components\OAuth::class,
-        'pay'       => Components\Pay::class,
-        'qrcode'    => Components\QrCode::class,
-        'redpack'   => Components\Redpack::class,
-        'tag'       => Components\Tag::class,
-        'template'  => Components\Template::class,
-        'token'     => Components\Token::class,
-        'user'      => Components\User::class,
+        'base'         => Components\Base::class,
+        'comment'      => Components\Comment::class,
+        'jsapi'        => Components\JsApi::class,
+        'material'     => Components\Material::class,
+        'media'        => Components\Media::class,
+        'menu'         => Components\Menu::class,
+        'message'      => Components\Message::class,
+        'notification' => Components\Notification::class,
+        'oauth'        => Components\OAuth::class,
+        'pay'          => Components\Pay::class,
+        'qrcode'       => Components\QrCode::class,
+        'redpack'      => Components\Redpack::class,
+        'tag'          => Components\Tag::class,
+        'template'     => Components\Template::class,
+        'token'        => Components\Token::class,
+        'user'         => Components\User::class,
     ];
 
     protected $baseUri = 'https://api.weixin.qq.com/';
@@ -38,6 +40,7 @@ class Client extends ClientBase
     public function setThirdClient(ThirdClientInterface $thirdClient)
     {
         $this->thirdClient = $thirdClient;
+
         return $this;
     }
 
