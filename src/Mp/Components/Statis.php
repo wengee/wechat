@@ -19,6 +19,15 @@ use fwkit\Wechat\ComponentBase;
  * @method mixed getUserReadHour(string $startDate, string $endDate)
  * @method mixed getUserShare(string $startDate, string $endDate)
  * @method mixed getUserShareHour(string $startDate, string $endDate)
+ * @method mixed getUpstreamMsg(string $startDate, string $endDate)
+ * @method mixed getUpstreamMsgHour(string $startDate, string $endDate)
+ * @method mixed getUpstreamMsgWeek(string $startDate, string $endDate)
+ * @method mixed getUpstreamMsgMonth(string $startDate, string $endDate)
+ * @method mixed getUpstreamMsgDist(string $startDate, string $endDate)
+ * @method mixed getUpstreamMsgDistWeek(string $startDate, string $endDate)
+ * @method mixed getUpstreamMsgDistMonth(string $startDate, string $endDate)
+ * @method mixed getInterfaceSummary(string $startDate, string $endDate)
+ * @method mixed getInterfaceSummaryHour(string $startDate, string $endDate)
  */
 class Statis extends ComponentBase
 {
