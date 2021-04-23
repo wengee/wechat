@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-04-23 10:05:01 +0800
+ * @version  2021-04-23 15:51:24 +0800
  */
 
 namespace fwkit\Wechat\Mp;
@@ -27,6 +27,7 @@ class Client extends ClientBase
         'pay'          => Components\Pay::class,
         'qrcode'       => Components\QrCode::class,
         'redpack'      => Components\Redpack::class,
+        'statis'       => Components\Statis::class,
         'tag'          => Components\Tag::class,
         'template'     => Components\Template::class,
         'token'        => Components\Token::class,
