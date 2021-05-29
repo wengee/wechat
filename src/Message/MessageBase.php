@@ -2,13 +2,12 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-05-28 10:51:35 +0800
+ * @version  2021-05-29 18:04:32 +0800
  */
 
 namespace fwkit\Wechat\Message;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Event;
 
 abstract class MessageBase
 {
