@@ -2,12 +2,14 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-05-29 18:04:32 +0800
+ * @version  2021-05-29 18:26:55 +0800
  */
 
 namespace fwkit\Wechat\Message;
 
+use fwkit\Wechat\Utils\Helper;
 use Illuminate\Support\Arr;
+use SimpleXMLElement;
 
 abstract class MessageBase
 {
@@ -117,8 +119,9 @@ abstract class MessageBase
 
     public static function factory(string $message)
     {
-        $data = json_decode(json_encode(simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-        $data = array_change_key_case_recursive($data);
+        /** @var SimpleXMLElement $xml */
+        $xml  = simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $data = $xml ? Helper::parseXmlElement($xml) : [];
 
         $msgType = $data['msgtype'] ?? (isset($data['infotype']) ? 'info' : null);
         if (empty($data) || !$msgType) {
