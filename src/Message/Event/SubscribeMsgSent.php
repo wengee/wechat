@@ -2,13 +2,14 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-05-31 14:15:31 +0800
+ * @version  2021-05-31 14:16:59 +0800
  */
 
 namespace fwkit\Wechat\Message\Event;
 
 class SubscribeMsgSent extends EventBase
 {
+    /** @var array */
     protected $list = [];
 
     protected function initialize(): void
