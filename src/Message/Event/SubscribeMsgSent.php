@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-05-28 10:49:33 +0800
+ * @version  2021-05-31 14:15:31 +0800
  */
 
 namespace fwkit\Wechat\Message\Event;
@@ -15,7 +15,7 @@ class SubscribeMsgSent extends EventBase
     {
         $list = (array) $this->get('subscribeMsgSentEvent.list');
         foreach ($list as $item) {
-            $this->picList[] = [
+            $this->list[] = [
                 'templateId'  => $item['templateid'] ?? null,
                 'msgId'       => $item['msgid'] ?? null,
                 'errorCode'   => $item['errorcode'] ?? 0,
