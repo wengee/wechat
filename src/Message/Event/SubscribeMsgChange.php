@@ -10,7 +10,7 @@ namespace fwkit\Wechat\Message\Event;
 class SubscribeMsgChange extends EventBase
 {
     /** @var array */
-    protected $list = [];
+    public $list = [];
 
     protected function initialize(): void
     {
