@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-04-22 18:36:37 +0800
+ * @version  2021-06-08 18:05:57 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -14,7 +14,7 @@ class Notification extends ComponentBase
     public function getCategory()
     {
         $res = $this->get('wxaapi/newtmpl/getcategory');
-        $this->checkResponse($res);
+        $res = $this->checkResponse($res);
 
         return $res->get('data');
     }
@@ -22,7 +22,7 @@ class Notification extends ComponentBase
     public function getTemplateList()
     {
         $res = $this->get('wxaapi/newtmpl/gettemplate');
-        $this->checkResponse($res);
+        $res = $this->checkResponse($res);
 
         return $res->get('data');
     }
