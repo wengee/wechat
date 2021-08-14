@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2021-08-14 14:44:06 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -16,12 +17,13 @@ class Message extends ComponentBase
     {
         $res = $this->post('cgi-bin/message/custom/typing', [
             'json' => [
-                'touser' => $openId,
+                'touser'  => $openId,
                 'command' => $typing ? 'Typing' : 'CancelTyping',
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -49,21 +51,21 @@ class Message extends ComponentBase
     public function sendVideo(string $openId, string $mediaId, ?string $thumbMediaId = null, ?string $title = null, ?string $description = null, ?string $kf = null)
     {
         return $this->send($openId, 'video', [
-            'media_id' => $mediaId,
+            'media_id'       => $mediaId,
             'thumb_media_id' => $thumbMediaId,
-            'title' => $title,
-            'description' => $description,
+            'title'          => $title,
+            'description'    => $description,
         ], $kf);
     }
 
     public function sendMusic(string $openId, string $url, ?string $hqUrl = null, ?string $thumbMediaId = null, ?string $title = null, ?string $description = null, ?string $kf = null)
     {
         return $this->send($openId, 'music', [
-            'musicurl' => $url,
-            'hqmusicurl' => $hqUrl,
+            'musicurl'       => $url,
+            'hqmusicurl'     => $hqUrl,
             'thumb_media_id' => $thumbMediaId,
-            'title' => $title,
-            'description' => $description,
+            'title'          => $title,
+            'description'    => $description,
         ], $kf);
     }
 
@@ -76,11 +78,12 @@ class Message extends ComponentBase
                 $news = array_map(function ($item) {
                     if (is_array($item)) {
                         return new News($item);
-                    } elseif ($item instanceof News) {
-                        return $item;
-                    } else {
-                        return null;
                     }
+                    if ($item instanceof News) {
+                        return $item;
+                    }
+
+                    return null;
                 }, $news);
             }
         } elseif ($news instanceof News) {
@@ -110,7 +113,7 @@ class Message extends ComponentBase
 
         return $this->send($openId, 'msgmenu', [
             'head_content' => $head,
-            'list' => $list,
+            'list'         => $list,
             'tail_content' => $tail,
         ], $kf);
     }
@@ -122,11 +125,12 @@ class Message extends ComponentBase
         ], $kf);
     }
 
-    public function sendMiniprogram(string $openId, string $title, string $page, string $mediaId, ?string $kf = null)
+    public function sendMiniprogram(string $openId, string $appId, string $title, string $page, string $mediaId, ?string $kf = null)
     {
         return $this->send($openId, 'miniprogrampage', [
-            'title' => $title,
-            'pagepath' => $page,
+            'appid'          => $appId,
+            'title'          => $title,
+            'pagepath'       => $page,
             'thumb_media_id' => $mediaId,
         ], $kf);
     }
@@ -134,12 +138,12 @@ class Message extends ComponentBase
     public function send(string $openId, string $msgType, array $data, ?string $kf = null)
     {
         $data = [
-            'touser' => $openId,
+            'touser'  => $openId,
             'msgtype' => $msgType,
-            $msgType => $data,
+            $msgType  => $data,
         ];
 
-        if ($kf !== null) {
+        if (null !== $kf) {
             $data['customservice'] = ['kf_account' => $kf];
         }
 
@@ -148,6 +152,7 @@ class Message extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 }
