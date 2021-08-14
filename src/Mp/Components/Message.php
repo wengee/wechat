@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-08-14 14:44:06 +0800
+ * @version  2021-08-14 15:28:13 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -125,12 +125,12 @@ class Message extends ComponentBase
         ], $kf);
     }
 
-    public function sendMiniprogram(string $openId, string $appId, string $title, string $page, string $mediaId, ?string $kf = null)
+    public function sendMiniprogram(string $openId, string $appId, string $title, string $pagePath, string $mediaId, ?string $kf = null)
     {
         return $this->send($openId, 'miniprogrampage', [
             'appid'          => $appId,
             'title'          => $title,
-            'pagepath'       => $page,
+            'pagepath'       => $pagePath,
             'thumb_media_id' => $mediaId,
         ], $kf);
     }
