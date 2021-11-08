@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-05-29 18:26:55 +0800
+ * @version  2021-11-08 10:44:53 +0800
  */
 
 namespace fwkit\Wechat\Message;
@@ -51,6 +51,8 @@ abstract class MessageBase
         'subscribe_msg_popup_event'  => Event\SubscribeMsgPopup::class,
         'subscribe_msg_change_event' => Event\SubscribeMsgChange::class,
         'subscribe_msg_sent_event'   => Event\SubscribeMsgSent::class,
+        'user_info_modified'         => Event\UserInfoModified::class,
+        'user_authorization_revoke'  => Event\UserAuthorizationRevoke::class,
     ];
 
     protected static $replies = [

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-08-14 15:28:13 +0800
+ * @version  2021-11-08 10:49:36 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -101,6 +101,13 @@ class Message extends ComponentBase
     {
         return $this->send($openId, 'mpnews', [
             'media_id' => $mediaId,
+        ], $kf);
+    }
+
+    public function sendMpNewsArticle(string $openId, string $articleId, ?string $kf = null)
+    {
+        return $this->send($openId, 'mpnewsarticle', [
+            'article_id' => $articleId,
         ], $kf);
     }
 
