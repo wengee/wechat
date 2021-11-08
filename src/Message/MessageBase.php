@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-11-08 10:44:53 +0800
+ * @version  2021-11-08 17:41:21 +0800
  */
 
 namespace fwkit\Wechat\Message;
@@ -53,6 +53,7 @@ abstract class MessageBase
         'subscribe_msg_sent_event'   => Event\SubscribeMsgSent::class,
         'user_info_modified'         => Event\UserInfoModified::class,
         'user_authorization_revoke'  => Event\UserAuthorizationRevoke::class,
+        'wxa_media_check'            => Event\WxaMediaCheck::class,
     ];
 
     protected static $replies = [
@@ -67,15 +68,18 @@ abstract class MessageBase
 
     protected $attributes = [];
 
-    protected $rawXml;
+    protected $rawMsg;
+
+    protected $isJson = false;
 
     protected $data;
 
     protected $cryptor;
 
-    public function __construct(string $rawXml, array $data)
+    public function __construct(string $rawMsg, array $data, bool $isJson = false)
     {
-        $this->rawXml = $rawXml;
+        $this->rawMsg = $rawMsg;
+        $this->isJson = $isJson;
 
         $this->setData($data);
         $this->initialize();
@@ -105,9 +109,23 @@ abstract class MessageBase
         return Arr::get($this->data, $key, $default);
     }
 
-    public function rawXml()
+    /**
+     * @deprecated deprecated since version 1.0
+     * @see self::rawMsg()
+     */
+    public function rawXml(): ?string
     {
-        return $this->rawXml;
+        return $this->rawMsg;
+    }
+
+    public function rawMsg(): ?string
+    {
+        return $this->rawMsg;
+    }
+
+    public function isJson(): bool
+    {
+        return $this->isJson;
     }
 
     public function reply(string $type = 'text')
@@ -121,9 +139,20 @@ abstract class MessageBase
 
     public static function factory(string $message)
     {
-        /** @var SimpleXMLElement $xml */
-        $xml  = simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $data = $xml ? Helper::parseXmlElement($xml) : [];
+        $isJson = false;
+        /** @var bool|SimpleXMLElement $xml */
+        $xml = simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if (false === $xml) {
+            $data = json_decode($message, true);
+            if (is_array($data)) {
+                $isJson = true;
+                $data   = array_change_key_case($data, CASE_LOWER);
+            } else {
+                $data = [];
+            }
+        } else {
+            $data = $xml ? Helper::parseXmlElement($xml) : [];
+        }
 
         $msgType = $data['msgtype'] ?? (isset($data['infotype']) ? 'info' : null);
         if (empty($data) || !$msgType) {
@@ -138,7 +167,7 @@ abstract class MessageBase
             $className = static::$types[$msgType] ?? Unknown::class;
         }
 
-        return new $className($message, $data);
+        return new $className($message, $data, $isJson);
     }
 
     public function withAttribute($name, $value): self

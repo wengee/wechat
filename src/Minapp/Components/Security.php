@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2021-11-08 17:21:43 +0800
  */
 
 namespace fwkit\Wechat\Minapp\Components;
@@ -29,7 +30,7 @@ class Security extends ComponentBase
         $res = $this->post('wxa/img_sec_check', [
             'multipart' => [
                 [
-                    'name' => 'media',
+                    'name'     => 'media',
                     'contents' => $file,
                 ],
             ],
@@ -38,23 +39,33 @@ class Security extends ComponentBase
         return $this->checkResponse($res);
     }
 
-    public function checkMsg(string $content)
+    public function checkMsg(string $openId, int $scene, string $content, array $extra = [])
     {
-        $res = $this->post('wxa/msg_sec_check', [
-            'json' => [
-                'content' => $content,
-            ],
+        $data = array_merge($extra, [
+            'version' => 2,
+            'openid'  => $openId,
+            'scene'   => $scene,
+            'content' => $content,
         ]);
 
-        return $this->checkResponse($res);
+        $res = $this->post('wxa/msg_sec_check', [
+            'json' => $data,
+        ]);
+
+        return $this->checkResponse($res, [
+            'trace_id' => 'traceId',
+        ]);
     }
 
-    public function checkMediaAsync(string $mediaUrl, int $mediaType = 1)
+    public function checkMediaAsync(string $openId, int $scene, string $mediaUrl, int $mediaType = 1)
     {
         $res = $this->post('wxa/media_check_async', [
             'json' => [
-                'media_url' => $mediaUrl,
+                'media_url'  => $mediaUrl,
                 'media_type' => $mediaType,
+                'version'    => 2,
+                'openid'     => $openId,
+                'scene'      => $scene,
             ],
         ]);
 
