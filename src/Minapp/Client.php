@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2021-11-12 09:53:08 +0800
  */
 
 namespace fwkit\Wechat\Minapp;
@@ -21,12 +22,14 @@ class Client extends ClientBase
         'pay'       => Components\Pay::class,
         'plugin'    => Components\Plugin::class,
         'qrcode'    => Components\QrCode::class,
+        'redpacket' => Components\Redpacket::class,
         'search'    => Components\Search::class,
         'security'  => Components\Security::class,
         'soter'     => Components\Soter::class,
         'subscribe' => Components\Subscribe::class,
         'template'  => Components\Template::class,
         'token'     => Components\Token::class,
+        'url'       => Components\Url::class,
     ];
 
     protected $baseUri = 'https://api.weixin.qq.com/';
