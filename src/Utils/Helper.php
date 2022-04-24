@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-05-29 18:24:16 +0800
+ * @version  2022-04-24 14:18:25 +0800
  */
 
 namespace fwkit\Wechat\Utils;
@@ -52,5 +52,28 @@ class Helper
         }
 
         return $ret;
+    }
+
+    public static function arrGet($data, string $key, $default = null)
+    {
+        if (!is_array($data)) {
+            return $default;
+        }
+
+        if (false === strpos($key, '.')) {
+            return array_key_exists($key, $data) ? $data[$key] : $default;
+        }
+
+        $value = $data;
+        $keys  = explode('.', $key);
+        foreach ($keys as $k) {
+            if (!is_array($value) || !array_key_exists($k, $value)) {
+                return $default;
+            }
+
+            $value = $value[$k];
+        }
+
+        return $value;
     }
 }
