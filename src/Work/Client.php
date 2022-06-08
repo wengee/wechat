@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-06-08 16:37:49 +0800
  */
 
 namespace fwkit\Wechat\Work;
@@ -16,38 +16,39 @@ class Client extends ClientBase
     protected $type = self::TYPE_WORK;
 
     protected $componentList = [
-        'agent'         => Components\Agent::class,
-        'base'          => Components\Base::class,
-        'batch'         => Components\Batch::class,
-        'department'    => Components\Department::class,
-        'jsapi'         => Components\JsApi::class,
-        'media'         => Components\Media::class,
-        'menu'          => Components\Menu::class,
-        'message'       => Components\Message::class,
-        'oauth'         => Components\OAuth::class,
-        'redpack'       => Components\Redpack::class,
-        'schedule'      => Components\Schedule::class,
-        'tag'           => Components\Tag::class,
-        'token'         => Components\Token::class,
-        'user'          => Components\User::class,
+        'agent'      => Components\Agent::class,
+        'base'       => Components\Base::class,
+        'batch'      => Components\Batch::class,
+        'department' => Components\Department::class,
+        'jsapi'      => Components\JsApi::class,
+        'media'      => Components\Media::class,
+        'menu'       => Components\Menu::class,
+        'message'    => Components\Message::class,
+        'oauth'      => Components\OAuth::class,
+        'redpack'    => Components\Redpack::class,
+        'schedule'   => Components\Schedule::class,
+        'tag'        => Components\Tag::class,
+        'token'      => Components\Token::class,
+        'user'       => Components\User::class,
+        'kf'         => Components\Kf::class,
     ];
 
     protected $baseUri = 'https://qyapi.weixin.qq.com/';
 
     public function checkSignature(ServerRequestInterface $request)
     {
-        $query = $request->getQueryParams();
+        $query     = $request->getQueryParams();
         $signature = $query['msg_signature'] ?? '';
         $timestamp = $query['timestamp'] ?? '';
-        $nonce = $query['nonce'] ?? '';
-        $echoStr = $query['echostr'] ?? '';
+        $nonce     = $query['nonce'] ?? '';
+        $echoStr   = $query['echostr'] ?? '';
 
         if (!$signature || !$timestamp || !$nonce || !$echoStr) {
             throw new OfficialError('Params is invalid.');
         }
 
         $ret = $this->cryptor->verifyUrl($signature, $timestamp, $nonce, $echoStr, $replyEchoStr);
-        if ($ret !== ErrorCode::OK) {
+        if (ErrorCode::OK !== $ret) {
             throw new OfficialError('Signature is invalid.');
         }
 
@@ -57,11 +58,11 @@ class Client extends ClientBase
     public function fetchMessage(ServerRequestInterface $request)
     {
         $query = $request->getQueryParams();
-        $body = (string) $request->getBody();
+        $body  = (string) $request->getBody();
 
         $msgSignature = $query['msg_signature'] ?? '';
-        $timestamp = $query['timestamp'] ?? '';
-        $nonce = $query['nonce'] ?? '';
+        $timestamp    = $query['timestamp'] ?? '';
+        $nonce        = $query['nonce'] ?? '';
 
         $errcode = $this->cryptor->decrypt(
             $msgSignature,
@@ -71,12 +72,13 @@ class Client extends ClientBase
             $message
         );
 
-        if ($errcode !== ErrorCode::OK) {
-            throw new OfficialError('Decrypt error ' . $errcode);
+        if (ErrorCode::OK !== $errcode) {
+            throw new OfficialError('Decrypt error '.$errcode);
         }
 
         $message = $this->parseMessage($message);
         $message->setCryptor($this->cryptor);
+
         return $message;
     }
 }

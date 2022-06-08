@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-04-24 11:58:20 +0800
+ * @version  2022-06-08 16:34:18 +0800
  */
 
 namespace fwkit\Wechat\Message;
@@ -53,6 +53,7 @@ abstract class MessageBase
         'user_info_modified'         => Event\UserInfoModified::class,
         'user_authorization_revoke'  => Event\UserAuthorizationRevoke::class,
         'wxa_media_check'            => Event\WxaMediaCheck::class,
+        'kf_msg_or_event'            => Event\KfMsgOrEvent::class,
     ];
 
     protected static $replies = [
