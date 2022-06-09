@@ -61,7 +61,7 @@ class Client extends ClientBase
         $body  = (string) $request->getBody();
 
         $msgSignature = $query['msg_signature'] ?? '';
-        $timestamp    = $query['timestamp'] ?? '';
+        $timestamp    = intval($query['timestamp'] ?? 0);
         $nonce        = $query['nonce'] ?? '';
 
         $errcode = $this->cryptor->decrypt(
