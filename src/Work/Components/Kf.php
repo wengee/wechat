@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-08 17:44:09 +0800
+ * @version  2022-06-09 17:48:41 +0800
  */
 
 namespace fwkit\Wechat\Work\Components;
 
 use fwkit\Wechat\ComponentBase;
 use fwkit\Wechat\Constants;
+use fwkit\Wechat\Work\Kf\MessageBase;
 
 class Kf extends ComponentBase
 {
@@ -108,7 +109,7 @@ class Kf extends ComponentBase
             'json' => $data,
         ]);
 
-        return $this->checkResponse($res, [
+        $res = $this->checkResponse($res, [
             'next_cursor'     => 'nextCursor',
             'has_more'        => 'hasMore',
             'msg_list'        => 'msgList',
@@ -116,6 +117,7 @@ class Kf extends ComponentBase
             'external_userid' => 'userId',
             'send_time'       => 'sendTime',
             'msgtype'         => 'msgType',
+            'msgid'           => 'msgId',
             'menu_id'         => 'menuId',
             'media_id'        => 'mediaId',
             'event_type'      => 'eventType',
@@ -125,6 +127,12 @@ class Kf extends ComponentBase
             'fail_msgid'      => 'failMsgId',
             'fail_type'       => 'failType',
         ]);
+
+        $res['msgList'] = array_map(function ($item) {
+            return is_array($item) ? MessageBase::factory($item) : null;
+        }, $res['msgList'] ?? []);
+
+        return $res;
     }
 
     public function sendWelcomeTextMsg(string $code, string $content, string $msgId = ''): string

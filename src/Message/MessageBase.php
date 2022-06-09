@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-08 16:34:18 +0800
+ * @version  2022-06-09 17:30:16 +0800
  */
 
 namespace fwkit\Wechat\Message;
@@ -21,6 +21,7 @@ abstract class MessageBase
     public $openId;
 
     public $createTime;
+
     protected static $types = [
         'image'      => Image::class,
         'link'       => Link::class,
