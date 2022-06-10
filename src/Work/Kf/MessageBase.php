@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-09 17:46:04 +0800
+ * @version  2022-06-10 17:43:02 +0800
  */
 
 namespace fwkit\Wechat\Work\Kf;
@@ -23,6 +23,8 @@ abstract class MessageBase
 
     public $data = [];
 
+    protected $raw;
+
     protected static $types = [
         'event' => Event::class,
         'file'  => File::class,
@@ -32,24 +34,25 @@ abstract class MessageBase
         'voice' => Voice::class,
     ];
 
-    public function __construct(array $msgData)
+    public function __construct(array $rawData)
     {
-        $this->id       = $msgData['msgId'] ?? null;
-        $this->type     = $msgData['msgType'] ?? null;
-        $this->origin   = $msgData['origin'] ?? null;
-        $this->kfId     = $msgData['kfId'] ?? null;
-        $this->userId   = $msgData['userId'] ?? null;
-        $this->sendTime = $msgData['sendTime'] ?? null;
+        $this->raw      = $rawData;
+        $this->id       = $rawData['msgId'] ?? null;
+        $this->type     = $rawData['msgType'] ?? null;
+        $this->origin   = $rawData['origin'] ?? null;
+        $this->kfId     = $rawData['kfId'] ?? null;
+        $this->userId   = $rawData['userId'] ?? null;
+        $this->sendTime = $rawData['sendTime'] ?? null;
 
         if ($this->type) {
-            $this->data = $msgData[$this->type] ?? [];
+            $this->data = $rawData[$this->type] ?? [];
             $this->initialize($this->data);
         }
     }
 
-    public static function factory(array $data)
+    public static function factory(array $rawData)
     {
-        $msgType = $data['msgType'] ?? null;
+        $msgType = $rawData['msgType'] ?? null;
         if (!$msgType) {
             $className = Other::class;
         } else {
@@ -57,7 +60,12 @@ abstract class MessageBase
             $className = static::$types[$msgType] ?? Other::class;
         }
 
-        return new $className($data);
+        return new $className($rawData);
+    }
+
+    public function raw(): array
+    {
+        return $this->raw ?: [];
     }
 
     protected function initialize(array $data): void
