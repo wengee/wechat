@@ -2,13 +2,17 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-10 17:43:02 +0800
+ * @version  2022-06-13 16:04:16 +0800
  */
 
 namespace fwkit\Wechat\Work\Kf;
 
+use fwkit\Wechat\Traits\HasAttributes;
+
 abstract class MessageBase
 {
+    use HasAttributes;
+
     public $id;
 
     public $type;

@@ -2,16 +2,19 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-09 17:30:16 +0800
+ * @version  2022-06-13 16:04:01 +0800
  */
 
 namespace fwkit\Wechat\Message;
 
+use fwkit\Wechat\Traits\HasAttributes;
 use fwkit\Wechat\Utils\Helper;
 use SimpleXMLElement;
 
 abstract class MessageBase
 {
+    use HasAttributes;
+
     public $id;
 
     public $type;
@@ -66,8 +69,6 @@ abstract class MessageBase
         'voice' => Reply\Voice::class,
         'raw'   => Reply\Raw::class,
     ];
-
-    protected $attributes = [];
 
     protected $rawMsg;
 
@@ -170,30 +171,6 @@ abstract class MessageBase
         }
 
         return new $className($message, $data, $isJson);
-    }
-
-    public function withAttribute($name, $value): self
-    {
-        $this->attributes[$name] = $value;
-
-        return $this;
-    }
-
-    public function withoutAttribute($name): self
-    {
-        unset($this->attributes[$name]);
-
-        return $this;
-    }
-
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    public function getAttribute($name, $default = null)
-    {
-        return $this->attributes[$name] ?? $default;
     }
 
     public function isEvent(...$types): bool
