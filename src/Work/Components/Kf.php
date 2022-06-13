@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-09 17:48:41 +0800
+ * @version  2022-06-13 16:28:30 +0800
  */
 
 namespace fwkit\Wechat\Work\Components;
@@ -65,7 +65,7 @@ class Kf extends ComponentBase
 
     public function listAccount(int $offset = 0, int $limit = 100)
     {
-        $res = $this->post('cgi-bin/kf/account/del', [
+        $res = $this->post('cgi-bin/kf/account/list', [
             'json' => [
                 'offset' => $offset,
                 'limit'  => $limit,
@@ -85,7 +85,7 @@ class Kf extends ComponentBase
             $data['scene'] = $scene;
         }
 
-        $res = $this->post('cgi-bin/kf/account/update', [
+        $res = $this->post('cgi-bin/kf/add_contact_way', [
             'json' => $data,
         ]);
 
