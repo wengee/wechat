@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-13 16:28:30 +0800
+ * @version  2022-06-15 11:40:15 +0800
  */
 
 namespace fwkit\Wechat\Work\Components;
@@ -137,42 +137,42 @@ class Kf extends ComponentBase
 
     public function sendWelcomeTextMsg(string $code, string $content, string $msgId = ''): string
     {
-        return $this->doSendTextMsg($code, $content, $msgId, true);
+        return $this->doSendTextMsg($code, '', $content, $msgId, true);
     }
 
     public function sendWelcomeMenuMsg(string $kfId, string $header, array $list, string $footer, string $msgId = ''): string
     {
-        return $this->doSendMenuMsg($kfId, $header, $list, $footer, $msgId, true);
+        return $this->doSendMenuMsg($kfId, '', $header, $list, $footer, $msgId, true);
     }
 
-    public function sendTextMsg(string $kfId, string $content, string $msgId = ''): string
+    public function sendTextMsg(string $kfId, string $userId, string $content, string $msgId = ''): string
     {
-        return $this->doSendTextMsg($kfId, $content, $msgId);
+        return $this->doSendTextMsg($kfId, $userId, $content, $msgId);
     }
 
-    public function sendImageMsg(string $kfId, string $mediaId, string $msgId = ''): string
+    public function sendImageMsg(string $kfId, string $userId, string $mediaId, string $msgId = ''): string
     {
-        return $this->sendMsg($kfId, 'image', ['media_id' => $mediaId], $msgId);
+        return $this->sendMsg($kfId, $userId, 'image', ['media_id' => $mediaId], $msgId);
     }
 
-    public function sendVoiceMsg(string $kfId, string $mediaId, string $msgId = ''): string
+    public function sendVoiceMsg(string $kfId, string $userId, string $mediaId, string $msgId = ''): string
     {
-        return $this->sendMsg($kfId, 'voice', ['media_id' => $mediaId], $msgId);
+        return $this->sendMsg($kfId, $userId, 'voice', ['media_id' => $mediaId], $msgId);
     }
 
-    public function sendVideoMsg(string $kfId, string $mediaId, string $msgId = ''): string
+    public function sendVideoMsg(string $kfId, string $userId, string $mediaId, string $msgId = ''): string
     {
-        return $this->sendMsg($kfId, 'video', ['media_id' => $mediaId], $msgId);
+        return $this->sendMsg($kfId, $userId, 'video', ['media_id' => $mediaId], $msgId);
     }
 
-    public function sendFileMsg(string $kfId, string $mediaId, string $msgId = ''): string
+    public function sendFileMsg(string $kfId, string $userId, string $mediaId, string $msgId = ''): string
     {
-        return $this->sendMsg($kfId, 'file', ['media_id' => $mediaId], $msgId);
+        return $this->sendMsg($kfId, $userId, 'file', ['media_id' => $mediaId], $msgId);
     }
 
-    public function sendLinkMsg(string $kfId, string $title, string $desc, string $url, string $thumbMediaId, string $msgId = ''): string
+    public function sendLinkMsg(string $kfId, string $userId, string $title, string $desc, string $url, string $thumbMediaId, string $msgId = ''): string
     {
-        return $this->sendMsg($kfId, 'link', [
+        return $this->sendMsg($kfId, $userId, 'link', [
             'title'          => $title,
             'desc'           => $desc,
             'url'            => $url,
@@ -180,9 +180,9 @@ class Kf extends ComponentBase
         ], $msgId);
     }
 
-    public function sendMiniprogramMsg(string $kfId, string $appId, string $title, string $pagePath, string $thumbMediaId, string $msgId = ''): string
+    public function sendMiniprogramMsg(string $kfId, string $userId, string $appId, string $title, string $pagePath, string $thumbMediaId, string $msgId = ''): string
     {
-        return $this->sendMsg($kfId, 'miniprogram', [
+        return $this->sendMsg($kfId, $userId, 'miniprogram', [
             'appid'          => $appId,
             'title'          => $title,
             'thumb_media_id' => $thumbMediaId,
@@ -190,14 +190,14 @@ class Kf extends ComponentBase
         ], $msgId);
     }
 
-    public function sendMenuMsg(string $kfId, string $header, array $list, string $footer, string $msgId = ''): string
+    public function sendMenuMsg(string $kfId, string $userId, string $header, array $list, string $footer, string $msgId = ''): string
     {
-        return $this->doSendMenuMsg($kfId, $header, $list, $footer, $msgId);
+        return $this->doSendMenuMsg($kfId, $userId, $header, $list, $footer, $msgId);
     }
 
-    public function sendLocationMsg(string $kfId, float $latitude, float $longitude, string $name = '', string $address = '', string $msgId = ''): string
+    public function sendLocationMsg(string $kfId, string $userId, float $latitude, float $longitude, string $name = '', string $address = '', string $msgId = ''): string
     {
-        return $this->sendMsg($kfId, 'location', [
+        return $this->sendMsg($kfId, $userId, 'location', [
             'name'      => $name,
             'address'   => $address,
             'latitude'  => $latitude,
@@ -205,21 +205,21 @@ class Kf extends ComponentBase
         ], $msgId);
     }
 
-    protected function doSendTextMsg(string $kfIdOrCode, string $content, string $msgId = '', bool $isWelcomeMsg = false): string
+    protected function doSendTextMsg(string $kfIdOrCode, string $userId, string $content, string $msgId = '', bool $isWelcomeMsg = false): string
     {
-        return $this->sendMsg($kfIdOrCode, 'text', ['content' => $content], $msgId, $isWelcomeMsg);
+        return $this->sendMsg($kfIdOrCode, $userId, 'text', ['content' => $content], $msgId, $isWelcomeMsg);
     }
 
-    protected function doSendMenuMsg(string $kfIdOrCode, string $header, array $list, string $footer, string $msgId = '', bool $isWelcomeMsg = false): string
+    protected function doSendMenuMsg(string $kfIdOrCode, string $userId, string $header, array $list, string $footer, string $msgId = '', bool $isWelcomeMsg = false): string
     {
-        return $this->sendMsg($kfIdOrCode, 'msgmenu', [
+        return $this->sendMsg($kfIdOrCode, $userId, 'msgmenu', [
             'head_content' => $header,
             'list'         => $list,
             'tail_content' => $footer,
         ], $msgId, $isWelcomeMsg);
     }
 
-    protected function sendMsg(string $kfIdOrCode, string $msgType, array $data, string $msgId = '', bool $isWelcomeMsg = false): string
+    protected function sendMsg(string $kfIdOrCode, string $userId, string $msgType, array $data, string $msgId = '', bool $isWelcomeMsg = false): string
     {
         if ($isWelcomeMsg && in_array($msgType, ['text', 'msgmenu'])) {
             $res = $this->post('cgi-bin/kf/send_msg_on_event', [
@@ -233,6 +233,7 @@ class Kf extends ComponentBase
         } else {
             $res = $this->post('cgi-bin/kf/send_msg', [
                 'json' => [
+                    'touser'    => $userId,
                     'open_kfid' => $kfIdOrCode,
                     'msgid'     => $msgId,
                     'msgtype'   => $msgType,
