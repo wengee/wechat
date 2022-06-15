@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-15 11:40:15 +0800
+ * @version  2022-06-15 11:43:37 +0800
  */
 
 namespace fwkit\Wechat\Work\Components;
@@ -222,23 +222,33 @@ class Kf extends ComponentBase
     protected function sendMsg(string $kfIdOrCode, string $userId, string $msgType, array $data, string $msgId = '', bool $isWelcomeMsg = false): string
     {
         if ($isWelcomeMsg && in_array($msgType, ['text', 'msgmenu'])) {
+            $data = [
+                'code'    => $kfIdOrCode,
+                'msgtype' => $msgType,
+                $msgType  => $data,
+            ];
+
+            if ($msgId) {
+                $data['msgid'] = $msgId;
+            }
+
             $res = $this->post('cgi-bin/kf/send_msg_on_event', [
-                'json' => [
-                    'code'    => $kfIdOrCode,
-                    'msgid'   => $msgId,
-                    'msgtype' => $msgType,
-                    $msgType  => $data,
-                ],
+                'json' => $data,
             ]);
         } else {
+            $data = [
+                'touser'    => $userId,
+                'open_kfid' => $kfIdOrCode,
+                'msgtype'   => $msgType,
+                $msgType    => $data,
+            ];
+
+            if ($msgId) {
+                $data['msgid'] = $msgId;
+            }
+
             $res = $this->post('cgi-bin/kf/send_msg', [
-                'json' => [
-                    'touser'    => $userId,
-                    'open_kfid' => $kfIdOrCode,
-                    'msgid'     => $msgId,
-                    'msgtype'   => $msgType,
-                    $msgType    => $data,
-                ],
+                'json' => $data,
             ]);
         }
 
