@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-11-08 17:21:43 +0800
+ * @version  2022-07-06 17:07:41 +0800
  */
 
 namespace fwkit\Wechat\Minapp\Components;
@@ -14,8 +14,12 @@ use Psr\Http\Message\StreamInterface;
 class Security extends ComponentBase
 {
     public const MEDIA_VOICE = 1;
-
     public const MEDIA_IMAGE = 2;
+
+    public const SCENE_PROFILE = 1;
+    public const SCENE_COMMENT = 2;
+    public const SCENE_POST    = 3;
+    public const SCENE_BLOG    = 4;
 
     public function checkImg($file)
     {
@@ -57,7 +61,7 @@ class Security extends ComponentBase
         ]);
     }
 
-    public function checkMediaAsync(string $openId, int $scene, string $mediaUrl, int $mediaType = 1)
+    public function checkMediaAsync(string $openId, int $scene, string $mediaUrl, int $mediaType = 2)
     {
         $res = $this->post('wxa/media_check_async', [
             'json' => [
