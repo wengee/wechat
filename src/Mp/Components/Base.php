@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:17:44 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -14,12 +14,13 @@ class Base extends ComponentBase
     {
         $res = $this->post('cgi-bin/shorturl', [
             'json' => [
-                'action' => 'long2short',
+                'action'   => 'long2short',
                 'long_url' => $url,
             ],
         ]);
 
         $res = $this->checkResponse($res, ['short_url' => 'shortUrl']);
+
         return $res->shortUrl;
     }
 
@@ -27,6 +28,7 @@ class Base extends ComponentBase
     {
         $res = $this->get('cgi-bin/getcallbackip');
         $res = $this->checkResponse($res, ['ip_list' => 'ipList']);
+
         return $res->ipList;
     }
 
@@ -34,7 +36,7 @@ class Base extends ComponentBase
     {
         $res = $this->post('cgi-bin/callback/check', [
             'json' => [
-                'action' => $action,
+                'action'         => $action,
                 'check_operator' => $operator,
             ],
         ]);
@@ -42,7 +44,7 @@ class Base extends ComponentBase
         return $this->checkResponse($res, [
             'real_operator' => 'realOperator',
             'from_operator' => 'fromOperator',
-            'package_loss' => 'packageLoss',
+            'package_loss'  => 'packageLoss',
         ]);
     }
 }

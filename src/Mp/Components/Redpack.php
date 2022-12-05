@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:22:11 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -13,31 +13,31 @@ class Redpack extends ComponentBase
 {
     public function send(string $openId, int $amount = 100, array $data = [], array $mchConfig = [], bool $group = false)
     {
-        $data['re_openid'] = $openId;
+        $data['re_openid']    = $openId;
         $data['total_amount'] = $amount;
-        $xml = $this->toXml($data, $mchConfig, $group);
+        $xml                  = $this->toXml($data, $mchConfig, $group);
 
         $url = $group ?
             'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendgroupredpack' :
             'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
 
         $res = $this->post($url, [
-            'body' => $xml,
+            'body'     => $xml,
             'withCert' => $mchConfig,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
-            'return_code' => 'returnCode',
-            'return_msg' => 'returnMsg',
-            'result_code' => 'resultCode',
-            'err_code' => 'errCode',
+            'return_code'  => 'returnCode',
+            'return_msg'   => 'returnMsg',
+            'result_code'  => 'resultCode',
+            'err_code'     => 'errCode',
             'err_code_des' => 'errCodeDes',
-            'mch_billno' => 'mchBillNo',
-            'mch_id' => 'mchId',
-            'wxappid' => 'appId',
-            're_openid' => 'openId',
+            'mch_billno'   => 'mchBillNo',
+            'mch_id'       => 'mchId',
+            'wxappid'      => 'appId',
+            're_openid'    => 'openId',
             'total_amount' => 'amount',
-            'send_listid' => 'sendListId',
+            'send_listid'  => 'sendListId',
         ]) : null;
     }
 
@@ -49,15 +49,15 @@ class Redpack extends ComponentBase
     public function query(string $mchBillNo, string $billType = 'MCHT', array $mchConfig = [])
     {
         $data = [
-            'nonce_str' => Helper::createNonceStr(),
+            'nonce_str'  => Helper::createNonceStr(),
             'mch_billno' => $mchBillNo,
-            'mch_id' => $this->client->mchConfig($mchConfig, 'mchId'),
-            'appid' => $this->client->getAppId(),
-            'bill_type' => $billType,
+            'mch_id'     => $this->client->mchConfig($mchConfig, 'mchId'),
+            'appid'      => $this->client->getAppId(),
+            'bill_type'  => $billType,
         ];
 
         $data['sign'] = $this->signature($data, $mchConfig);
-        $xml = "<xml>
+        $xml          = "<xml>
                     <sign><![CDATA[{$data['sign']}]]></sign>
                     <mch_billno><![CDATA[{$data['mch_billno']}]]></mch_billno>
                     <mch_id><![CDATA[{$data['mch_id']}]]></mch_id>
@@ -67,81 +67,82 @@ class Redpack extends ComponentBase
                 </xml>";
 
         $res = $this->post('https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo', [
-            'body' => $xml,
+            'body'     => $xml,
             'withCert' => $mchConfig,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
-            'return_code' => 'returnCode',
-            'return_msg' => 'returnMsg',
-            'result_code' => 'resultCode',
-            'err_code' => 'errCode',
-            'err_code_des' => 'errCodeDes',
-            'mch_billno' => 'mchBillNo',
-            'mch_id' => 'mchId',
-            'detail_id' => 'detailId',
-            'send_type' => 'sendType',
-            'hb_type' => 'hbType',
-            'total_num' => 'num',
-            'total_amount' => 'amount',
-            'send_time' => 'sendTime',
-            'refund_time' => 'refundTime',
+            'return_code'   => 'returnCode',
+            'return_msg'    => 'returnMsg',
+            'result_code'   => 'resultCode',
+            'err_code'      => 'errCode',
+            'err_code_des'  => 'errCodeDes',
+            'mch_billno'    => 'mchBillNo',
+            'mch_id'        => 'mchId',
+            'detail_id'     => 'detailId',
+            'send_type'     => 'sendType',
+            'hb_type'       => 'hbType',
+            'total_num'     => 'num',
+            'total_amount'  => 'amount',
+            'send_time'     => 'sendTime',
+            'refund_time'   => 'refundTime',
             'refund_amount' => 'refundAmount',
-            'act_name' => 'actName',
-            'hblist' => 'hbList',
-            'openid' => 'openId',
-            'rcv_time' => 'rcvTime',
+            'act_name'      => 'actName',
+            'hblist'        => 'hbList',
+            'openid'        => 'openId',
+            'rcv_time'      => 'rcvTime',
         ]) : null;
     }
 
     private function toXml(array $data, array $mchConfig = [], bool $group = false)
     {
         $data = $this->transformKeys($data, [
-            'actName' => 'act_name',
-            'clientIp' => 'client_ip',
-            'billNo' => 'mch_billno',
+            'actName'   => 'act_name',
+            'clientIp'  => 'client_ip',
+            'billNo'    => 'mch_billno',
             'mchBillNo' => 'mch_billno',
-            'openId' => 're_openid',
-            'sendName' => 'send_name',
-            'amount' => 'total_amount',
-            'num' => 'total_num',
-            'totalNum' => 'total_num',
-            'clientIp' => 'client_ip',
-            'sceneId' => 'scene_id',
-            'riskInfo' => 'risk_info',
-            'amtType' => 'amt_type',
+            'openId'    => 're_openid',
+            'sendName'  => 'send_name',
+            'amount'    => 'total_amount',
+            'num'       => 'total_num',
+            'totalNum'  => 'total_num',
+            'clientIp'  => 'client_ip',
+            'sceneId'   => 'scene_id',
+            'riskInfo'  => 'risk_info',
+            'amtType'   => 'amt_type',
         ]);
 
         $data += [
-            'nonce_str' => Helper::createNonceStr(),
-            'mch_billno' => '',
-            'mch_id' => $this->client->mchConfig($mchConfig, 'mchId'),
-            'wxappid' => $this->client->getAppId(),
-            'send_name' => '',
-            're_openid' => '',
+            'nonce_str'    => Helper::createNonceStr(),
+            'mch_billno'   => '',
+            'mch_id'       => $this->client->mchConfig($mchConfig, 'mchId'),
+            'wxappid'      => $this->client->getAppId(),
+            'send_name'    => '',
+            're_openid'    => '',
             'total_amount' => '',
-            'total_num' => 1,
-            'wishing' => '',//祝福语
-            'act_name' => '',
-            'remark' => '',
-            'client_ip' => '',
-            'scene_id' => '',
-            'risk_info' => '',
+            'total_num'    => 1,
+            'wishing'      => '', // 祝福语
+            'act_name'     => '',
+            'remark'       => '',
+            'client_ip'    => '',
+            'scene_id'     => '',
+            'risk_info'    => '',
         ];
 
         if (empty($data['mch_billno'])) {
-            $microTime = microtime(true) * 10000;
-            $mchBillNo = 'RP' . $this->client->getAppId() . $microTime;
+            $microTime          = microtime(true) * 10000;
+            $mchBillNo          = 'RP'.$this->client->getAppId().$microTime;
             $data['mch_billno'] = substr($mchBillNo, 0, 28);
         }
 
         $amtType = '';
         if ($group) {
             $data['amt_type'] = $data['amt_type'] ?? 'ALL_RAND';
-            $amtType = "<amt_type><![CDATA[{$data['amt_type']}]]></amt_type>";
+            $amtType          = "<amt_type><![CDATA[{$data['amt_type']}]]></amt_type>";
         }
 
         $data['sign'] = $this->signature($data, $mchConfig);
+
         return "<xml>
                     <sign><![CDATA[{$data['sign']}]]></sign>
                     <mch_billno><![CDATA[{$data['mch_billno']}]]></mch_billno>
@@ -167,10 +168,11 @@ class Redpack extends ComponentBase
         ksort($data);
         $tmpStr = '';
         foreach ($data as $key => $value) {
-            $tmpStr .= $key . '=' . $value . '&';
+            $tmpStr .= $key.'='.$value.'&';
         }
 
-        $tmpStr .= 'key=' . $this->client->mchConfig($mchConfig, 'mchKey');
+        $tmpStr .= 'key='.$this->client->mchConfig($mchConfig, 'mchKey');
+
         return strtoupper(md5($tmpStr));
     }
 }

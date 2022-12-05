@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:17:52 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -34,9 +34,9 @@ class JsApi extends ComponentBase
             $url = substr($url, 0, $pos);
         }
 
-        $nonceStr = Helper::createNonceStr();
+        $nonceStr  = Helper::createNonceStr();
         $timestamp = time();
-        $tmpStr = sprintf(
+        $tmpStr    = sprintf(
             'jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s',
             $ticket,
             $nonceStr,
@@ -45,10 +45,11 @@ class JsApi extends ComponentBase
         );
 
         $signature = sha1($tmpStr);
+
         return [
-            'url' => $url,
-            'appId' => $this->client->getAppId(),
-            'nonceStr' => $nonceStr,
+            'url'       => $url,
+            'appId'     => $this->client->getAppId(),
+            'nonceStr'  => $nonceStr,
             'timestamp' => $timestamp,
             'signature' => $signature,
         ];
@@ -62,16 +63,16 @@ class JsApi extends ComponentBase
         }
 
         $data = [
-            'cardId' => $cardId,
-            'ticket' => $ticket,
+            'cardId'    => $cardId,
+            'ticket'    => $ticket,
             'timestamp' => time(),
-            'nonceStr' => Helper::createNonceStr(),
+            'nonceStr'  => Helper::createNonceStr(),
         ];
-        if ($code !== null) {
+        if (null !== $code) {
             $data['code'] = $code;
         }
 
-        if ($openId !== null) {
+        if (null !== $openId) {
             $data['openid'] = $openId;
         }
 
@@ -84,9 +85,9 @@ class JsApi extends ComponentBase
 
     protected function safeGetTicket(string $type = 'jsapi'): string
     {
-        $appId = $this->client->getAppId();
-        $cacheKey = $type . 'Ticket';
-        $ticket = Cache::get($appId, $cacheKey);
+        $appId    = $this->client->getAppId();
+        $cacheKey = $type.'Ticket';
+        $ticket   = Cache::get($appId, $cacheKey);
         if (empty($ticket)) {
             try {
                 $res = $this->getTicket($type);

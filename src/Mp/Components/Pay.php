@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-08-12 21:32:07 +0800
+ * @version  2022-12-05 16:21:47 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -17,11 +17,12 @@ class Pay extends ComponentBase
             'appId'     => $this->client->getAppId(),
             'timeStamp' => (string) time(),
             'nonceStr'  => Helper::createNonceStr(),
-            'package'   => 'prepay_id=' . $prepayId,
+            'package'   => 'prepay_id='.$prepayId,
             'signType'  => 'MD5',
         ];
 
         $data['paySign'] = $this->signature($data, $mchConfig);
+
         return $data;
     }
 
@@ -29,23 +30,23 @@ class Pay extends ComponentBase
     {
         $xml = $this->toXml($data, $mchConfig);
         $res = $this->post('https://api.mch.weixin.qq.com/pay/unifiedorder', [
-            'body' => $xml,
+            'body'     => $xml,
             'withCert' => false,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
-            'return_code'   => 'returnCode',
-            'return_msg'    => 'returnMsg',
-            'appid'         => 'appId',
-            'mch_id'        => 'mchId',
-            'device_info'   => 'deviceInfo',
-            'nonce_str'     => 'nonceStr',
-            'result_code'   => 'resultCode',
-            'err_code'      => 'errCode',
-            'err_code_des'  => 'errCodeDes',
-            'trade_type'    => 'tradeType',
-            'prepay_id'     => 'prepayId',
-            'code_url'      => 'codeUrl',
+            'return_code'  => 'returnCode',
+            'return_msg'   => 'returnMsg',
+            'appid'        => 'appId',
+            'mch_id'       => 'mchId',
+            'device_info'  => 'deviceInfo',
+            'nonce_str'    => 'nonceStr',
+            'result_code'  => 'resultCode',
+            'err_code'     => 'errCode',
+            'err_code_des' => 'errCodeDes',
+            'trade_type'   => 'tradeType',
+            'prepay_id'    => 'prepayId',
+            'code_url'     => 'codeUrl',
         ]) : null;
     }
 
@@ -53,35 +54,35 @@ class Pay extends ComponentBase
     {
         $xml = $this->toXml($data, $mchConfig);
         $res = $this->post('https://api.mch.weixin.qq.com/pay/orderquery', [
-            'body' => $xml,
+            'body'     => $xml,
             'withCert' => false,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
-            'return_code'           => 'returnCode',
-            'return_msg'            => 'returnMsg',
-            'appid'                 => 'appId',
-            'mch_id'                => 'mchId',
-            'device_info'           => 'deviceInfo',
-            'nonce_str'             => 'nonceStr',
-            'result_code'           => 'resultCode',
-            'err_code'              => 'errCode',
-            'err_code_des'          => 'errCodeDes',
-            'openid'                => 'openId',
-            'is_subscribe'          => 'isSubscribe',
-            'trade_type'            => 'tradeType',
-            'trade_state'           => 'tradeState',
-            'bank_type'             => 'bankType',
-            'total_fee'             => 'totalFee',
-            'settlement_total_fee'  => 'settlementTotalFee',
-            'fee_type'              => 'feeType',
-            'cash_fee'              => 'cashFee',
-            'cash_fee_type'         => 'cashFeeType',
-            'coupon_fee'            => 'couponFee',
-            'coupon_count'          => 'couponCount',
-            'out_trade_no'          => 'outTradeNo',
-            'time_end'              => 'timeEnd',
-            'trade_state_desc'      => 'tradeStateDesc',
+            'return_code'          => 'returnCode',
+            'return_msg'           => 'returnMsg',
+            'appid'                => 'appId',
+            'mch_id'               => 'mchId',
+            'device_info'          => 'deviceInfo',
+            'nonce_str'            => 'nonceStr',
+            'result_code'          => 'resultCode',
+            'err_code'             => 'errCode',
+            'err_code_des'         => 'errCodeDes',
+            'openid'               => 'openId',
+            'is_subscribe'         => 'isSubscribe',
+            'trade_type'           => 'tradeType',
+            'trade_state'          => 'tradeState',
+            'bank_type'            => 'bankType',
+            'total_fee'            => 'totalFee',
+            'settlement_total_fee' => 'settlementTotalFee',
+            'fee_type'             => 'feeType',
+            'cash_fee'             => 'cashFee',
+            'cash_fee_type'        => 'cashFeeType',
+            'coupon_fee'           => 'couponFee',
+            'coupon_count'         => 'couponCount',
+            'out_trade_no'         => 'outTradeNo',
+            'time_end'             => 'timeEnd',
+            'trade_state_desc'     => 'tradeStateDesc',
         ]) : null;
     }
 
@@ -89,20 +90,20 @@ class Pay extends ComponentBase
     {
         $xml = $this->toXml(['out_trade_no' => $tradeNo], $mchConfig);
         $res = $this->post('https://api.mch.weixin.qq.com/pay/closeorder', [
-            'body' => $xml,
+            'body'     => $xml,
             'withCert' => false,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
-            'return_code'           => 'returnCode',
-            'return_msg'            => 'returnMsg',
-            'appid'                 => 'appId',
-            'mch_id'                => 'mchId',
-            'device_info'           => 'deviceInfo',
-            'nonce_str'             => 'nonceStr',
-            'result_code'           => 'resultCode',
-            'err_code'              => 'errCode',
-            'err_code_des'          => 'errCodeDes',
+            'return_code'  => 'returnCode',
+            'return_msg'   => 'returnMsg',
+            'appid'        => 'appId',
+            'mch_id'       => 'mchId',
+            'device_info'  => 'deviceInfo',
+            'nonce_str'    => 'nonceStr',
+            'result_code'  => 'resultCode',
+            'err_code'     => 'errCode',
+            'err_code_des' => 'errCodeDes',
         ]) : null;
     }
 
@@ -110,7 +111,7 @@ class Pay extends ComponentBase
     {
         $xml = $this->toXml($data, $mchConfig);
         $res = $this->post('https://api.mch.weixin.qq.com/secapi/pay/refund', [
-            'body' => $xml,
+            'body'     => $xml,
             'withCert' => $mchConfig,
         ], false, 'xml');
 
@@ -145,27 +146,27 @@ class Pay extends ComponentBase
     {
         $xml = $this->toXml($data, $mchConfig);
         $res = $this->post('https://api.mch.weixin.qq.com/pay/refundquery', [
-            'body' => $xml,
+            'body'     => $xml,
             'withCert' => $mchConfig,
         ], false, 'xml');
 
         return $res ? $this->transformKeys($res, [
-            'return_code'           => 'returnCode',
-            'return_msg'            => 'returnMsg',
-            'appid'                 => 'appId',
-            'mch_id'                => 'mchId',
-            'nonce_str'             => 'nonceStr',
-            'result_code'           => 'resultCode',
-            'err_code'              => 'errCode',
-            'err_code_des'          => 'errCodeDes',
-            'total_refund_count'    => 'totalRefundCount',
-            'transaction_id'        => 'transactionId',
-            'out_trade_no'          => 'outTradeNo',
-            'total_fee'             => 'totalFee',
-            'settlement_total_fee'  => 'settlementTotalFee',
-            'fee_type'              => 'feeType',
-            'cash_fee'              => 'cashFee',
-            'refund_count'          => 'refundCount',
+            'return_code'          => 'returnCode',
+            'return_msg'           => 'returnMsg',
+            'appid'                => 'appId',
+            'mch_id'               => 'mchId',
+            'nonce_str'            => 'nonceStr',
+            'result_code'          => 'resultCode',
+            'err_code'             => 'errCode',
+            'err_code_des'         => 'errCodeDes',
+            'total_refund_count'   => 'totalRefundCount',
+            'transaction_id'       => 'transactionId',
+            'out_trade_no'         => 'outTradeNo',
+            'total_fee'            => 'totalFee',
+            'settlement_total_fee' => 'settlementTotalFee',
+            'fee_type'             => 'feeType',
+            'cash_fee'             => 'cashFee',
+            'refund_count'         => 'refundCount',
         ]) : null;
     }
 
@@ -203,8 +204,8 @@ class Pay extends ComponentBase
         ];
 
         $data['sign_type'] = 'MD5';
-        $data['sign'] = $this->signature($data, $mchConfig);
-        $ret = '<xml>';
+        $data['sign']      = $this->signature($data, $mchConfig);
+        $ret               = '<xml>';
         foreach ($data as $key => $value) {
             if (is_array($value) || is_object($value)) {
                 $value = json_encode($value, JSON_UNESCAPED_UNICODE);
@@ -223,10 +224,11 @@ class Pay extends ComponentBase
         ksort($data);
         $tmpStr = '';
         foreach ($data as $key => $value) {
-            $tmpStr .= $key . '=' . $value . '&';
+            $tmpStr .= $key.'='.$value.'&';
         }
 
-        $tmpStr .= 'key=' . $this->client->mchConfig($mchConfig, 'mchKey');
+        $tmpStr .= 'key='.$this->client->mchConfig($mchConfig, 'mchKey');
+
         return strtoupper(md5($tmpStr));
     }
 }

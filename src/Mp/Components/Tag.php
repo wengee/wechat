@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-04-22 18:22:13 +0800
+ * @version  2022-12-05 16:22:26 +0800
  */
+
 namespace fwkit\Wechat\Mp\Components;
 
 use fwkit\Wechat\ComponentBase;
@@ -18,12 +19,14 @@ class Tag extends ComponentBase
         ]);
 
         $res = $this->checkResponse($res);
+
         return $res->get('tag');
     }
 
     public function fetchAll()
     {
         $res = $this->get('cgi-bin/tags/get');
+
         return $this->checkResponse($res);
     }
 
@@ -36,6 +39,7 @@ class Tag extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -48,6 +52,7 @@ class Tag extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -60,11 +65,12 @@ class Tag extends ComponentBase
         $res = $this->post('cgi-bin/tags/members/batchtagging', [
             'json' => [
                 'openid_list' => $openId,
-                'tagid' => $tagId,
+                'tagid'       => $tagId,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -77,11 +83,12 @@ class Tag extends ComponentBase
         $res = $this->post('cgi-bin/tags/members/batchuntagging', [
             'json' => [
                 'openid_list' => $openId,
-                'tagid' => $tagId,
+                'tagid'       => $tagId,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -103,7 +110,7 @@ class Tag extends ComponentBase
         ]);
 
         return $this->checkResponse($res, [
-            'openid' => 'openId',
+            'openid'      => 'openId',
             'next_openid' => 'nextOpenId',
         ]);
     }
@@ -119,6 +126,7 @@ class Tag extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -133,6 +141,7 @@ class Tag extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 }

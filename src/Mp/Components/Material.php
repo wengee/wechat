@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:17:59 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -23,11 +23,11 @@ class Material extends ComponentBase
         ]);
 
         return $this->checkResponse($res, [
-            'news_item' => 'newsItem',
-            'thumb_media_id' => 'thumbMediaId',
-            'show_cover_pic' => 'showCoverPic',
+            'news_item'          => 'newsItem',
+            'thumb_media_id'     => 'thumbMediaId',
+            'show_cover_pic'     => 'showCoverPic',
             'content_source_url' => 'ContentSourceUrl',
-            'down_url' => 'downUrl',
+            'down_url'           => 'downUrl',
         ], false);
     }
 
@@ -43,23 +43,23 @@ class Material extends ComponentBase
 
         $multipart = [
             [
-                'name' => 'media',
+                'name'     => 'media',
                 'contents' => $file,
             ],
         ];
 
-        if ($type === 'video') {
+        if ('video' === $type) {
             $multipart[] = [
-                'name' => 'description',
+                'name'     => 'description',
                 'contents' => json_encode([
-                    'title' => $title,
+                    'title'        => $title,
                     'introduction' => $introduction,
-                ])
+                ]),
             ];
         }
 
         $res = $this->post('cgi-bin/material/add_material', [
-            'query' => ['type' => $type],
+            'query'     => ['type' => $type],
             'multipart' => $multipart,
         ]);
 
@@ -81,7 +81,7 @@ class Material extends ComponentBase
         return $this->post('cgi-bin/media/uploadimg', [
             'multipart' => [
                 [
-                    'name' => 'media',
+                    'name'     => 'media',
                     'contents' => $file,
                 ],
             ],
@@ -97,6 +97,7 @@ class Material extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -108,11 +109,12 @@ class Material extends ComponentBase
             $articles = array_map(function ($item) {
                 if ($item instanceof Article) {
                     return $item;
-                } elseif (is_array($item)) {
-                    return new Article($item);
-                } else {
-                    return null;
                 }
+                if (is_array($item)) {
+                    return new Article($item);
+                }
+
+                return null;
             }, $articles);
         }
 
@@ -140,12 +142,13 @@ class Material extends ComponentBase
         $res = $this->post('cgi-bin/material/update_news', [
             'json' => [
                 'media_id' => $mediaId,
-                'index' => $index,
+                'index'    => $index,
                 'articles' => $article,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -157,11 +160,12 @@ class Material extends ComponentBase
     public function count()
     {
         $res = $this->get('cgi-bin/material/get_materialcount');
+
         return $this->checkResponse($res, [
             'voice_count' => 'voiceCount',
             'video_count' => 'videoCount',
             'image_count' => 'imageCount',
-            'news_count' => 'newsCount',
+            'news_count'  => 'newsCount',
         ]);
     }
 
@@ -169,23 +173,23 @@ class Material extends ComponentBase
     {
         $res = $this->post('cgi-bin/material/batchget_material', [
             'json' => [
-                'type' => $type,
+                'type'   => $type,
                 'offset' => $offset,
-                'count' => $count,
+                'count'  => $count,
             ],
         ]);
 
         return $this->checkResponse($res, [
-            'total_count' => 'totalCount',
-            'item_count' => 'itemCount',
-            'media_id' => 'mediaId',
-            'news_item' => 'newsItem',
-            'thumb_media_id' => 'thumbMediaId',
-            'show_cover_pic' => 'showCoverPic',
-            'content_source_url' => 'contentSourceUrl',
-            'need_open_comment' => 'openComment',
+            'total_count'           => 'totalCount',
+            'item_count'            => 'itemCount',
+            'media_id'              => 'mediaId',
+            'news_item'             => 'newsItem',
+            'thumb_media_id'        => 'thumbMediaId',
+            'show_cover_pic'        => 'showCoverPic',
+            'content_source_url'    => 'contentSourceUrl',
+            'need_open_comment'     => 'openComment',
             'only_fans_can_comment' => 'onlyFansComment',
-            'update_time' => 'updated',
+            'update_time'           => 'updated',
         ]);
     }
 }

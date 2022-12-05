@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:18:07 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -38,17 +38,17 @@ class Media extends ComponentBase
         }
 
         $res = $this->post('cgi-bin/media/upload', [
-            'query' => ['type' => $type],
+            'query'     => ['type' => $type],
             'multipart' => [
                 [
-                    'name' => 'media',
+                    'name'     => 'media',
                     'contents' => $file,
                 ],
             ],
         ]);
 
         return $this->checkResponse($res, [
-            'media_id' => 'mediaId',
+            'media_id'   => 'mediaId',
             'created_at' => 'created',
         ]);
     }

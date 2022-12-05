@@ -1,13 +1,19 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:21:19 +0800
  */
 
 namespace fwkit\Wechat;
 
+use fwkit\Wechat\Minapp\Client as MinappClient;
+use fwkit\Wechat\Mp\Client as MpClient;
+use fwkit\Wechat\ThirdParty\Client as ThirdPartyClient;
+use fwkit\Wechat\Work\Client as WorkClient;
+
 abstract class ComponentBase
 {
+    /** @var MinappClient|MpClient|ThirdPartyClient|WorkClient */
     protected $client;
 
     public function setClient(ClientBase $client): void
@@ -27,13 +33,14 @@ abstract class ComponentBase
 
     protected function request(string $method, string $url, array $options = [], $accessToken = null, $dataType = 'auto')
     {
-        $first = $accessToken === null;
+        $first = null === $accessToken;
 
         RETRY:
         $res = $this->client->request($method, $url, $options, $accessToken, $dataType);
-        if ($first && ($accessToken !== false) && is_array($res) && isset($res['errcode']) && ($res['errcode'] == 40001 || $res['errcode'] == 42001)) {
-            $first = false;
+        if ($first && (false !== $accessToken) && is_array($res) && isset($res['errcode']) && (40001 == $res['errcode'] || 42001 == $res['errcode'])) {
+            $first       = false;
             $accessToken = true;
+
             goto RETRY;
         }
 
@@ -70,7 +77,7 @@ abstract class ComponentBase
             }
 
             if (isset($map[$key])) {
-                $newKey = $map[$key];
+                $newKey       = $map[$key];
                 $ret[$newKey] = $value;
             } else {
                 $ret[$key] = $value;

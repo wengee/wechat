@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:17:35 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -15,11 +15,12 @@ class Comment extends ComponentBase
         $res = $this->post('cgi-bin/comment/open', [
             'json' => [
                 'msg_data_id' => $msgId,
-                'index' => $index,
+                'index'       => $index,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -28,11 +29,12 @@ class Comment extends ComponentBase
         $res = $this->post('cgi-bin/comment/close', [
             'json' => [
                 'msg_data_id' => $msgId,
-                'index' => $index,
+                'index'       => $index,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -41,18 +43,18 @@ class Comment extends ComponentBase
         $res = $this->post('cgi-bin/comment/list', [
             'json' => [
                 'msg_data_id' => $msgId,
-                'index' => $index,
-                'begin' => $begin,
-                'count' => $count,
-                'type' => $type,
+                'index'       => $index,
+                'begin'       => $begin,
+                'count'       => $count,
+                'type'        => $type,
             ],
         ]);
 
         return $this->checkResponse($res, [
             'user_comment_id' => 'commentId',
-            'openid' => 'openId',
-            'comment_type' => 'commentType',
-            'create_time' => 'created',
+            'openid'          => 'openId',
+            'comment_type'    => 'commentType',
+            'create_time'     => 'created',
         ]);
     }
 
@@ -60,13 +62,14 @@ class Comment extends ComponentBase
     {
         $res = $this->post('cgi-bin/comment/markelect', [
             'json' => [
-                'msg_data_id' => $msgId,
-                'index' => $index,
+                'msg_data_id'     => $msgId,
+                'index'           => $index,
                 'user_comment_id' => $commentId,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -74,13 +77,14 @@ class Comment extends ComponentBase
     {
         $res = $this->post('cgi-bin/comment/unmarkelect', [
             'json' => [
-                'msg_data_id' => $msgId,
-                'index' => $index,
+                'msg_data_id'     => $msgId,
+                'index'           => $index,
                 'user_comment_id' => $commentId,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -88,13 +92,14 @@ class Comment extends ComponentBase
     {
         $res = $this->post('cgi-bin/comment/delete', [
             'json' => [
-                'msg_data_id' => $msgId,
-                'index' => $index,
+                'msg_data_id'     => $msgId,
+                'index'           => $index,
                 'user_comment_id' => $commentId,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -102,14 +107,15 @@ class Comment extends ComponentBase
     {
         $res = $this->post('cgi-bin/comment/reply/add', [
             'json' => [
-                'msg_data_id' => $msgId,
-                'index' => $index,
+                'msg_data_id'     => $msgId,
+                'index'           => $index,
                 'user_comment_id' => $commentId,
-                'content' => $content,
+                'content'         => $content,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -117,13 +123,14 @@ class Comment extends ComponentBase
     {
         $res = $this->post('cgi-bin/comment/reply/delete', [
             'json' => [
-                'msg_data_id' => $msgId,
-                'index' => $index,
+                'msg_data_id'     => $msgId,
+                'index'           => $index,
                 'user_comment_id' => $commentId,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 }

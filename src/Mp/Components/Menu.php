@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-08-12 21:31:41 +0800
+ * @version  2022-12-05 16:18:13 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -22,7 +22,7 @@ class Menu extends ComponentBase
         }
 
         if (is_array($args)) {
-            if ($type !== null) {
+            if (null !== $type) {
                 $args['type'] = $type;
             }
 
@@ -35,13 +35,14 @@ class Menu extends ComponentBase
     public function create(array $buttons)
     {
         $buttons = $this->filterButtons($buttons);
-        $res = $this->post('cgi-bin/menu/create', [
+        $res     = $this->post('cgi-bin/menu/create', [
             'json' => [
                 'button' => $buttons,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -50,16 +51,16 @@ class Menu extends ComponentBase
         $res = $this->get('cgi-bin/menu/get');
 
         return $this->checkResponse($res, [
-            'sub_button' => 'children',
-            'menuid' => 'menuId',
-            'conditionalmenu' => 'conditionalMenu',
-            'matchrule' => 'matchRule',
-            'tag_id' => 'tagId',
-            'group_id' => 'groupId',
+            'sub_button'           => 'children',
+            'menuid'               => 'menuId',
+            'conditionalmenu'      => 'conditionalMenu',
+            'matchrule'            => 'matchRule',
+            'tag_id'               => 'tagId',
+            'group_id'             => 'groupId',
             'client_platform_type' => 'clientPlatformType',
-            'appid' => 'appId',
-            'pagepath' => 'pagePath',
-            'media_id' => 'mediaId',
+            'appid'                => 'appId',
+            'pagepath'             => 'pagePath',
+            'media_id'             => 'mediaId',
         ]);
     }
 
@@ -67,25 +68,27 @@ class Menu extends ComponentBase
     {
         $res = $this->get('cgi-bin/menu/delete');
         $this->checkResponse($res);
+
         return true;
     }
 
     public function createConditional(array $buttons, array $matchRule)
     {
-        $buttons = $this->filterButtons($buttons);
+        $buttons   = $this->filterButtons($buttons);
         $matchRule = $this->transformKeys($matchRule, [
-            'tagId' => 'tag_id',
-            'platform' => 'client_platform_type',
+            'tagId'              => 'tag_id',
+            'platform'           => 'client_platform_type',
             'clientPlatformType' => 'client_platform_type',
         ]);
         $res = $this->post('cgi-bin/menu/addconditional', [
             'json' => [
-                'button' => $buttons,
+                'button'    => $buttons,
                 'matchrule' => $matchRule,
             ],
         ]);
 
         $res = $this->checkResponse($res, ['menuid' => 'menuId']);
+
         return $res->menuId;
     }
 
@@ -98,6 +101,7 @@ class Menu extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -119,7 +123,8 @@ class Menu extends ComponentBase
         return array_map(function ($button) {
             if (is_array($button)) {
                 return new Button($button);
-            } elseif ($button instanceof Button) {
+            }
+            if ($button instanceof Button) {
                 return $button;
             }
 

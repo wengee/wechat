@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:22:31 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -20,17 +20,19 @@ class Template extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
     public function getIndustry()
     {
         $res = $this->get('cgi-bin/template/get_industry');
+
         return $this->checkResponse($res, [
-            'primary_industry' => 'primary',
+            'primary_industry'   => 'primary',
             'secondary_industry' => 'secondary',
-            'first_class' => 'firstClass',
-            'second_class' => 'secondClass',
+            'first_class'        => 'firstClass',
+            'second_class'       => 'secondClass',
         ]);
     }
 
@@ -43,17 +45,19 @@ class Template extends ComponentBase
         ]);
 
         $res = $this->checkResponse($res);
+
         return $res->get('template_id');
     }
 
     public function list()
     {
         $res = $this->get('cgi-bin/template/get_all_private_template');
+
         return $this->checkResponse($res, [
-            'template_list' => 'list',
-            'template_id' => 'templateId',
+            'template_list'    => 'list',
+            'template_id'      => 'templateId',
             'primary_industry' => 'primaryIndustry',
-            'deputy_industry' => 'deputyIndustry',
+            'deputy_industry'  => 'deputyIndustry',
         ]);
     }
 
@@ -66,6 +70,7 @@ class Template extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
@@ -73,11 +78,11 @@ class Template extends ComponentBase
     {
         $data = $this->transformKeys($data, [
             'miniProgram' => 'miniprogram',
-            'appId' => 'appid',
-            'pagePath' => 'pagepath',
+            'appId'       => 'appid',
+            'pagePath'    => 'pagepath',
         ]);
 
-        $data['touser'] = $openId;
+        $data['touser']      = $openId;
         $data['template_id'] = $templateId;
 
         $url = $oneTime ? 'cgi-bin/message/template/subscribe' : 'cgi-bin/message/template/send';
@@ -86,6 +91,7 @@ class Template extends ComponentBase
         ]);
 
         $res = $this->checkResponse($res);
+
         return $res->get('msgid');
     }
 

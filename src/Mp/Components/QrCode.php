@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2022-12-05 16:22:06 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -12,22 +12,22 @@ class QrCode extends ComponentBase
 {
     public function create($value, int $expire = 0)
     {
-        $data = [];
+        $data   = [];
         $expire = min(max($expire, 0), 2592000);
         if ($expire > 0) {
             $data['expire_seconds'] = $expire;
-            $prefix = 'QR_';
+            $prefix                 = 'QR_';
         } else {
             $prefix = 'QR_LIMIT_';
         }
 
         if (is_int($value)) {
-            $data['action_name'] = $prefix . 'SCENE';
+            $data['action_name'] = $prefix.'SCENE';
             $data['action_info'] = [
                 'scene' => ['scene_id' => $value],
             ];
         } else {
-            $data['action_name'] = $prefix . 'STR_SCENE';
+            $data['action_name'] = $prefix.'STR_SCENE';
             $data['action_info'] = [
                 'scene' => ['scene_str' => (string) $value],
             ];
@@ -44,7 +44,7 @@ class QrCode extends ComponentBase
 
     public function url(string $ticket)
     {
-        return 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=' . urlencode($ticket);
+        return 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.urlencode($ticket);
     }
 
     public function fetch(string $ticket)
