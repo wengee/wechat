@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-04-23 15:51:24 +0800
+ * @version  2023-06-08 11:35:37 +0800
  */
 
 namespace fwkit\Wechat\Mp;
@@ -10,6 +10,26 @@ namespace fwkit\Wechat\Mp;
 use fwkit\Wechat\ClientBase;
 use fwkit\Wechat\ThirdParty\ThirdClientInterface;
 
+/**
+ * @method Components\Base         getBaseComponent()
+ * @method Components\Comment      getCommentComponent()
+ * @method Components\JsApi        getJsApiComponent()
+ * @method Components\Material     getMaterialComponent()
+ * @method Components\Media        getMediaComponent()
+ * @method Components\Menu         getMenuComponent()
+ * @method Components\Message      getMessageComponent()
+ * @method Components\Notification getNotificationComponent()
+ * @method Components\OAuth        getOAuthComponent()
+ * @method Components\Pay          getPayComponent()
+ * @method Components\Publish      getPublishComponent()
+ * @method Components\QrCode       getQrCodeComponent()
+ * @method Components\Redpack      getRedpackComponent()
+ * @method Components\Statis       getStatisComponent()
+ * @method Components\Tag          getTagComponent()
+ * @method Components\Template     getTemplateComponent()
+ * @method Components\Token        getTokenComponent()
+ * @method Components\User         getUserComponent()
+ */
 class Client extends ClientBase
 {
     protected $type = self::TYPE_MP;
@@ -25,6 +45,7 @@ class Client extends ClientBase
         'notification' => Components\Notification::class,
         'oauth'        => Components\OAuth::class,
         'pay'          => Components\Pay::class,
+        'publish'      => Components\Publish::class,
         'qrcode'       => Components\QrCode::class,
         'redpack'      => Components\Redpack::class,
         'statis'       => Components\Statis::class,

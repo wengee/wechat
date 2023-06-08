@@ -2,13 +2,31 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2021-11-12 09:53:08 +0800
+ * @version  2023-06-08 11:35:46 +0800
  */
 
 namespace fwkit\Wechat\Minapp;
 
 use fwkit\Wechat\ClientBase;
 
+/**
+ * @method Components\Analysis  getAnalysisComponent()
+ * @method Components\Media     getMediaComponent()
+ * @method Components\Message   getMessageComponent()
+ * @method Components\Nearby    getNearbyComponent()
+ * @method Components\OAuth     getOAuthComponent()
+ * @method Components\Pay       getPayComponent()
+ * @method Components\Plugin    getPluginComponent()
+ * @method Components\QrCode    getQrCodeComponent()
+ * @method Components\Redpacket getRedpacketComponent()
+ * @method Components\Search    getSearchComponent()
+ * @method Components\Security  getSecurityComponent()
+ * @method Components\Soter     getSoterComponent()
+ * @method Components\Subscribe getSubscribeComponent()
+ * @method Components\Template  getTemplateComponent()
+ * @method Components\Token     getTokenComponent()
+ * @method Components\Url       getUrlComponent()
+ */
 class Client extends ClientBase
 {
     protected $type = self::TYPE_MINAPP;

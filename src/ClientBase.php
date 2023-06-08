@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-08-12 21:35:23 +0800
+ * @version  2023-06-08 11:35:09 +0800
  */
 
 namespace fwkit\Wechat;
 
+use BadMethodCallException;
 use fwkit\Wechat\Message\MessageBase;
 use fwkit\Wechat\Traits\HasAccessToken;
 use fwkit\Wechat\Traits\HasHttpRequests;
@@ -16,6 +17,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 abstract class ClientBase
 {
+    use HasAccessToken;
+    use HasHttpRequests;
+    use HasOptions;
     public const TYPE_MP = 'mp';
 
     public const TYPE_MINAPP = 'minapp';
@@ -23,8 +27,6 @@ abstract class ClientBase
     public const TYPE_WORK = 'work';
 
     public const TYPE_THIRD_PARTY = 'thirdParty';
-
-    use HasAccessToken, HasHttpRequests, HasOptions;
 
     protected $type;
 
@@ -40,7 +42,7 @@ abstract class ClientBase
 
     protected $encodingAESKey;
 
-    protected $cryptor = null;
+    protected $cryptor;
 
     protected $mchConfig = [];
 
@@ -60,6 +62,17 @@ abstract class ClientBase
         $this->initialize();
     }
 
+    public function __call(string $method, array $arguments = [])
+    {
+        if (preg_match('#^get(.+)Component$#i', $method, $m)) {
+            $componentName = lcfirst($m[1]);
+
+            return $this->component($componentName);
+        }
+
+        throw new BadMethodCallException("Call to undefined method [{$method}]");
+    }
+
     public function getType(): ?string
     {
         return $this->type;
@@ -67,10 +80,10 @@ abstract class ClientBase
 
     public function checkSignature(ServerRequestInterface $request)
     {
-        $query = $request->getQueryParams();
+        $query     = $request->getQueryParams();
         $signature = $query['signature'] ?? '';
         $timestamp = $query['timestamp'] ?? '';
-        $nonce = $query['nonce'] ?? '';
+        $nonce     = $query['nonce'] ?? '';
 
         if (!$signature || !$timestamp || !$nonce) {
             throw new OfficialError('Params is invalid.');
@@ -94,14 +107,14 @@ abstract class ClientBase
     public function fetchMessage(ServerRequestInterface $request)
     {
         $query = $request->getQueryParams();
-        $body = (string) $request->getBody();
+        $body  = (string) $request->getBody();
 
-        $message = '';
+        $message     = '';
         $encryptType = $query['encrypt_type'] ?? null;
         if ($encryptType && $this->cryptor) {
             $msgSignature = $query['msg_signature'] ?? '';
-            $timestamp = intval($query['timestamp'] ?? 0);
-            $nonce = $query['nonce'] ?? '';
+            $timestamp    = intval($query['timestamp'] ?? 0);
+            $nonce        = $query['nonce'] ?? '';
 
             $errcode = $this->cryptor->decrypt(
                 $msgSignature,
@@ -111,17 +124,18 @@ abstract class ClientBase
                 $message
             );
 
-            if ($errcode !== ErrorCode::OK) {
-                throw new OfficialError('Decrypt error ' . $errcode);
+            if (ErrorCode::OK !== $errcode) {
+                throw new OfficialError('Decrypt error '.$errcode);
             }
 
             $message = $this->parseMessage($message);
             $message->setCryptor($this->cryptor);
+
             return $message;
-        } else {
-            $this->checkSignature($request);
-            return $this->parseMessage($body);
         }
+        $this->checkSignature($request);
+
+        return $this->parseMessage($body);
     }
 
     public function get(string $name)
@@ -136,10 +150,11 @@ abstract class ClientBase
         }
 
         $className = $this->componentList[$name] ?? null;
-        if ($className !== null) {
-            $component = new $className;
+        if (null !== $className) {
+            $component = new $className();
             $component->setClient($this);
             $this->components[$name] = $component;
+
             return $component;
         }
 
@@ -164,14 +179,14 @@ abstract class ClientBase
     public function mchConfig(array $config = [], ?string $key = null, $default = null)
     {
         $config += $this->mchConfig;
-        if ($key === null) {
+        if (null === $key) {
             return $config;
         }
 
         return $config[$key] ?? $default;
     }
 
-    protected function initialize()
+    protected function initialize(): void
     {
     }
 }

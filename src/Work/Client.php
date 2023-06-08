@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-06-08 16:37:49 +0800
+ * @version  2023-06-08 11:35:21 +0800
  */
 
 namespace fwkit\Wechat\Work;
@@ -11,6 +11,23 @@ use fwkit\Wechat\OfficialError;
 use fwkit\Wechat\Utils\ErrorCode;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * @method Components\Agent      getAgentComponent()
+ * @method Components\Base       getBaseComponent()
+ * @method Components\Batch      getBatchComponent()
+ * @method Components\Department getDepartmentComponent()
+ * @method Components\JsApi      getJsApiComponent()
+ * @method Components\Media      getMediaComponent()
+ * @method Components\Menu       getMenuComponent()
+ * @method Components\Message    getMessageComponent()
+ * @method Components\OAuth      getOAuthComponent()
+ * @method Components\Redpack    getRedpackComponent()
+ * @method Components\Schedule   getScheduleComponent()
+ * @method Components\Tag        getTagComponent()
+ * @method Components\Token      getTokenComponent()
+ * @method Components\User       getUserComponent()
+ * @method Components\Kf         getKfComponent()
+ */
 class Client extends ClientBase
 {
     protected $type = self::TYPE_WORK;
