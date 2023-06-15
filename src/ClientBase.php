@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2023-06-08 11:35:09 +0800
+ * @version  2023-06-15 13:13:53 +0800
  */
 
 namespace fwkit\Wechat;
@@ -65,7 +65,7 @@ abstract class ClientBase
     public function __call(string $method, array $arguments = [])
     {
         if (preg_match('#^get(.+)Component$#i', $method, $m)) {
-            $componentName = lcfirst($m[1]);
+            $componentName = strtolower($m[1]);
 
             return $this->component($componentName);
         }
