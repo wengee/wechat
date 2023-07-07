@@ -33,7 +33,7 @@ trait HasHttpRequests
 
             $options['query'] = $options['query'] ?? [];
 
-            if ($this->getType() === ClientBase::TYPE_THIRD_PARTY) {
+            if ($this->getType() === ClientBase::TYPE_OPEN) {
                 $options['query']['component_access_token'] = $accessToken;
             } else {
                 $options['query']['access_token'] = $accessToken;
@@ -73,7 +73,7 @@ trait HasHttpRequests
 
         if ($response->getStatusCode() !== 200) {
             throw new \Exception(
-                $response->getBody(),
+                (string) $response->getBody(),
                 $response->getStatusCode()
             );
         }
@@ -82,11 +82,8 @@ trait HasHttpRequests
         $body = trim((string) $response->getBody());
         if ($body) {
             if ($dataType === 'xml' || ($dataType === 'auto' && $body[0] === '<')) {
-                $backup = libxml_disable_entity_loader(true);
                 $res = @simplexml_load_string($body, 'SimpleXMLElement', LIBXML_NOCDATA);
                 $res = $res ? json_decode(json_encode($res), true) : null;
-
-                libxml_disable_entity_loader($backup);
             } elseif ($dataType === 'json' || $dataType === 'auto') {
                 $res = @json_decode($body, true);
             }

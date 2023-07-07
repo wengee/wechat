@@ -4,9 +4,9 @@
  * @version  2020-06-04 14:31:37 +0800
  */
 
-namespace fwkit\Wechat\ThirdParty;
+namespace fwkit\Wechat\Open;
 
-interface ThirdClientInterface
+interface OpenClientInterface
 {
     public function getAppId();
 

@@ -18,9 +18,9 @@ class OAuth extends ComponentBase
 
         $url         = urlencode($url);
         $extra       = '';
-        $thirdClient = $this->client->getThirdClient();
-        if ($thirdClient) {
-            $extra = sprintf('&component_appid=%s', $thirdClient->getAppId());
+        $openClient = $this->client->getOpenClient();
+        if ($openClient) {
+            $extra = sprintf('&component_appid=%s', $openClient->getAppId());
         }
 
         return sprintf('%s?appid=%s&redirect_uri=%s&response_type=%s&scope=%s&state=%s%s#wechat_redirect', $urlPrefix, $this->client->getAppId(), $url, $responseType, $scope, $state, $extra);
@@ -28,15 +28,15 @@ class OAuth extends ComponentBase
 
     public function getAccessToken(string $code, string $grantType = 'authorization_code')
     {
-        $thirdClient = $this->client->getThirdClient();
-        if ($thirdClient) {
+        $openClient = $this->client->getOpenClient();
+        if ($openClient) {
             $url   = 'sns/oauth2/component/access_token';
             $query = [
                 'appid'                  => $this->client->getAppId(),
                 'code'                   => $code,
                 'grant_type'             => $grantType,
-                'component_appid'        => $thirdClient->getAppId(),
-                'component_access_token' => $thirdClient->getAccessToken(),
+                'component_appid'        => $openClient->getAppId(),
+                'component_access_token' => $openClient->getAccessToken(),
             ];
         } else {
             $url   = 'sns/oauth2/access_token';
@@ -61,15 +61,15 @@ class OAuth extends ComponentBase
 
     public function refreshToken(string $refreshToken, string $grantType = 'refresh_token')
     {
-        $thirdClient = $this->client->getThirdClient();
-        if ($thirdClient) {
+        $openClient = $this->client->getOpenClient();
+        if ($openClient) {
             $url   = 'sns/oauth2/component/refresh_token';
             $query = [
                 'appid'                  => $this->client->getAppId(),
                 'grant_type'             => $grantType,
                 'refresh_token'          => $refreshToken,
-                'component_appid'        => $thirdClient->getAppId(),
-                'component_access_token' => $thirdClient->getAccessToken(),
+                'component_appid'        => $openClient->getAppId(),
+                'component_access_token' => $openClient->getAccessToken(),
             ];
         } else {
             $url   = 'sns/oauth2/refresh_token';

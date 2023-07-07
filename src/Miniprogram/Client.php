@@ -5,7 +5,7 @@ declare(strict_types=1);
  * @version  2023-06-08 11:35:46 +0800
  */
 
-namespace fwkit\Wechat\Minapp;
+namespace fwkit\Wechat\Miniprogram;
 
 use fwkit\Wechat\ClientBase;
 
@@ -29,7 +29,7 @@ use fwkit\Wechat\ClientBase;
  */
 class Client extends ClientBase
 {
-    protected $type = self::TYPE_MINAPP;
+    protected $type = self::TYPE_MINIPROGRAM;
 
     protected $componentList = [
         'analysis'  => Components\Analysis::class,

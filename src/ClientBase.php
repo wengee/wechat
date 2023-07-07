@@ -22,11 +22,11 @@ abstract class ClientBase
     use HasOptions;
     public const TYPE_MP = 'mp';
 
-    public const TYPE_MINAPP = 'minapp';
+    public const TYPE_MINIPROGRAM = 'miniprogram';
 
     public const TYPE_WORK = 'work';
 
-    public const TYPE_THIRD_PARTY = 'thirdParty';
+    public const TYPE_OPEN = 'open';
 
     protected $type;
 

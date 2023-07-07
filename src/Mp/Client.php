@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace fwkit\Wechat\Mp;
 
 use fwkit\Wechat\ClientBase;
-use fwkit\Wechat\ThirdParty\ThirdClientInterface;
+use fwkit\Wechat\Open\OpenClientInterface;
 
 /**
  * @method Components\Base         getBaseComponent()
@@ -57,17 +57,17 @@ class Client extends ClientBase
 
     protected $baseUri = 'https://api.weixin.qq.com/';
 
-    protected $thirdClient;
+    protected $openClient;
 
-    public function setThirdClient(ThirdClientInterface $thirdClient)
+    public function setOpenClient(OpenClientInterface $openClient)
     {
-        $this->thirdClient = $thirdClient;
+        $this->openClient = $openClient;
 
         return $this;
     }
 
-    public function getThirdClient(): ?ThirdClientInterface
+    public function getOpenClient(): ?OpenClientInterface
     {
-        return $this->thirdClient ?: null;
+        return $this->openClient ?: null;
     }
 }

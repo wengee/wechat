@@ -4,7 +4,7 @@
  * @version  2023-06-08 11:35:29 +0800
  */
 
-namespace fwkit\Wechat\ThirdParty;
+namespace fwkit\Wechat\Open;
 
 use Exception;
 use fwkit\Wechat\ClientBase;
@@ -15,9 +15,9 @@ use fwkit\Wechat\Utils\Cache;
  * @method Components\Option getOptionComponent()
  * @method Components\Token  getTokenComponent()
  */
-class Client extends ClientBase implements ThirdClientInterface
+class Client extends ClientBase implements OpenClientInterface
 {
-    protected $type = self::TYPE_THIRD_PARTY;
+    protected $type = self::TYPE_OPEN;
 
     protected $baseUri = 'https://api.weixin.qq.com/';
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
  * @version  2021-11-12 09:51:32 +0800
  */
 
-namespace fwkit\Wechat\Minapp\Components;
+namespace fwkit\Wechat\Miniprogram\Components;
 
 use fwkit\Wechat\ComponentBase;
 

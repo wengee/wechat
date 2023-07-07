@@ -4,7 +4,7 @@
  * @version  2020-06-04 11:49:06 +0800
  */
 
-namespace fwkit\Wechat\ThirdParty\Components;
+namespace fwkit\Wechat\Open\Components;
 
 use fwkit\Wechat\ComponentBase;
 

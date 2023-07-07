@@ -5,7 +5,7 @@ declare(strict_types=1);
  * @version  2022-07-06 17:07:41 +0800
  */
 
-namespace fwkit\Wechat\Minapp\Components;
+namespace fwkit\Wechat\Miniprogram\Components;
 
 use fwkit\Wechat\ComponentBase;
 use GuzzleHttp\Psr7\Stream;

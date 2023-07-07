@@ -4,7 +4,7 @@
  * @version  2020-08-12 21:29:49 +0800
  */
 
-namespace fwkit\Wechat\Minapp\Components;
+namespace fwkit\Wechat\Miniprogram\Components;
 
 use fwkit\Wechat\ComponentBase;
 use fwkit\Wechat\Utils\Helper;

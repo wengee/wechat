@@ -6,14 +6,14 @@
 
 namespace fwkit\Wechat;
 
-use fwkit\Wechat\Minapp\Client as MinappClient;
+use fwkit\Wechat\Miniprogram\Client as MiniprogramClient;
 use fwkit\Wechat\Mp\Client as MpClient;
-use fwkit\Wechat\ThirdParty\Client as ThirdPartyClient;
+use fwkit\Wechat\Open\Client as OpenClient;
 use fwkit\Wechat\Work\Client as WorkClient;
 
 abstract class ComponentBase
 {
-    /** @var MinappClient|MpClient|ThirdPartyClient|WorkClient */
+    /** @var MiniprogramClient|MpClient|OpenClient|WorkClient */
     protected $client;
 
     public function setClient(ClientBase $client): void

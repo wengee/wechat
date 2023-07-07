@@ -12,9 +12,9 @@ class Token extends ComponentBase
 {
     public function getAccessToken()
     {
-        $thirdClient = $this->client->getThirdClient();
-        if ($thirdClient) {
-            return $thirdClient->getAuthorizerAccessToken($this->client->getAppId());
+        $openClient = $this->client->getOpenClient();
+        if ($openClient) {
+            return $openClient->getAuthorizerAccessToken($this->client->getAppId());
         }
 
         $options = [

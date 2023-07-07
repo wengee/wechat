@@ -4,13 +4,13 @@
  * @version  2020-08-12 21:29:12 +0800
  */
 
-namespace fwkit\Wechat\Minapp\Components;
+namespace fwkit\Wechat\Miniprogram\Components;
 
 use fwkit\Wechat\ComponentBase;
 
 class QrCode extends ComponentBase
 {
-    public function getMinappCode(string $path, int $width = 430, $color = [], bool $transparent = false)
+    public function getMiniprogramCode(string $path, int $width = 430, $color = [], bool $transparent = false)
     {
         $color = $this->formatColor($color);
         $res = $this->post('wxa/getwxacode', [
