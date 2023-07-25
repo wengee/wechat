@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2023-06-15 13:13:53 +0800
+ * @version  2023-07-25 09:56:36 +0800
  */
 
 namespace fwkit\Wechat;
@@ -20,13 +20,13 @@ abstract class ClientBase
     use HasAccessToken;
     use HasHttpRequests;
     use HasOptions;
-    public const TYPE_MP = 'mp';
 
+    public const VERSION = '0.7.1';
+
+    public const TYPE_MP          = 'mp';
     public const TYPE_MINIPROGRAM = 'miniprogram';
-
-    public const TYPE_WORK = 'work';
-
-    public const TYPE_OPEN = 'open';
+    public const TYPE_WORK        = 'work';
+    public const TYPE_OPEN        = 'open';
 
     protected $type;
 
