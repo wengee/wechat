@@ -1,7 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-12-05 16:17:59 +0800
+ * @version  2024-11-19 17:50:21 +0800
  */
 
 namespace fwkit\Wechat\Mp\Components;
@@ -37,7 +39,7 @@ class Material extends ComponentBase
             $file = fopen($file, 'r');
         }
 
-        if (!($file instanceof StreamInterface)) {
+        if (!$file instanceof StreamInterface) {
             $file = new Stream($file);
         }
 
@@ -54,7 +56,7 @@ class Material extends ComponentBase
                 'contents' => json_encode([
                     'title'        => $title,
                     'introduction' => $introduction,
-                ]),
+                ], JSON_UNESCAPED_UNICODE),
             ];
         }
 
@@ -74,7 +76,7 @@ class Material extends ComponentBase
             $file = fopen($file, 'r');
         }
 
-        if (!($file instanceof StreamInterface)) {
+        if (!$file instanceof StreamInterface) {
             $file = new Stream($file);
         }
 
@@ -135,7 +137,7 @@ class Material extends ComponentBase
             $article = new Article($article);
         }
 
-        if (!($article instanceof Article)) {
+        if (!$article instanceof Article) {
             throw new \Exception('Params not valid');
         }
 
