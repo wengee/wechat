@@ -3,7 +3,7 @@
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2024-12-04 10:48:15 +0800
+ * @version  2024-12-04 16:04:58 +0800
  */
 
 namespace fwkit\Wechat\Miniprogram\Components;
@@ -12,6 +12,10 @@ use fwkit\Wechat\ComponentBase;
 
 class Subscribe extends ComponentBase
 {
+    public const VERSION_FORMAL    = 'formal';
+    public const VERSION_TRIAL     = 'trial';
+    public const VERSION_DEVELOPER = 'developer';
+
     public function addTemplate(string $tid, array $kidList, string $sceneDesc = '')
     {
         $res = $this->post('wxaapi/newtmpl/addtemplate', [
@@ -76,7 +80,7 @@ class Subscribe extends ComponentBase
         return $this->checkResponse($res);
     }
 
-    public function sendMessage(string $openId, string $templateId, array $data, ?string $page = null)
+    public function sendMessage(string $openId, string $templateId, array $data, ?string $page = null, string $version = self::VERSION_FORMAL, string $lang = 'zh_CN')
     {
         foreach ($data as $key => $value) {
             if (!is_array($value)) {
@@ -86,10 +90,12 @@ class Subscribe extends ComponentBase
 
         $res = $this->post('cgi-bin/message/subscribe/send', [
             'json' => [
-                'touser'      => $openId,
-                'template_id' => $templateId,
-                'page'        => $page ?: '',
-                'data'        => $data,
+                'touser'            => $openId,
+                'template_id'       => $templateId,
+                'page'              => $page ?: '',
+                'data'              => $data,
+                'miniprogram_state' => $version,
+                'lang'              => $lang,
             ],
         ]);
 

@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2023-06-08 11:35:46 +0800
+ * @version  2024-12-04 15:44:15 +0800
  */
 
 namespace fwkit\Wechat\Miniprogram;

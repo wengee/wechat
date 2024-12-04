@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2022-07-06 17:07:41 +0800
+ * @version  2024-12-04 15:53:32 +0800
  */
 
 namespace fwkit\Wechat\Miniprogram\Components;
@@ -27,7 +28,7 @@ class Security extends ComponentBase
             $file = fopen($file, 'r');
         }
 
-        if (!($file instanceof StreamInterface)) {
+        if (!$file instanceof StreamInterface) {
             $file = new Stream($file);
         }
 
@@ -75,6 +76,27 @@ class Security extends ComponentBase
 
         return $this->checkResponse($res, [
             'trace_id' => 'traceId',
+        ]);
+    }
+
+    public function getUserRiskRank(string $openId, string $clientIp, int $scene = 0, array $extra = [])
+    {
+        $res = $this->post('wxa/getuserriskrank', [
+            'json' => [
+                'appid'         => $this->client->getAppId(),
+                'openid'        => $openId,
+                'scene'         => $scene,
+                'mobile_no'     => $extra['mobile'] ?? '',
+                'client_ip'     => $clientIp,
+                'email_address' => $extra['email'] ?? '',
+                'extended_info' => $extra['extendedInfo'] ?? '',
+                'is_test'       => $extra['test'] ?? false,
+            ],
+        ]);
+
+        return $this->checkResponse($res, [
+            'risk_rank' => 'riskRank',
+            'unoin_id'  => 'unionId',
         ]);
     }
 }
