@@ -1,7 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2024-12-04 10:48:15 +0800
  */
 
 namespace fwkit\Wechat\Miniprogram\Components;
@@ -10,12 +12,12 @@ use fwkit\Wechat\ComponentBase;
 
 class Subscribe extends ComponentBase
 {
-    public function add(string $tid, array $kidList, string $sceneDesc = '')
+    public function addTemplate(string $tid, array $kidList, string $sceneDesc = '')
     {
         $res = $this->post('wxaapi/newtmpl/addtemplate', [
             'json' => [
-                'tid' => $tid,
-                'kidList' => array_values($kidList),
+                'tid'       => $tid,
+                'kidList'   => array_values($kidList),
                 'sceneDesc' => $sceneDesc,
             ],
         ]);
@@ -23,7 +25,7 @@ class Subscribe extends ComponentBase
         return $this->checkResponse($res);
     }
 
-    public function del(string $priTmplId)
+    public function delTemplate(string $priTmplId)
     {
         $res = $this->post('wxaapi/newtmpl/deltemplate', [
             'json' => [
@@ -32,12 +34,14 @@ class Subscribe extends ComponentBase
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 
     public function getCategory()
     {
         $res = $this->get('wxaapi/newtmpl/getcategory');
+
         return $this->checkResponse($res);
     }
 
@@ -56,7 +60,7 @@ class Subscribe extends ComponentBase
     {
         $res = $this->get('wxaapi/newtmpl/getpubtemplatetitles', [
             'query' => [
-                'ids' => implode(',', $ids),
+                'ids'   => implode(',', $ids),
                 'start' => $start,
                 'limit' => $limit,
             ],
@@ -65,13 +69,14 @@ class Subscribe extends ComponentBase
         return $this->checkResponse($res);
     }
 
-    public function list()
+    public function listTemplate()
     {
         $res = $this->get('wxaapi/newtmpl/gettemplate');
+
         return $this->checkResponse($res);
     }
 
-    public function send(string $openId, string $templateId, array $data, ?string $page = null)
+    public function sendMessage(string $openId, string $templateId, array $data, ?string $page = null)
     {
         foreach ($data as $key => $value) {
             if (!is_array($value)) {
@@ -81,14 +86,15 @@ class Subscribe extends ComponentBase
 
         $res = $this->post('cgi-bin/message/subscribe/send', [
             'json' => [
-                'touser' => $openId,
+                'touser'      => $openId,
                 'template_id' => $templateId,
-                'page' => $page ?: '',
-                'data' => $data,
+                'page'        => $page ?: '',
+                'data'        => $data,
             ],
         ]);
 
         $this->checkResponse($res);
+
         return true;
     }
 }

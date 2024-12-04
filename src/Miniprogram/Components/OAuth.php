@@ -1,7 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @author   Fung Wing Kit <wengee@gmail.com>
- * @version  2020-06-03 17:15:25 +0800
+ * @version  2024-12-04 09:57:20 +0800
  */
 
 namespace fwkit\Wechat\Miniprogram\Components;
@@ -22,24 +24,59 @@ class OAuth extends ComponentBase
     {
         $res = $this->get('sns/jscode2session', [
             'query' => [
-                'appid' => $this->client->getAppId(),
-                'secret' => $this->client->getAppSecret(),
-                'js_code' => $code,
+                'appid'      => $this->client->getAppId(),
+                'secret'     => $this->client->getAppSecret(),
+                'js_code'    => $code,
                 'grant_type' => 'authorization_code',
             ],
         ], false);
 
         $res = $this->checkResponse($res, [
-            'expires_in' => 'expiresIn',
-            'openid' => 'openId',
-            'unionid' => 'unionId',
+            'expires_in'  => 'expiresIn',
+            'openid'      => 'openId',
+            'unionid'     => 'unionId',
             'session_key' => 'sessionKey',
         ]);
 
-        $this->code = $code;
-        $this->openId = $res->openId;
+        $this->code       = $code;
+        $this->openId     = $res->openId;
         $this->sessionKey = $res->sessionKey;
+
         return $res;
+    }
+
+    public function checkSessionKey(string $openId, string $sessionKey): bool
+    {
+        $signature = hash_hmac('sha256', $sessionKey, '');
+
+        $res = $this->get('wxa/checksession', [
+            'query' => [
+                'openid'     => $openId,
+                'signature'  => $signature,
+                'sig_method' => 'hmac_sha256',
+            ],
+        ]);
+
+        $this->checkResponse($res);
+
+        return true;
+    }
+
+    public function resetSessionKey(string $openId, string $sessionKey): bool
+    {
+        $signature = hash_hmac('sha256', $sessionKey, '');
+
+        $res = $this->get('wxa/resetusersessionkey', [
+            'query' => [
+                'openid'     => $openId,
+                'signature'  => $signature,
+                'sig_method' => 'hmac_sha256',
+            ],
+        ]);
+
+        $this->checkResponse($res);
+
+        return true;
     }
 
     public function getUserInfo(string $encryptedData, string $iv, ?string $sessionKey = null)
@@ -51,8 +88,9 @@ class OAuth extends ComponentBase
 
         $data = $this->transformKeys($data, [
             'nickName' => 'nickname',
-            'appid' => 'appId',
+            'appid'    => 'appId',
         ]);
+
         return $this->makeCollection($data);
     }
 
@@ -64,16 +102,16 @@ class OAuth extends ComponentBase
         }
 
         $crypter = new DataCrypt($this->client->getAppId(), $sessionKey);
-        $ret = $crypter->decrypt($encryptedData, $iv, $decryptedData);
-        if ($ret !== 0) {
+        $ret     = $crypter->decrypt($encryptedData, $iv, $decryptedData);
+        if (0 !== $ret) {
             throw new OfficialError('Illegal encrypted data.');
         }
 
         $data = json_decode($decryptedData, true);
 
         $errcode = json_last_error();
-        if ($errcode !== JSON_ERROR_NONE) {
-            throw new OfficialError('Parse json error: ' . json_last_error_msg(), $errcode);
+        if (JSON_ERROR_NONE !== $errcode) {
+            throw new OfficialError('Parse json error: '.json_last_error_msg(), $errcode);
         }
 
         return $data;
